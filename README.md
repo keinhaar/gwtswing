@@ -5,6 +5,8 @@ There are 2 main differences between Swing an GWTSwing.
 1. There are no modal dialogs. Instead of that, callback objects can be used, to get notified if a dialog was closed.
 2. All Classnames beginn with "G" instead of "J" (GTextField instead of JTextField). This was done to avoid license problems, because the API is now different from Oracles Swing and to avoid confusion while developing with GWTSwing.
 
+There are no server calls after starting the application. Everything is handled locally on the client.
+
 ## How to use
 GWTSwing is used like other gwt libraries. Just add
 
@@ -28,6 +30,8 @@ GUtilities.addToWidget(Document.get().getBody(), panel);
 Looks like Swing? Thats the goal! :-) 
 
 The call of 'GUtilities.addToWidget' appends your GWTSwing UI to the Web Page.
+
+Porting an existing Swing application is now nearly as easy as replacing all "J" with "G".
 
 ## Demo
 A small demo application, which shows some of the main UI components can be found here:
