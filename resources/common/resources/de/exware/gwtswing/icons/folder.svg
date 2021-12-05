@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   viewBox="0 0 32 32"
+   height="32"
+   width="32"
+   id="svg6"
+   sodipodi:docname="folder.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1054"
+     id="namedview8"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="6.88"
+     inkscape:cx="-20.777304"
+     inkscape:cy="20.470368"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <path
+     style="fill:#72a7cf;fill-rule:evenodd;stroke:#568cbc;stroke-width:1.31793201;stroke-linejoin:round"
+     inkscape:connector-curvature="0"
+     d="M 0.56249505,31.227501 V 0.77194408 H 10.870779 l -4.87e-4,2.96046612 h 15.89486 V 31.226987 Z"
+     id="path2" />
+  <path
+     style="fill:#89b1d3;fill-rule:evenodd;stroke:#568cbc;stroke-width:1.43392003;stroke-linejoin:round"
+     inkscape:connector-curvature="0"
+     d="M 0.59670829,31.193188 4.7269969,12.179096 H 12.081318 L 15.204422,6.7946082 H 31.222914 L 26.790209,31.193802 Z"
+     id="path4" />
+</svg>
