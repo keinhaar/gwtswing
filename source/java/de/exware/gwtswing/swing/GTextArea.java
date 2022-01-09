@@ -14,7 +14,7 @@ public class GTextArea extends GTextComponent
 
     public GTextArea(String text)
     {
-        this(text, 20, 4);
+        this(text, 4, 20);
     }
 
     public GTextArea(String text, int rows, int columns)

@@ -9,7 +9,7 @@ import de.exware.gwtswing.awt.event.GActionListener;
 
 public class GMenu extends GMenuItem
 {
-    private List<GMenuItem> items = new ArrayList<GMenuItem>();
+    private List<GMenuItem> items = new ArrayList<>();
     private GPopupMenu menu;
     
     public GMenu(String text)
@@ -68,10 +68,20 @@ public class GMenu extends GMenuItem
         return item;
     }
 
+    public void add(GMenuItem item)
+    {
+        items.add(item);
+    }
+
     public GMenuItem insert(GAction action, int pos)
     {
         GMenuItem item = new GMenuItem(action);
-        items.add(pos,item);
+        items.add(pos, item);
         return item;
+    }
+
+    public void insert(GMenuItem item, int pos)
+    {
+        items.add(pos, item);
     }
 }

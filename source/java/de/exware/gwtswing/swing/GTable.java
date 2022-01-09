@@ -17,9 +17,10 @@ import de.exware.gwtswing.awt.GGridBagConstraints;
 import de.exware.gwtswing.awt.GGridBagLayout;
 import de.exware.gwtswing.awt.GGridLayout;
 import de.exware.gwtswing.awt.GPoint;
+import de.exware.gwtswing.awt.event.GKeyEvent;
+import de.exware.gwtswing.awt.event.GKeyListener;
 import de.exware.gwtswing.awt.event.GMouseAdapter;
 import de.exware.gwtswing.awt.event.GMouseEvent;
-import de.exware.gwtswing.awt.event.GMouseListener;
 import de.exware.gwtswing.awt.event.GMouseMotionListener;
 import de.exware.gwtswing.swing.border.GBorderFactory;
 import de.exware.gwtswing.swing.border.SelectiveLineBorder;
@@ -78,6 +79,7 @@ public class GTable<T> extends GComponent
     public GTable()
     {
         renderers.put(Object.class, new GDefaultTableCellRenderer());
+        getPeer().setAttribute("tabindex", "1");
         setLayout(new GBorderLayout());
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -98,6 +100,7 @@ public class GTable<T> extends GComponent
         setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
         setModel(new InnerDefaultTableModel());
         addMouseListener(selectionListener);
+        addKeyListener(selectionListener);
         setDefaultRenderer(Date.class, new GDefaultTableCellRenderer()
         {
             @Override
@@ -779,7 +782,10 @@ public class GTable<T> extends GComponent
         return rows;
     }
 
-    private GMouseListener selectionListener = new GMouseAdapter()
+    private InputListener selectionListener = new InputListener(); 
+        
+    class InputListener extends GMouseAdapter
+        implements GKeyListener
     {
         @Override
         public void mouseClicked(final GMouseEvent evt) 
@@ -834,6 +840,83 @@ public class GTable<T> extends GComponent
                         validate();
                     };
                 });
+            }
+        }
+
+        @Override
+        public void keyTyped(GKeyEvent e)
+        {
+        }
+
+        @Override
+        public void keyPressed(GKeyEvent e)
+        {
+        }
+
+        @Override
+        public void keyReleased(GKeyEvent e)
+        {
+            if(e.getKeyCode() == GKeyEvent.VK_DOWN)
+            {
+                int[] rows = getSelectedRows();
+                if(rows.length > 0)
+                {
+                    int row = rows[0];
+                    if(row >= getRowCount() - 1)
+                    {
+                        row = 0;
+                    }
+                    else
+                    {
+                        row++;
+                    }
+                    int current = row * model.getColumnCount();
+                    ArrayList<Integer> oldList = new ArrayList<>(selectedItems);
+                    selectedItems.clear();
+                    for(int i=0;i<oldList.size();i++)
+                    {
+                        revalidateRenderedItem(oldList.get(i));
+                    }
+                    selectedItems.add(current);
+                    revalidateRenderedItem(current);
+                }
+                else
+                {
+                    selectedItems.add(0);
+                    revalidateRenderedItem(0);
+                    fireSelectionEvent();
+                }
+            }
+            else if(e.getKeyCode() == GKeyEvent.VK_UP)
+            {
+                int[] rows = getSelectedRows();
+                if(rows.length > 0)
+                {
+                    int row = rows[0];
+                    if(row == 0)
+                    {
+                        row = getRowCount()-1;
+                    }
+                    else
+                    {
+                        row--;
+                    }
+                    int current = row * model.getColumnCount();
+                    ArrayList<Integer> oldList = new ArrayList<>(selectedItems);
+                    selectedItems.clear();
+                    for(int i=0;i<oldList.size();i++)
+                    {
+                        revalidateRenderedItem(oldList.get(i));
+                    }
+                    selectedItems.add(current);
+                    revalidateRenderedItem(current);
+                }
+                else
+                {
+                    selectedItems.add(0);
+                    revalidateRenderedItem(0);
+                    fireSelectionEvent();
+                }
             }
         };
     };
@@ -900,7 +983,6 @@ public class GTable<T> extends GComponent
         gbc.gridx = gridx;
         gbc.gridy = gridy;
         content.remove(comp);
-        comp.removeMouseListener(selectionListener);
         Class clazz = getModel().getColumnClass(gridx);
         GTableCellRenderer renderer = getCellRenderer(gridy, gridx);
         comp = renderer.getTableCellRendererComponent(GTable.this, value, selected, false, gridy, gridx);

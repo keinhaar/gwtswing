@@ -22,6 +22,12 @@ public class GGridBagLayout implements GLayoutManager
         this.constraints.put(component,con);
     }
 
+    public void setConstraints(GComponent comp, GGridBagConstraints constraints) 
+    {
+        GGridBagConstraints con = constraints.clone();
+        this.constraints.put(comp, con);
+    }
+
     /**
      * Calculates the preferred size dimensions for the specified
      * panel given the components in the specified parent container.

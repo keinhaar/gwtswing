@@ -37,6 +37,16 @@ public class GToolBar extends GComponent
     {
         super.addImpl(comp, gbc, index);
         gbc.gridx++;
+        if(index < getComponentCount())
+        {
+            GGridBagLayout gbl = (GGridBagLayout) getLayout();
+            gbc = new GGridBagConstraints();
+            for(int i=0;i<getComponentCount();i++)
+            {
+                gbl.setConstraints(getComponent(i), gbc);
+                gbc.gridx++;
+            }
+        }
     }
     
     /**
@@ -45,7 +55,7 @@ public class GToolBar extends GComponent
     public void addGroup(String groupname)
     {
         GLabel group = new GLabel();
-        group.putClientProperty("group", groupname);
+        group.putClientProperty("id", groupname);
         group.setVisible(false);
         add(group);
     }
