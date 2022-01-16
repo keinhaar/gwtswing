@@ -71,6 +71,12 @@ public class GTable<T> extends GComponent
                 {
                     ((GTableLayout)content.getLayout()).rowHeight=0;
                 }
+                if(evt.getType() == GTableModelEvent.DELETE)
+                {
+                    int from = evt.getFirstRow();
+                    int to = evt.getFirstRow();
+                    removeRowSelectionInterval(from, to);
+                }
                 renderAll();
             }
         }
@@ -149,6 +155,21 @@ public class GTable<T> extends GComponent
                 public void setSelectionMode(int selectionMode)
                 {
                     GTable.this.selectionMode = selectionMode;
+                }
+
+                @Override
+                public void addSelectionInterval(int from, int to)
+                {
+                }
+
+                @Override
+                public void setSelectionInterval(int from, int to)
+                {
+                }
+
+                @Override
+                public void clearSelection()
+                {
                 }
             };
         }
@@ -816,27 +837,16 @@ public class GTable<T> extends GComponent
                                 selected = true;
                                 selectedItems.add(current);
                             }
+                            revalidateRenderedItem(current);
                             fireSelectionEvent();
                         }
                         else
                         {
-                            if(selectedItems.contains(current) == false)
+                            if(selected == false)
                             {
-                                ArrayList<Integer> oldList = new ArrayList<>(selectedItems);
-                                selectedItems.clear();
-                                for(int i=0;i<oldList.size();i++)
-                                {
-                                    revalidateRenderedItem(oldList.get(i));
-                                }
-                                if(!selected)
-                                {
-                                    selected = true;
-                                    selectedItems.add(current);
-                                }
-                                fireSelectionEvent();
+                                setRowSelectionInterval(current, current);
                             }
                         }
-                        revalidateRenderedItem(current);
                         validate();
                     };
                 });
@@ -870,15 +880,7 @@ public class GTable<T> extends GComponent
                     {
                         row++;
                     }
-                    int current = row * model.getColumnCount();
-                    ArrayList<Integer> oldList = new ArrayList<>(selectedItems);
-                    selectedItems.clear();
-                    for(int i=0;i<oldList.size();i++)
-                    {
-                        revalidateRenderedItem(oldList.get(i));
-                    }
-                    selectedItems.add(current);
-                    revalidateRenderedItem(current);
+                    setRowSelectionInterval(row, row);
                 }
                 else
                 {
@@ -901,15 +903,7 @@ public class GTable<T> extends GComponent
                     {
                         row--;
                     }
-                    int current = row * model.getColumnCount();
-                    ArrayList<Integer> oldList = new ArrayList<>(selectedItems);
-                    selectedItems.clear();
-                    for(int i=0;i<oldList.size();i++)
-                    {
-                        revalidateRenderedItem(oldList.get(i));
-                    }
-                    selectedItems.add(current);
-                    revalidateRenderedItem(current);
+                    setRowSelectionInterval(row, row);
                 }
                 else
                 {
@@ -921,6 +915,61 @@ public class GTable<T> extends GComponent
         };
     };
 
+    public void setRowSelectionInterval(int from, int to)
+    {
+        ArrayList<Integer> oldList = new ArrayList<>(selectedItems);
+        selectedItems.clear();
+        for(int i=0;i<oldList.size();i++)
+        {
+            revalidateRenderedItem(oldList.get(i));
+        }
+        if(selectionMode == GListSelectionModel.SINGLE_SELECTION)
+        {
+            from = to;
+        }
+        for(int i=from; i<=to;i++)
+        {
+            selectedItems.add(i * model.getColumnCount());
+            revalidateRenderedItem(i * model.getColumnCount());
+        }
+        fireSelectionEvent();
+    }
+    
+    public void addRowSelectionInterval(int from, int to)
+    {
+        if(selectionMode == GListSelectionModel.SINGLE_SELECTION)
+        {
+            from = to;
+        }
+        for(int i=from; i<=to;i++)
+        {
+            int row = i * model.getColumnCount();
+            if(selectedItems.contains(row) == false)
+            {
+                selectedItems.add(row);
+                revalidateRenderedItem(row);
+            }
+        }
+        fireSelectionEvent();
+    }
+    
+    public void removeRowSelectionInterval(int from, int to)
+    {
+        if(selectionMode == GListSelectionModel.SINGLE_SELECTION)
+        {
+            from = to;
+        }
+        for(int i=from; i<=to;i++)
+        {
+            for(int c=0;c < model.getColumnCount();c++)
+            {
+                int current = i * model.getColumnCount() + c;
+                selectedItems.remove(new Integer(current));
+            }
+        }
+        fireSelectionEvent();
+    }
+    
     private void fireSelectionEvent()
     {
         GListSelectionEvent evt = new GListSelectionEvent(this);

@@ -12,4 +12,8 @@ public interface GListSelectionModel
     void removeListSelectionListener(GListSelectionListener listener);
 
     void setSelectionMode(int selectionMode);
+
+    void addSelectionInterval(int from, int to);
+    void setSelectionInterval(int from, int to);
+    void clearSelection();
 }
