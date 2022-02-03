@@ -893,7 +893,7 @@ public class GComponent
     
     public void remove(int index)
     {        
-        if(components != null)
+        if(components != null && index >= 0 && index < components.size())
         {
             GComponent comp = components.remove(index);
             comp.getPeer().removeFromParent();

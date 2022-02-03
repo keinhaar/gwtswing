@@ -9,6 +9,11 @@ public class GBorderFactory
         return new GEmptyBorder(top, left, bottom, right);
     }
 
+    public static GBorder createDefaultEmptyBorder()
+    {
+        return new GEmptyBorder(10, 10, 10, 10);
+    }
+
     public static GBorder createLineBorder(GColor col, int thick)
     {
         return new GLineBorder(col, thick);

@@ -1,5 +1,7 @@
 package de.exware.gwtswing.swing;
 
+import java.util.List;
+
 import de.exware.gwtswing.PartitionedPanel;
 import de.exware.gwtswing.awt.GBorderLayout;
 import de.exware.gwtswing.awt.GDimension;
@@ -31,9 +33,10 @@ public class GOptionPane extends GComponent
     private int messageType;
     private int optionType;
     private boolean input;
-    private GTextField inputField;
+    private GComponent inputField;
     private GOptionCallback callback;
     private GDialog dlg;
+    List<String> selectableOptions;
     
     public GOptionPane(Object message, int messageType)
     {
@@ -70,6 +73,26 @@ public class GOptionPane extends GComponent
         pane.createAndShow(parent);
     }
     
+    public static void showInputDialog(GComponent parent, Object message, String title, int optionType, GOptionCallback callback)
+    {
+        GOptionPane pane = new GOptionPane(message, QUESTION_MESSAGE, optionType);
+        pane.setCallback(callback);
+        pane.setInput(true);
+        pane.title = title;
+        pane.createAndShow(parent);
+    }
+    
+    public static void showInputDialog(GComponent parent, Object message, String title, int optionType,
+        List<String> selectableOptions, GOptionCallback callback)
+    {
+        GOptionPane pane = new GOptionPane(message, QUESTION_MESSAGE, optionType);
+        pane.setCallback(callback);
+        pane.setInput(true);
+        pane.title = title;
+        pane.selectableOptions = selectableOptions;
+        pane.createAndShow(parent);
+    }
+
     public static void showConfirmDialog(GComponent parent,
         Object message, String title, int optionType, GOptionCallback callback)
     {
@@ -129,7 +152,19 @@ public class GOptionPane extends GComponent
         panel.add(messageComp, gbc);
         if(input)
         {
-            inputField = new GTextField(20); 
+            if(selectableOptions == null)
+            {
+                inputField = new GTextField(20); 
+            }
+            else
+            {
+                GComboBox<String> combo = new GComboBox<>();
+                for(int i=0;i<selectableOptions.size();i++)
+                {
+                    combo.addItem(selectableOptions.get(i));
+                }
+                inputField = combo;
+            }
             gbc.gridy++;
             panel.add(inputField, gbc);
         }
@@ -150,7 +185,14 @@ public class GOptionPane extends GComponent
                 String input = null;
                 if(GOptionPane.this.input)
                 {
-                    input = inputField.getText();
+                    if(selectableOptions == null)
+                    {
+                        input = ((GTextField)inputField).getText();
+                    }
+                    else
+                    {
+                        input = (String) ((GComboBox)inputField).getSelectedItem();
+                    }
                 }
                 dlg.setVisible(false);
                 if(callback != null)
