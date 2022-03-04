@@ -11,6 +11,7 @@
 	overflow: hidden;
 }
 .gwts-GLabel {
+	background-color: #ddddbb;
 	color: #000000;
 	padding-left: 3px;
 	vertical-align: middle;
