@@ -25,7 +25,6 @@ import de.exware.gwtswing.swing.GLabel;
 public class PartitionedPanel extends GComponent
 {
     private int columns;
-    private int maxColumns; //specifies where to the right margin;
     private int indentSize = 20;
     private GGridBagConstraints gbc;
 
@@ -44,7 +43,6 @@ public class PartitionedPanel extends GComponent
         super();
         getPeer().addClassName("gwts-PartitionedPanel");
         this.columns = columns;
-        maxColumns = columns;
         super.setLayout(new GGridBagLayout());
         gbc = new GGridBagConstraints();
         gbc.insets.left = 5;
@@ -77,7 +75,7 @@ public class PartitionedPanel extends GComponent
 //        gbc.weightx = 1;
 //        gbc.fill = gbc.HORIZONTAL;
         breakRow();
-        gbc.gridwidth = maxColumns +1;
+        gbc.gridwidth = columns +1;
         gbc.insets.left = 5;
         gbc.insets.right = 5;
         SeparatorLabel lab = new SeparatorLabel(label);
@@ -215,7 +213,7 @@ public class PartitionedPanel extends GComponent
     public void add(GComponent comp, int fillmode, int columnSpan, int rowSpan,double weightX,double weightY)
     {
         GGridBagConstraints clone = gbc.clone();
-        if (gbc.gridx + columnSpan >= maxColumns ) // last column in row?
+        if (gbc.gridx + columnSpan >= columns ) // last column in row?
         {
             gbc.insets.right = indentSize;
         }
@@ -241,16 +239,6 @@ public class PartitionedPanel extends GComponent
         gbc.weightx = clone.weightx;
         gbc.weighty = clone.weighty;
         gbc.fill = clone.fill;
-    }
-
-    public int getMaxColumns()
-    {
-        return maxColumns;
-    }
-
-    public void setMaxColumns(int maxColumns)
-    {
-        this.maxColumns = maxColumns;
     }
 
     public int getIndentSize()

@@ -31,6 +31,12 @@ public final class CSSRule extends JavaScriptObject
         return i;
     }
     
+    public final void setPixel(String name, int value)
+    {
+        String str = getProperty(name);
+        setPropertyValue(name, value + "px");
+    }
+    
     public final GColor getColor(String name)
     {
         String str = getProperty(name);
@@ -57,6 +63,10 @@ public final class CSSRule extends JavaScriptObject
 
     protected native String getPropertyValue(String name) /*-{
         return this.style.getPropertyValue(name);
+    }-*/;
+
+    protected native void setPropertyValue(String name, String value) /*-{
+        return this.style.setProperty(name, value);
     }-*/;
 
     protected native int getPropertyCount() /*-{

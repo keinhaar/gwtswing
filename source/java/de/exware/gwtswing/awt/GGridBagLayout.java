@@ -272,6 +272,12 @@ public class GGridBagLayout implements GLayoutManager
                 int yo = (rowheight - height - constr.insets.top - constr.insets.bottom) / 2;
                 y += yo;
             }
+            if(constr.anchor == constr.SOUTHWEST || constr.anchor == constr.SOUTH || constr.anchor == constr.SOUTHEAST)
+            {
+                int rowheight = linfo.rowheight[constr.gridy];
+                int yo = (rowheight - height - constr.insets.top - constr.insets.bottom);
+                y += yo;
+            }
             comp.setBounds(x, y ,width, height);
         }
     }

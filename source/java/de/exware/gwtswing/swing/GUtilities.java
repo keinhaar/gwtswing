@@ -18,6 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import de.exware.gwtswing.awt.GCanvas;
 import de.exware.gwtswing.awt.GGridBagConstraints;
 import de.exware.gwtswing.awt.GGridBagLayout;
+import de.exware.gwtswing.awt.GPoint;
 
 /**
  * Utilities, die nicht im GSwingUtilities Interface zu finden sind.
@@ -31,6 +32,7 @@ public class GUtilities
     private static DivElement measureElement;
     private static GCanvas measureCanvas;
     
+
     static
     {
         measureElement = Document.get().createDivElement();
@@ -130,6 +132,12 @@ public class GUtilities
     {
         return measureCanvas;
     }
+    
+    public native static double getDevicePixelRatio()
+    /*-{
+        return window.devicePixelRatio;
+    }-*/;
+
     
 //    public static PixelStyle getComputedStyle(Element element) 
 //    {
@@ -446,5 +454,75 @@ public class GUtilities
     public static void setEnabledRecursive(GComponent cont,boolean enabled)
     {
         GUtilities.setEnabledRecursive(cont, enabled, false);
+    }
+    
+    /**
+     * Liefert die Entfernung zwischen 2 Punkten.
+     * @param a
+     * @param b
+     * @return
+     */
+    public static double getDistance(GPoint a, GPoint b)
+    {
+        double distance = 0;
+        double x = b.getX() - a.getX();
+        double x2 = x * x;
+        double y = b.getY() - a.getY();
+        double y2 = y * y;
+        distance = x2 + y2;
+        distance = Math.sqrt(distance);
+        return distance;
+    }
+    
+    /**
+     * Liefert die Richtung in der der Punkt relativ zu Punkt a liegt.
+     * Liegt Punkt b genau rechts von Punkt a, dann ist der Winkel 0.
+     * Der Winkel steigt im Uhrzeigersinn bis 2 * PI an.
+     * @param a
+     * @param b
+     * @return Winkel in RAD.
+     */
+    public static double getAngle(GPoint a, GPoint b)
+    {        
+        double angle = 0;
+        if(a.equals(b) == false)
+        {
+            double x = b.getX() - a.getX();
+            double y = b.getY() - a.getY();
+            angle = Math.atan(y/x);
+            if(x < 0)
+            {
+                angle += Math.PI;
+            }
+            if(x >= 0 && y < 0)
+            {
+                angle += Math.PI * 2;
+            }
+        }
+        return angle;
+    }
+    
+    public static void main(String[] args)
+    {
+        double angle = getAngle(new GPoint(100,100), new GPoint(151,100));
+        System.out.println(angle * 180 / Math.PI);
+        angle = getAngle(new GPoint(100,100), new GPoint(150,101));
+        System.out.println(angle * 180 / Math.PI);
+        angle = getAngle(new GPoint(100,100), new GPoint(150,150));
+        System.out.println(angle * 180 / Math.PI);
+        angle = getAngle(new GPoint(100,100), new GPoint(100,150));
+        System.out.println(angle * 180 / Math.PI);
+        angle = getAngle(new GPoint(100,100), new GPoint(50,150));
+        System.out.println(angle * 180 / Math.PI);
+        angle = getAngle(new GPoint(100,100), new GPoint(50,100));
+        System.out.println(angle * 180 / Math.PI);
+        angle = getAngle(new GPoint(100,100), new GPoint(50,50));
+        System.out.println(angle * 180 / Math.PI);
+        angle = getAngle(new GPoint(100,100), new GPoint(100,50));
+        System.out.println(angle * 180 / Math.PI);
+        angle = getAngle(new GPoint(100,100), new GPoint(150,50));
+        System.out.println(angle * 180 / Math.PI);
+        angle = getAngle(new GPoint(100,100), new GPoint(150,99));
+        System.out.println(angle * 180 / Math.PI);
     }
 }

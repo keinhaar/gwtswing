@@ -30,6 +30,7 @@ public class GToolTipManager
     private GToolTipManager()
     {
         popup = Document.get().createDivElement();;
+        popup.addClassName("gwts-GComponent");
         popup.addClassName(DEFAULT_TOOLTIP_STYLE);
     }
 
@@ -37,9 +38,12 @@ public class GToolTipManager
     {        
         showTimer = new Timer()
         {
+            private boolean canceled = false;
+            
             @Override
             public void run()
             {
+                if(canceled) return;
                 showTimer = null;
                 popupTime = System.currentTimeMillis();
                 popup.setInnerHTML(text);
@@ -60,8 +64,15 @@ public class GToolTipManager
                 };
                 t.schedule(delay);
             }
+            
+            @Override
+            public void cancel()
+            {
+                super.cancel();
+                canceled = true;
+            }
         };
-        showTimer.schedule(400);
+        showTimer.schedule(800);
     }
 
     public static GToolTipManager getInstance()
@@ -104,14 +115,18 @@ public class GToolTipManager
         public void mouseMoved(GMouseEvent evt)
         {
             GComponent comp = (GComponent)evt.getSource();
-            if(comp.getClass().getName().contains("TimeFi"))
-            {
-                System.out.println();
-            }
+//            if(comp.getClass().getName().contains("TimeFi"))
+//            {
+//                System.out.println();
+//            }
             String text = comp.getToolTipText(evt.getX(), evt.getY());
             if(text != null)
             {
                 GPoint loc = comp.getLocationOnScreen();
+                if(showTimer != null)
+                {
+                    showTimer.cancel();
+                }
                 show(text, loc.x + evt.getX() + DEFAULT_OFFSET_X, loc.y + evt.getY() + DEFAULT_OFFSET_Y);
             }
         }

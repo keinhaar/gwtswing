@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.Style.TextAlign;
 
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GFontMetrics;
@@ -35,6 +36,14 @@ public class GLabel extends GComponent
         setOpaque(false);
     }
 
+    public void setHorizontalTextPosition(int pos)
+    {
+        if(pos == GSwingConstants.CENTER)
+        {
+            getPeer().getStyle().setTextAlign(TextAlign.CENTER);
+        }
+    }
+    
 //    @Override
 //    public void setBounds(int x, int y, int width, int height)
 //    {

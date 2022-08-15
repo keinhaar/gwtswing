@@ -73,7 +73,7 @@ public class GComponent
     private static long longClickStart;
     private static boolean longClickPerformed;
     private static Map<Class, GInsets> cssBorderCache = new HashMap<>();
-    
+
     public GComponent()
     {
         this(Document.get().createDivElement());
@@ -83,6 +83,11 @@ public class GComponent
     {
         setPeer(peer);
         setClassNames(peer, "");
+//        if(GUtilities.getDevicePixelRatio() != 1 
+//            && GUIManager.isInitialized(".gwts-GComponent/font") == false)
+//        {
+//            getFont();
+//        }
     }
     
     /**
@@ -239,7 +244,7 @@ public class GComponent
             GAWTEvent obj = handleEvent(event);
             if(obj == null)
             {
-                System.out.println("");
+//                System.out.println("");
             }
             else
             {
@@ -291,12 +296,8 @@ public class GComponent
             bevent = evt;
             for(int i=0;mouseListeners != null && i< mouseListeners.size();i++)
             {
-                Object lis = mouseListeners.get(i);
-                if(lis instanceof GMouseListener == false)
-                {
-                    System.out.println("");
-                }
-                mouseListeners.get(i).mouseExited(evt);
+                GMouseListener lis = mouseListeners.get(i);
+                lis.mouseExited(evt);
             }
         }
         else if(event.getTypeInt() == event.ONCLICK && isEnabled())
@@ -480,6 +481,7 @@ public class GComponent
                 focusListeners.get(i).focusGained(evt);
             }
         }
+//        System.out.println("EVENT " + bevent + "; "  +event.getTypeInt());
         return bevent;
     }
 
@@ -522,6 +524,10 @@ public class GComponent
     {
         String col = getPeer().getStyle().getBackgroundColor();
         GColor gcol = GColor.fromHex(col);
+        if(gcol == null)
+        {
+            gcol = GUIManager.getColor(".gwts-GComponent/background-color");
+        }
         return gcol;
     }
     

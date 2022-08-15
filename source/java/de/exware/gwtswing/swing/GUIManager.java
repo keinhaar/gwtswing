@@ -99,7 +99,13 @@ public class GUIManager
             String k = key.toString();
             int index = k.indexOf('/');
             String cssrule = k.substring(0, index);
-            int size = StyleSheet.getInt(cssrule,"font-size");
+            int size = StyleSheet.getInt(cssrule, "font-size");
+//            if(GUtilities.getDevicePixelRatio() != 1)
+//            {
+//                double scaling = GUtilities.getDevicePixelRatio();
+//                size = (int) (size * scaling);
+//                StyleSheet.setPixel(cssrule, "font-size", size);
+//            }
             String family = StyleSheet.getProperty(cssrule,"font-family");
             font = new GFont(family, size, GFont.PLAIN);
             resources.put(key, font);
@@ -107,6 +113,11 @@ public class GUIManager
         return font;
     }
 
+    public static boolean isInitialized(Object key)
+    {
+        return resources.get(key) != null;
+    }
+    
     public static GInsets getPadding(Class<?> clazz)
     {
         String key = ".gwts-" + clazz.getSimpleName() + "/padding";

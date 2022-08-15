@@ -10,37 +10,43 @@ import de.exware.gwtswing.swing.GComponent;
 
 public class GTouchEvent extends GAWTEvent
 {
-    private int x, y;
+    private GPoint[] points;
+    private GPoint[] changedPoints;
     
     public GTouchEvent(Object source, Event jsEvent)
     {
-        super(source); 
+        super(source, jsEvent); 
         GComponent c = (GComponent) source;
         GPoint loc = c.getLocationOnScreen();
         GInsets insets = c.getInsets();
         JsArray<Touch> touches = jsEvent.getTouches();
-        x = -1;
-        y = -1;
-        if(touches.length() > 0)
+        points = new GPoint[touches.length()];
+        for(int i=0;i<points.length;i++)
         {
-            Touch t = touches.get(0);
-            x = t.getClientX() - loc.x - insets.left;
-            y = t.getClientY() - loc.y - insets.top;
+            Touch t = touches.get(i);
+            int x = t.getClientX() - loc.x - insets.left;
+            int y = t.getClientY() - loc.y - insets.top;
+            points[i] = new GPoint(x, y);
+        }
+        touches = jsEvent.getChangedTouches();
+        changedPoints = new GPoint[touches.length()];
+        for(int i=0;i<changedPoints.length;i++)
+        {
+            Touch t = touches.get(i);
+            int x = t.getClientX() - loc.x - insets.left;
+            int y = t.getClientY() - loc.y - insets.top;
+            changedPoints[i] = new GPoint(x, y);
         }
     }
 
-    public int getX()
+    public GPoint[] getPoints()
     {
-        return x;
-    }
-    
-    public int getY()
-    {
-        return y;
+        return points;
     }
 
-    public GPoint getPoint()
+    public GPoint[] getChangedPoints()
     {
-        return new GPoint(x, y);
+        return changedPoints;
     }
+
 }

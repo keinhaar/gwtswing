@@ -23,6 +23,10 @@ public final class StyleSheet extends JavaScriptObject
                 if(rule != null)
                 {
                     col = rule.getColor(property);
+                    if(col != null)
+                    {
+                        break;
+                    }
                 }
             }
             catch(Exception ex)
@@ -45,8 +49,12 @@ public final class StyleSheet extends JavaScriptObject
                 rule = st.getCSSRule(selector);
                 if(rule != null)
                 {
-                    String href = st.getHref();
+//                    String href = st.getHref();
                     prop = rule.getProperty(property);
+                    if(prop != null)
+                    {
+                        break;
+                    }
                 }
             }
             catch(Exception ex)
@@ -65,11 +73,15 @@ public final class StyleSheet extends JavaScriptObject
             try
             {
                 StyleSheet st = get(i);
-                String href = st.getHref();
+//                String href = st.getHref();
                 rule = st.getCSSRule(selector);
                 if(rule != null)
                 {
                     prop = rule.getInt(property);
+                    if(prop != null)
+                    {
+                        break;
+                    }
                 }
             }
             catch(Exception ex)
@@ -79,10 +91,36 @@ public final class StyleSheet extends JavaScriptObject
         return prop;
     }
 
+    public static void setPixel(String selector, String property, int value)
+    {
+        Integer prop = null;
+        CSSRule rule = null;
+        for(int i=count()-1;prop == null && i>=0;i--)
+        {
+            try
+            {
+                StyleSheet st = get(i);
+//                String href = st.getHref();
+                rule = st.getCSSRule(selector);
+                if(rule != null)
+                {
+                    prop = rule.getInt(property);
+                    if(prop != null)
+                    {
+                        rule.setPixel(property, value);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+            }
+        }
+    }
+
     public CSSRule getCSSRule(String selector)
     {
         CSSRule rule = null;
-        String href = getHref();
+//        String href = getHref();
         int c = getRuleCount();
         for(int i=0;i<c;i++)
         {
@@ -119,4 +157,5 @@ public final class StyleSheet extends JavaScriptObject
         var st = $doc.styleSheets.length;
         return st;            
     }-*/;
+
 }

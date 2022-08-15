@@ -2,6 +2,7 @@ package de.exware.gwtswing.swing;
 
 import de.exware.gwtswing.awt.GCursor;
 import de.exware.gwtswing.awt.GDimension;
+import de.exware.gwtswing.awt.GPoint;
 import de.exware.gwtswing.awt.event.GMouseAdapter;
 import de.exware.gwtswing.awt.event.GMouseEvent;
 import de.exware.gwtswing.awt.event.GMouseMotionListener;
@@ -105,19 +106,22 @@ public class GSplitPane extends GComponent
         @Override
         public void touchStart(GTouchEvent evt)
         {
+            GPoint p = evt.getPoints()[0];
+            int x = (int) p.getX();
+            int y = (int) p.getY();
             if(orientation == HORIZONTAL_SPLIT
-                && evt.getX() >= dividerLocation - dividerSize
-                && evt.getX() <= dividerLocation + dividerSize*2)
+                && x >= dividerLocation - dividerSize
+                && x <= dividerLocation + dividerSize*2)
             {
                 loaded = true;
-                diff = dividerLocation - evt.getX();
+                diff = dividerLocation - x;
             }
             else if(orientation == VERTICAL_SPLIT
-                && evt.getY() >= dividerLocation - dividerSize 
-                && evt.getY() <= dividerLocation + dividerSize * 2)
+                && y >= dividerLocation - dividerSize 
+                && y <= dividerLocation + dividerSize * 2)
             {
                 loaded = true;
-                diff = dividerLocation - evt.getY();
+                diff = dividerLocation - y;
             }
         }
 
@@ -130,19 +134,22 @@ public class GSplitPane extends GComponent
         @Override
         public void touchMove(GTouchEvent e)
         {
-            if(loaded && e.getX() >= 0)
+            GPoint p = e.getPoints()[0];
+            int x = (int) p.getX();
+            int y = (int) p.getY();
+            if(loaded && x >= 0)
             {
                 GDimension size = getSize();
                 int dividerLocation = 0;
                 if(orientation == HORIZONTAL_SPLIT)
                 {
-                    dividerLocation = e.getX() + diff;
+                    dividerLocation = x + diff;
                     if(dividerLocation < 0) dividerLocation = 0;
                     else if(dividerLocation > size.width - dividerSize) dividerLocation = size.width - dividerSize;
                 }
                 else if(orientation == VERTICAL_SPLIT)
                 {
-                    dividerLocation = e.getY() + diff;
+                    dividerLocation = y + diff;
                     if(dividerLocation < 0) dividerLocation = 0;
                     else if(dividerLocation > size.height - dividerSize) dividerLocation = size.height - dividerSize;
                 }
