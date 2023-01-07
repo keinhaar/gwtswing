@@ -62,12 +62,13 @@ public class GUtilities
      * Wraps 2 or more Components in a Horizontal Container to treat them as one.
      * @return
      */
-    public GComponent wrapComponents(GComponent ... comps )
+    public static GComponent wrapComponents(GComponent ... comps )
     {
         GPanel panel = new GPanel();
         panel.setLayout(new GGridBagLayout());
         GGridBagConstraints gbc = new GGridBagConstraints();
         gbc.gridx = 1;
+        gbc.insets.right = 3;
         for(int i=0;i<comps.length;i++)
         {
             panel.add(comps[i], gbc);

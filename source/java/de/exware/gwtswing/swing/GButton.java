@@ -30,6 +30,7 @@ public class GButton extends GAbstractButton
     public GButton(String text)
     {
         setText(text);
+        setActionCommand(text);
         setBackground(background);
         addMouseListener(new GMouseAdapter()
         {

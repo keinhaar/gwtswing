@@ -109,6 +109,24 @@ public class GComboBox<T> extends GComponent
         }
     }
     
+    public void addItems(List<T> items)
+    {
+        if(model instanceof GMutableComboBoxModel)
+        {
+            for(int i=0;i<items.size();i++)
+            {
+                T item = items.get(i);
+                ((GMutableComboBoxModel<T>)model).addElement(item);
+                _addItem(item);
+                if(model.getSize() == 1)
+                {
+                    setSelectedIndex(0);
+                }
+            }
+            setCachedPreferredSize(null);
+        }
+    }
+    
     @Override
     public GDimension getPreferredSize()
     {
