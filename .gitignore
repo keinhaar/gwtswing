@@ -1,3 +1,5 @@
+#_____________GENERAL______________
+
 # Compiled class file
 *.class
 
@@ -19,6 +21,19 @@
 *.tar.gz
 *.rar
 
+# IDE exclusions
+.settings
+/.settings/
+/.settings
+.classpath
+
+#_______________GWT________________
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
 /out/
+/resources/
+
+#______________TEAVM_______________
+/target/
+
