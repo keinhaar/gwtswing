@@ -348,25 +348,28 @@ public class GTabbedPane extends GComponent
      */
     public void removeTab(int i)
     {
-        GComponent tab = tabs.getComponent(i);
-        GComponent comp = tabbedComponents.getComponent(i);
-        tabs.remove(i);
-        tabbedComponents.remove(i);
-        if (i < selectedTab)
+        if(i>=0 && i < tabs.getComponentCount())
         {
-            selectedTab -= 1;
-        }
-        if (i == selectedTab)
-        {
-            selectedTab = -1;
-            setSelectedTab(0);
-        }
-        revalidate();
-        GTabEvent evt = new GTabEvent(this, tab, comp);
-        for (int j = 0; j < tabListeners.size(); j++)
-        {
-            GTabListener l = tabListeners.get(j);
-            l.tabRemoved(evt);
+            GComponent tab = tabs.getComponent(i);
+            GComponent comp = tabbedComponents.getComponent(i);
+            tabs.remove(i);
+            tabbedComponents.remove(i);
+            if (i < selectedTab)
+            {
+                selectedTab -= 1;
+            }
+            if (i == selectedTab)
+            {
+                selectedTab = -1;
+                setSelectedTab(0);
+            }
+            revalidate();
+            GTabEvent evt = new GTabEvent(this, tab, comp);
+            for (int j = 0; j < tabListeners.size(); j++)
+            {
+                GTabListener l = tabListeners.get(j);
+                l.tabRemoved(evt);
+            }
         }
     }
 

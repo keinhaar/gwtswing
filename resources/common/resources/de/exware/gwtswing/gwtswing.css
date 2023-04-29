@@ -69,6 +69,15 @@ img.disabled {
 	cursor: default;
 }
 
+.gwts-GProgressBar-indicator {
+	background-color: #3030FF;
+}
+
+.gwts-GProgressBar {
+	border-radius: 3px;
+	border: solid 1px #444444;
+}
+
 div {
 	position: absolute;
 	display: inline;
