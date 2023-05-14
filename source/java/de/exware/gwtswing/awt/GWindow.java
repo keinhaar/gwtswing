@@ -1,8 +1,6 @@
 package de.exware.gwtswing.awt;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.user.client.Window;
-
+import de.exware.gplatform.GPlatform;
 import de.exware.gwtswing.awt.event.GAWTEvent;
 import de.exware.gwtswing.awt.event.GAWTEventListener;
 import de.exware.gwtswing.awt.event.GActionEvent;
@@ -30,10 +28,10 @@ public class GWindow extends GComponent
         setLayout(new GBorderLayout());
         setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 3));
         header = new GPanel();
-        GUtilities.insertClassNameBefore(header.getPeer(), "gwts-GWindow-header");
+        GUtilities.insertClassNameBefore(header.getPeer(), "gwts-GPWindow-header");
         header.setLayout(new GBorderLayout());
         title = new GLabel("");
-        GUtilities.insertClassNameBefore(title.getPeer(), "gwts-GWindow-header-text");
+        GUtilities.insertClassNameBefore(title.getPeer(), "gwts-GPWindow-header-text");
         title.setOpaque(false);
         header.add(title, GBorderLayout.CENTER);
         GButton bt = new GButton("\u2715");
@@ -79,7 +77,7 @@ public class GWindow extends GComponent
         else
         {
             pos = new GPoint();
-            dim = new GDimension(Window.getClientWidth(), Window.getClientHeight());
+            dim = new GDimension(GPlatform.getWin().getClientWidth(), GPlatform.getWin().getClientHeight());
         }
         int x = pos.x + (dim.width / 2);
         int y = pos.y + (dim.height / 2);
@@ -166,7 +164,7 @@ public class GWindow extends GComponent
         super.setVisible(visible);
         if(visible)
         {
-            Document.get().getBody().appendChild(getPeer());
+            GPlatform.getDoc().getBody().appendChild(getPeer());
             GToolkit.getDefaultToolkit().addAWTEventListener(dragListener, 0);
             revalidate();
         }
@@ -191,7 +189,7 @@ public class GWindow extends GComponent
         boolean b = getPeer().getParentElement() == null;
         if(b)
         {
-            Document.get().getBody().appendChild(getPeer());
+            GPlatform.getDoc().getBody().appendChild(getPeer());
         }
         GDimension dim = getPreferredSize();
         setSize(dim);

@@ -1,21 +1,20 @@
 package de.exware.gwtswing.awt.event;
 
-import com.google.gwt.user.client.Event;
-
+import de.exware.gplatform.event.GPEvent;
 import de.exware.gwtswing.util.GEventObject;
 
 public abstract class GAWTEvent extends GEventObject
 {
     private int id;
     protected boolean consumed = false;
-    private Event jsEvent;
+    private GPEvent jsEvent;
     
     protected GAWTEvent(Object source)
     {
         super(source);
     }
 
-    protected GAWTEvent(Object source, Event jsEvent)
+    protected GAWTEvent(Object source, GPEvent jsEvent)
     {
         super(source);
         this.jsEvent = jsEvent;

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.exware.gplatform.DoubleMap;
 import de.exware.gwtswing.awt.GBorderLayout;
 import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GCursor;
@@ -34,7 +35,6 @@ import de.exware.gwtswing.swing.table.GAbstractTableModel;
 import de.exware.gwtswing.swing.table.GDefaultTableCellRenderer;
 import de.exware.gwtswing.swing.table.GTableCellRenderer;
 import de.exware.gwtswing.swing.table.GTableModel;
-import de.exware.gwtswing.util.DoubleMap;
 
 public class GTable<T> extends GComponent
 {
@@ -844,6 +844,7 @@ public class GTable<T> extends GComponent
                         {
                             if(selected == false)
                             {
+                                current = current / model.getColumnCount();
                                 setRowSelectionInterval(current, current);
                             }
                         }
@@ -929,8 +930,11 @@ public class GTable<T> extends GComponent
         }
         for(int i=from; i<=to;i++)
         {
-            selectedItems.add(i * model.getColumnCount());
-            revalidateRenderedItem(i * model.getColumnCount());
+            for(int x=0;x<model.getColumnCount();x++)
+            {
+                selectedItems.add(i * model.getColumnCount() + x);
+                revalidateRenderedItem(i * model.getColumnCount() + x);
+            }
         }
         fireSelectionEvent();
     }

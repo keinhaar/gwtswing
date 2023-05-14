@@ -3,9 +3,8 @@ package de.exware.gwtswing.awt;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.user.client.Event;
-
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.event.GPEvent;
 import de.exware.gwtswing.awt.event.GAWTEvent;
 import de.exware.gwtswing.awt.event.GAWTEventListener;
 import de.exware.gwtswing.awt.event.GKeyEvent;
@@ -79,11 +78,11 @@ public class GToolkit
     {
         public BaseComponent()
         {
-            setPeer(Document.get().getBody());
+            setPeer(GPlatform.getDoc().getBody());
         }
         
         @Override
-        public GAWTEvent handleEvent(Event event)
+        public GAWTEvent handleEvent(GPEvent event)
         {
             return super.handleEvent(event);
         }

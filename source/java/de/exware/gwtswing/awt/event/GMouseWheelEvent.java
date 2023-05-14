@@ -1,6 +1,6 @@
 package de.exware.gwtswing.awt.event;
 
-import com.google.gwt.user.client.Event;
+import de.exware.gplatform.event.GPEvent;
 
 public class GMouseWheelEvent extends GMouseEvent
 {
@@ -11,21 +11,21 @@ public class GMouseWheelEvent extends GMouseEvent
         super(source, x, y, clickcount);
     }
     
-    public GMouseWheelEvent(Object source, com.google.gwt.user.client.Event jsEvent)
+    public GMouseWheelEvent(Object source, GPEvent jsEvent)
     {
         this(source, jsEvent, 0);
     }
     
-    public GMouseWheelEvent(Object source, Event jsEvent, int clickCount)
+    public GMouseWheelEvent(Object source, GPEvent jsEvent, int clickCount)
     {
         this(source, jsEvent, clickCount, GMouseEvent.NOBUTTON);
     }
     
-    public GMouseWheelEvent(Object source, Event jsEvent, int clickCount, int button)
+    public GMouseWheelEvent(Object source, GPEvent jsEvent, int clickCount, int button)
     {        
         super(source, jsEvent, clickCount, button);
         amount = jsEvent.getMouseWheelVelocityY();
-        if(jsEvent.getTypeInt() == jsEvent.ONMOUSEWHEEL)
+        if(jsEvent.getType() == GPEvent.Type.ONMOUSEWHEEL)
         {
             setId(MOUSE_WHEEL);
         }

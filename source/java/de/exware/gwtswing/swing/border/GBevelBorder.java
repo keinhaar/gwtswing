@@ -1,7 +1,5 @@
 package de.exware.gwtswing.swing.border;
 
-import com.google.gwt.dom.client.Style.Unit;
-
 import de.exware.gwtswing.awt.GInsets;
 import de.exware.gwtswing.swing.GComponent;
 
@@ -37,6 +35,6 @@ public class GBevelBorder implements GBorder
         {
             component.getPeer().getStyle().setProperty("borderStyle","inset");
         }
-        component.getPeer().getStyle().setBorderWidth(2, Unit.PX);
+        component.getPeer().getStyle().setBorderWidth(2);
     }
 }

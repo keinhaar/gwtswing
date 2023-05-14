@@ -3,10 +3,10 @@ package de.exware.gwtswing.swing;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.RepeatingCommand;
-import com.google.gwt.dom.client.Element;
-
+import de.exware.gplatform.GPElement;
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.timer.AbstractGPTimerTask;
+import de.exware.gplatform.timer.GPTimer;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.event.GMouseAdapter;
 import de.exware.gwtswing.awt.event.GMouseEvent;
@@ -174,30 +174,29 @@ public class GList<T> extends GComponent
                     indexesToRevalidate.add(current);
                 
                     clickHandler = new ClickHandler();
-                    Scheduler.get().scheduleFixedDelay(clickHandler, 300);
+                    GPTimer timer = GPlatform.getInstance().createTimer();
+                    timer.schedule(clickHandler, 300);
                 }
             }
         };
     };
 
-    class ClickHandler implements RepeatingCommand
+    class ClickHandler extends AbstractGPTimerTask
     {
-        private boolean canceled;
-        
         public ClickHandler()
         {
         }
         
+        @Override
         public void cancel()
         {
-            canceled = true;
             clickHandler = null;
         }
         
         @Override
-        public boolean execute()
+        public void execute()
         {
-            if(canceled == false)
+            if(isCanceled() == false)
             {
                 for(int i=0;i<indexesToRevalidate.size();i++)
                 {
@@ -215,7 +214,6 @@ public class GList<T> extends GComponent
                 GUtilities.clearSelection();
             }
             clickHandler = null;
-            return false;
         }
     }
     
@@ -234,7 +232,7 @@ public class GList<T> extends GComponent
         T value = (T) comp.getClientProperty("value");
         int current = index;
         boolean selected = selectedItems.contains(current);
-        Element previous = null;
+        GPElement previous = null;
         if(current > 0)
         {
             GLabel c = (GLabel) renderedItems.get(current-1);

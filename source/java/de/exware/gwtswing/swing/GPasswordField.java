@@ -1,7 +1,7 @@
 package de.exware.gwtswing.swing;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.InputElement;
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.element.GPInputElement;
 
 public class GPasswordField extends GTextField
 {
@@ -16,9 +16,9 @@ public class GPasswordField extends GTextField
     }
 
     @Override
-    protected InputElement createInputElement()
+    protected GPInputElement createInputElement()
     {
-        return Document.get().createPasswordInputElement();      
+        return GPlatform.getDoc().createPasswordInputElement();      
     }
 
     public char[] getPassword()

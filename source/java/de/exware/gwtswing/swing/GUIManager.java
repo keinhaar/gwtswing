@@ -4,18 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.user.client.Window;
-
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.GPlatform.Callback;
+import de.exware.gplatform.style.GPStyleSheet;
 import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GFont;
 import de.exware.gwtswing.awt.GInsets;
-import de.exware.gwtswing.lang.StyleSheet;
 
 public class GUIManager
 {
@@ -24,52 +18,51 @@ public class GUIManager
     
     static
     {
-        RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, GWT.getModuleBaseURL()
-            + "localization/de.exware.gwtswing.properties");
-        try
-        {
-            requestBuilder.sendRequest(null, new RequestCallback()
-            {
-                @Override
-                public void onError(Request request, Throwable exception)
-                {
-                    Window.alert("" + exception);
-                }
-
-                @Override
-                public void onResponseReceived(Request request, Response response)
-                {
-                    if (response.getStatusCode() == 200)
-                    {
-                        String text = response.getText();
-                        String[] strings;
-                        if(text.contains("\\r"))
-                        {
-                            strings = text.split("\\r");
-                        }
-                        else
-                        {
-                            strings = text.split("\\n");
-                        }
-                        for (int i = 0; i < strings.length; i++)
-                        {
-                            String[] prop = strings[i].trim().split("=");
-                            if (prop.length == 2)
-                            {
-                                String value = prop[1];
-                                while (value.endsWith("\\"))
-                                {
-                                    value = value.substring(0, value.length() - 1) + strings[++i];
-                                }
-                                resources.put(prop[0], value);
-                            }
-                        }
-                        isInitialized = true;
-                    }
-                }
-            });
+    	try
+    	{
+    		GPlatform.getInstance().loadData(GPlatform.getInstance().getModuleBaseURL()
+    				+ "localization/de.exware.gwtswing.properties", new Callback()
+	            {
+	                @Override
+	                public void onError(Throwable exception)
+	                {
+	                    GPlatform.getInstance().alert("" + exception);
+	                }
+	
+	                @Override
+	                public void onSuccess(int statuscode, String data)
+	                {
+	                    if (statuscode == 200)
+	                    {
+	                        String text = data;
+	                        String[] strings;
+	                        if(text.contains("\\r"))
+	                        {
+	                            strings = text.split("\\r");
+	                        }
+	                        else
+	                        {
+	                            strings = text.split("\\n");
+	                        }
+	                        for (int i = 0; i < strings.length; i++)
+	                        {
+	                            String[] prop = strings[i].trim().split("=");
+	                            if (prop.length == 2)
+	                            {
+	                                String value = prop[1];
+	                                while (value.endsWith("\\"))
+	                                {
+	                                    value = value.substring(0, value.length() - 1) + strings[++i];
+	                                }
+	                                resources.put(prop[0], value);
+	                            }
+	                        }
+	                        isInitialized = true;
+	                    }
+	                }
+	            });
         }
-        catch (RequestException e)
+        catch (Exception e)
         {
             Logger.getLogger(GUIManager.class.getName()).severe("Unable to load localization: " + e.getMessage());
             e.printStackTrace();
@@ -85,7 +78,8 @@ public class GUIManager
             int index = k.indexOf('/');
             String cssrule = k.substring(0, index);
             String property = k.substring(index+1);
-            col = StyleSheet.getColor(cssrule, property);
+            String c = GPStyleSheet.getColor(cssrule, property);
+            col = GColor.fromHex(c);
             resources.put(key, col);
         }
         return col;
@@ -99,14 +93,14 @@ public class GUIManager
             String k = key.toString();
             int index = k.indexOf('/');
             String cssrule = k.substring(0, index);
-            int size = StyleSheet.getInt(cssrule, "font-size");
+            int size = GPStyleSheet.getInt(cssrule, "font-size");
 //            if(GUtilities.getDevicePixelRatio() != 1)
 //            {
 //                double scaling = GUtilities.getDevicePixelRatio();
 //                size = (int) (size * scaling);
-//                StyleSheet.setPixel(cssrule, "font-size", size);
+//                GwtGPStyleSheet.setPixel(cssrule, "font-size", size);
 //            }
-            String family = StyleSheet.getProperty(cssrule,"font-family");
+            String family = GPStyleSheet.getProperty(cssrule,"font-family");
             font = new GFont(family, size, GFont.PLAIN);
             resources.put(key, font);
         }
@@ -184,7 +178,7 @@ public class GUIManager
         while(i == null && clazz != null)
         {
             String cssrule = prefix + clazz.getSimpleName();        
-            i = StyleSheet.getInt(cssrule, rule);
+            i = GPStyleSheet.getInt(cssrule, rule);
             clazz = clazz.getSuperclass();
         }
         return i;

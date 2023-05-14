@@ -1,16 +1,13 @@
 package de.exware.gwtswing.swing;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.Visibility;
-
+import de.exware.gplatform.GPElement;
+import de.exware.gplatform.GPlatform;
 import de.exware.gwtswing.awt.GDimension;
 
 public class GProgressBar extends GComponent
 {
-    private Element valueElement;
-    private Element textElement;
+    private GPElement valueElement;
+    private GPElement textElement;
     private int min = 0;
     private int max = 100;
     private int value = 0;
@@ -18,15 +15,15 @@ public class GProgressBar extends GComponent
     public GProgressBar()
     {
         super();
-        Element el = getPeer();
-        valueElement = Document.get().createDivElement();
+        GPElement el = getPeer();
+        valueElement = GPlatform.getDoc().createDivElement();
         el.appendChild(valueElement);
-        valueElement.getStyle().setWidth(30, Unit.PCT);
-        valueElement.getStyle().setHeight(100, Unit.PCT);
+        valueElement.getStyle().setWidthInPercent(30);
+        valueElement.getStyle().setHeightInPercent(100);
         valueElement.addClassName("gwts-GProgressBar-indicator");
-        textElement = Document.get().createDivElement();
+        textElement = GPlatform.getDoc().createDivElement();
         textElement.getStyle().setProperty("textAlign", "center");
-        textElement.getStyle().setWidth(100, Unit.PCT);
+        textElement.getStyle().setWidthInPercent(100);
         el.appendChild(textElement);
         setPreferredSize(new GDimension(100, new GLabel("Hallo").getPreferredSize().height + getStyleExtraHeight()));
     }
@@ -44,8 +41,8 @@ public class GProgressBar extends GComponent
             value = max;
         }
         this.value = value;
-        double val = value * 100 / max;
-        valueElement.getStyle().setWidth(val, Unit.PCT);
+        double val = value * 100.0 / max;
+        valueElement.getStyle().setWidthInPercent((int)val);
     }
 
     public int getValue()
@@ -65,6 +62,6 @@ public class GProgressBar extends GComponent
     
     public void setStringPainted(boolean painted)
     {
-        textElement.getStyle().setVisibility(painted ? Visibility.VISIBLE: Visibility.HIDDEN);
+        textElement.getStyle().setVisibility(painted ? "visible": "hidden");
     }
 }

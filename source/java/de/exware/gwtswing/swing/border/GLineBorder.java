@@ -1,8 +1,5 @@
 package de.exware.gwtswing.swing.border;
 
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
-
 import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GInsets;
 import de.exware.gwtswing.swing.GComponent;
@@ -11,7 +8,7 @@ public class GLineBorder implements GBorder
 {
     private int thickness = 1;
     private GColor color = new GColor(0, 0, 0);
-    private BorderStyle linestyle = BorderStyle.SOLID;
+    private String linestyle = "solid";
 
     public GLineBorder(GColor col)
     {
@@ -20,10 +17,10 @@ public class GLineBorder implements GBorder
 
     public GLineBorder(GColor col, int thickness)
     {
-        this(col, thickness, BorderStyle.SOLID);
+        this(col, thickness, "solid");
     }
 
-    public GLineBorder(GColor col, int thickness, BorderStyle linestyle)
+    public GLineBorder(GColor col, int thickness, String linestyle)
     {
         this.color = col;
         this.thickness = thickness;
@@ -41,6 +38,6 @@ public class GLineBorder implements GBorder
     {
         component.getPeer().getStyle().setBorderStyle(linestyle);
         component.getPeer().getStyle().setBorderColor(color.toHex());
-        component.getPeer().getStyle().setBorderWidth(thickness, Unit.PX);
+        component.getPeer().getStyle().setBorderWidth(thickness);
     }
 }

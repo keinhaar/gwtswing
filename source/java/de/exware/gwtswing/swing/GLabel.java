@@ -3,17 +3,15 @@ package de.exware.gwtswing.swing;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.dom.client.Style.TextAlign;
-
+import de.exware.gplatform.GPElement;
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.element.GPImageElement;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GFontMetrics;
-import de.exware.gwtswing.awt.GGraphics2D;
 
 public class GLabel extends GComponent
 {
-    private ImageElement img;
+    private GPImageElement img;
     private GIcon icon;
     private static Map<Long, GDimension> sizeCache = new HashMap<>();
     private static Boolean canDoFastMeasuring;
@@ -40,7 +38,7 @@ public class GLabel extends GComponent
     {
         if(pos == GSwingConstants.CENTER)
         {
-            getPeer().getStyle().setTextAlign(TextAlign.CENTER);
+            getPeer().getStyle().setTextAlign("center");
         }
     }
     
@@ -62,7 +60,7 @@ public class GLabel extends GComponent
 //    
     public String getText()
     {
-        Element peer = getPeer();
+        GPElement peer = getPeer();
         if(img != null)
         {
             peer.removeChild(img);
@@ -79,7 +77,7 @@ public class GLabel extends GComponent
     
     public void setText(String text)
     {
-        Element peer = getPeer();
+        GPElement peer = getPeer();
         peer.setInnerHTML(text);
         if(img != null)
         {
@@ -91,7 +89,7 @@ public class GLabel extends GComponent
     public void setIcon(GIcon icon)
     {
         this.icon = icon;
-        Element peer = getPeer();
+        GPElement peer = getPeer();
         if(icon == null)
         {
             if(img != null)
@@ -132,9 +130,7 @@ public class GLabel extends GComponent
                     {
                         dim = super.getPreferredSize();
                         GDimension dim2 = new GDimension();
-                        GGraphics2D g2d = GUtilities.getMeasureCanvas().getGraphics();
-                        g2d.setFont(getFont());
-                        dim2.width += g2d.stringWidth(text);
+                        dim2.width += GPlatform.getInstance().stringWidth(getFont().toCSS(), text);
                         dim2.width += getStyleExtraWidth();
                         if(img == null && text.contains("<") == false)
                         {
@@ -146,12 +142,10 @@ public class GLabel extends GComponent
                         && img == null && text.contains("<") == false)
                     {
                         dim = new GDimension();
-                        GGraphics2D g2d = GUtilities.getMeasureCanvas().getGraphics();
-                        g2d.setFont(getFont());
-                        dim.width += g2d.stringWidth(text);
+                        dim.width += GPlatform.getInstance().stringWidth(getFont().toCSS(), text);
                         dim.width += getStyleExtraWidth();
                         dim.width ++;
-                        GFontMetrics fm = g2d.getFontMetrics();
+                        GFontMetrics fm = getFontMetrics(getFont());
                         dim.height = fm.getHeight() + getStyleExtraHeight();
                     }
                     else

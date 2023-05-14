@@ -1,11 +1,10 @@
 package de.exware.gwtswing.swing;
 
-import com.google.gwt.dom.client.BodyElement;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Timer;
-
+import de.exware.gplatform.GPElement;
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.timer.AbstractGPTimerTask;
+import de.exware.gplatform.timer.GPTimer;
+import de.exware.gplatform.timer.GPTimerTask;
 import de.exware.gwtswing.awt.GPoint;
 import de.exware.gwtswing.awt.event.GMouseAdapter;
 import de.exware.gwtswing.awt.event.GMouseEvent;
@@ -22,39 +21,38 @@ public class GToolTipManager
     private static final int DEFAULT_OFFSET_Y = 0;
     private static GToolTipManager instance = new GToolTipManager();
     private int delay = 3000;
-    private Element popup;
+    private GPElement popup;
     private long popupTime;
     private MouseListener listener = new MouseListener();
-    private Timer showTimer;
+    private GPTimer timer = GPTimer.createInstance();
+    private GPTimerTask task;
 
     private GToolTipManager()
     {
-        popup = Document.get().createDivElement();;
+        popup = GPlatform.getDoc().createDivElement();;
         popup.addClassName("gwts-GComponent");
         popup.addClassName(DEFAULT_TOOLTIP_STYLE);
     }
 
     private void show(String text, int x, int y)
     {        
-        showTimer = new Timer()
+        task = new AbstractGPTimerTask()
         {
-            private boolean canceled = false;
-            
             @Override
-            public void run()
+            public void execute()
             {
-                if(canceled) return;
-                showTimer = null;
+                if(isCanceled()) return;
+                task = null;
                 popupTime = System.currentTimeMillis();
                 popup.setInnerHTML(text);
-                popup.getStyle().setLeft(x, Unit.PX);
-                popup.getStyle().setTop(y, Unit.PX);
-                BodyElement root = Document.get().getBody();
+                popup.getStyle().setLeft(x);
+                popup.getStyle().setTop(y);
+                GPElement root = GPlatform.getDoc().getBody();
                 root.appendChild(popup);
-                Timer t = new Timer()
+                GPTimerTask t = new AbstractGPTimerTask()
                 {
                     @Override
-                    public void run()
+                    public void execute()
                     {
                         if (popupTime + delay <= System.currentTimeMillis())
                         {
@@ -62,17 +60,10 @@ public class GToolTipManager
                         }
                     }
                 };
-                t.schedule(delay);
-            }
-            
-            @Override
-            public void cancel()
-            {
-                super.cancel();
-                canceled = true;
+                timer.schedule(t, delay);
             }
         };
-        showTimer.schedule(800);
+        timer.schedule(task, 800);
     }
 
     public static GToolTipManager getInstance()
@@ -105,9 +96,9 @@ public class GToolTipManager
         {
             super.mouseExited(evt);
             popup.removeFromParent();
-            if(showTimer != null)
+            if(task != null)
             {
-                showTimer.cancel();
+                task.cancel();
             }
         }
 
@@ -123,9 +114,9 @@ public class GToolTipManager
             if(text != null)
             {
                 GPoint loc = comp.getLocationOnScreen();
-                if(showTimer != null)
+                if(task != null)
                 {
-                    showTimer.cancel();
+                    task.cancel();
                 }
                 show(text, loc.x + evt.getX() + DEFAULT_OFFSET_X, loc.y + evt.getY() + DEFAULT_OFFSET_Y);
             }

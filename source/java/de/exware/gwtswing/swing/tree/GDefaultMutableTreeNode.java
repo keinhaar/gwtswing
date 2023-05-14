@@ -3,8 +3,6 @@ package de.exware.gwtswing.swing.tree;
 import java.util.ArrayList;
 import java.util.List;
 
-import jsinterop.annotations.JsMethod;
-
 public class GDefaultMutableTreeNode implements GMutableTreeNode
 {
     private List<GTreeNode> children;
@@ -21,7 +19,7 @@ public class GDefaultMutableTreeNode implements GMutableTreeNode
     }
 
     @Override
-    @JsMethod
+//    @JsMethod
     public String toString()
     {
         String str = "";

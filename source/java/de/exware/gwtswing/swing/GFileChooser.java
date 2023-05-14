@@ -3,8 +3,8 @@ package de.exware.gwtswing.swing;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
+import de.exware.gplatform.io.GPFile;
+import de.exware.gplatform.io.GPFileSystem;
 import de.exware.gwtswing.awt.GBorderLayout;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GGridLayout;
@@ -12,28 +12,26 @@ import de.exware.gwtswing.awt.event.GActionEvent;
 import de.exware.gwtswing.awt.event.GActionListener;
 import de.exware.gwtswing.awt.event.GMouseAdapter;
 import de.exware.gwtswing.awt.event.GMouseEvent;
-import de.exware.gwtswing.io.GFile;
-import de.exware.gwtswing.io.GFileSystemAsync;
 import de.exware.gwtswing.swing.table.GAbstractTableModel;
 import de.exware.gwtswing.swing.table.GTableManager;
 
 public class GFileChooser extends GComponent
 {
-    private GFileSystemAsync filesystem;
-    private GFile start;
+    private GPFileSystem filesystem;
+    private GPFile start;
     private GButton ok;
-    private GTable<GFile> table;
+    private GTable<GPFile> table;
     private GDialog dlg;
-    private GFile[] actualFileList;
+    private GPFile[] actualFileList;
     private GTableManager tableManager;
-    private GFile selectedFile;
+    private GPFile selectedFile;
     
-    public GFileChooser(GFileSystemAsync filesystem)
+    public GFileChooser(GPFileSystem filesystem)
     {
         this(filesystem, null);
     }
     
-    public GFileChooser(GFileSystemAsync filesystem, GFile start)
+    public GFileChooser(GPFileSystem filesystem, GPFile start)
     {
         this.filesystem = filesystem;
         this.start = start;
@@ -48,8 +46,8 @@ public class GFileChooser extends GComponent
                 if(e.getClickCount() > 1)
                 {
                     int index = table.getSelectedRows()[0];
-                    GFile file = actualFileList[index];
-                    filesystem.listFiles(file, new FileSystemCallBack());
+                    GPFile file = actualFileList[index];
+//                    filesystem.listFiles(file, new FileSystemCallBack());
                 }
             }
         });
@@ -57,7 +55,7 @@ public class GFileChooser extends GComponent
         spane.setPreferredSize(new GDimension(500,300));
         add(spane, GBorderLayout.CENTER);
         
-        filesystem.getRoots(new FileSystemCallBack());
+//        filesystem.getRoots(new FileSystemCallBack());
         
         GPanel buttons = new GPanel();
         buttons.setLayout(new GGridLayout(1, 2));
@@ -105,34 +103,34 @@ public class GFileChooser extends GComponent
         dlg.show();
     }
     
-    class FileSystemCallBack implements AsyncCallback<GFile[]>
-    {
-        @Override
-        public void onFailure(Throwable caught)
-        {
-            caught.printStackTrace();
-        }
-
-        @Override
-        public void onSuccess(GFile[] result)
-        {
-            if(result != null)
-            {
-                actualFileList = result;
-                table.setModel(new GFileTableModel(result));
-                tableManager.resetColumnSizes();
-                GScrollPane spane = (GScrollPane) table.getParent();
-                spane.refitContent();
-                table.revalidate();
-            }
-        }
-    }
+//    class FileSystemCallBack implements AsyncCallback<GFile[]>
+//    {
+//        @Override
+//        public void onFailure(Throwable caught)
+//        {
+//            caught.printStackTrace();
+//        }
+//
+//        @Override
+//        public void onSuccess(GFile[] result)
+//        {
+//            if(result != null)
+//            {
+//                actualFileList = result;
+//                table.setModel(new GFileTableModel(result));
+//                tableManager.resetColumnSizes();
+//                GScrollPane spane = (GScrollPane) table.getParent();
+//                spane.refitContent();
+//                table.revalidate();
+//            }
+//        }
+//    }
     
     class GFileTableModel extends GAbstractTableModel
     {
-        private List<GFile> files;
+        private List<GPFile> files;
         
-        public GFileTableModel(GFile[] result)
+        public GFileTableModel(GPFile[] result)
         {
             files = Arrays.asList(result);
         }
@@ -171,7 +169,7 @@ public class GFileChooser extends GComponent
         @Override
         public Object getValueAt(int row, int column)
         {
-            GFile file = files.get(row);
+            GPFile file = files.get(row);
             Object value = null;
             switch(column)
             {
@@ -190,13 +188,13 @@ public class GFileChooser extends GComponent
         
     }
 
-    public GFile getSelectedFile()
+    public GPFile getSelectedFile()
     {
         return selectedFile;
     }
 
-    public void setSelectedFile(GFile file)
+    public void setSelectedFile(GPFile file)
     {
-        filesystem.listFiles(file, new FileSystemCallBack());
+//        filesystem.listFiles(file, new FileSystemCallBack());
     }
 }

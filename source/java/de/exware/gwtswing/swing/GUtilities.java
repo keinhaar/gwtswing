@@ -2,20 +2,8 @@ package de.exware.gwtswing.swing;
 
 import java.util.Stack;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.BodyElement;
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import de.exware.gwtswing.awt.GCanvas;
+import de.exware.gplatform.GPElement;
+import de.exware.gplatform.GPlatform;
 import de.exware.gwtswing.awt.GGridBagConstraints;
 import de.exware.gwtswing.awt.GGridBagLayout;
 import de.exware.gwtswing.awt.GPoint;
@@ -29,21 +17,19 @@ import de.exware.gwtswing.awt.GPoint;
 public class GUtilities
 {
     public static final String CLIENT_PROPERTY_IGNORE_ENABLE_RECURSIVE = "CLIENT_PROPERTY_IGNORE_ENABLE_RECURSIVE";
-    private static DivElement measureElement;
-    private static GCanvas measureCanvas;
+    private static GPElement measureElement;
     
 
     static
     {
-        measureElement = Document.get().createDivElement();
+        measureElement = GPlatform.getDoc().createDivElement();
 //        measureElement.getStyle().setHeight(0, Unit.PX);
-        measureElement.getStyle().setLeft(0, Unit.PX);
-        measureElement.getStyle().setTop(50, Unit.PX);
+        measureElement.getStyle().setLeft(0);
+        measureElement.getStyle().setTop(50);
 //        measureElement.getStyle().setOverflow(Overflow.HIDDEN);
-        BodyElement body = Document.get().getBody();
+        GPElement body = GPlatform.getDoc().getBody();
         measureElement.getStyle().setZIndex(10000);
         body.appendChild(measureElement);
-        measureCanvas = new GCanvas();
     }
     
     /**
@@ -51,7 +37,7 @@ public class GUtilities
      * @param el
      * @param className
      */
-    public static void insertClassNameBefore(Element el, String className)
+    public static void insertClassNameBefore(GPElement el, String className)
     {
         String str = el.getClassName();
         str = className + " " + str;
@@ -82,21 +68,29 @@ public class GUtilities
      * @param w
      * @param gc
      */
-    public static void addToWidget(Element el, GComponent gc)
+    public static void addToWidget(GPElement el, GComponent gc)
     {
-        Element peer = gc.getPeer();
+        GPElement peer = gc.getPeer();
         el.appendChild(peer);
         gc.revalidate();
-//        gc.revalidate();
     }
 
-    public static native Object getStyleSheetValue() /*-{
-        if (true) {
-            var st = $doc.styleSheets;            
-            alert("STYLE: " + st[0].cssRules.item(0).selectorText);
-            return st;
-        } 
-    }-*/;
+    /**
+     * Brückenmethode. Diese fügt die GComponent zum body Element der Seite hinzu.
+     * @param gc
+     */
+    public static void addToBody(GComponent gc)
+    {
+        addToWidget(GPlatform.getDoc().getBody(), gc);
+    }
+
+//    public static native Object getStyleSheetValue() /*-{
+//        if (true) {
+//            var st = $doc.styleSheets;            
+//            alert("STYLE: " + st[0].cssRules.item(0).selectorText);
+//            return st;
+//        } 
+//    }-*/;
     
     /**
      * This Method returns an URL for a resource file in the specified plugin.
@@ -104,7 +98,7 @@ public class GUtilities
     public static final String getResource(String pluginid,String resourcename)
     {
        pluginid = pluginid.replace('.', '/');
-       String res = GWT.getModuleBaseForStaticFiles() + pluginid + resourcename;      
+       String res = GPlatform.getInstance().getModuleBaseForStaticFiles() + pluginid + resourcename;      
        return res;
     }
 
@@ -114,7 +108,7 @@ public class GUtilities
      */
     public static final String getServletURL(String servletPath)
     {
-       String res = GWT.getModuleBaseURL() + servletPath;      
+       String res = GPlatform.getInstance().getModuleBaseURL() + servletPath;      
        return res;
     }
 
@@ -124,14 +118,9 @@ public class GUtilities
      * Änderungen an Attributen sollten Rückgängig gemacht werden.
      * @return
      */
-    public static DivElement getMeasureElement()
+    public static GPElement getMeasureElement()
     {
         return measureElement;
-    }
-    
-    public static GCanvas getMeasureCanvas()
-    {
-        return measureCanvas;
     }
     
     public native static double getDevicePixelRatio()
@@ -309,14 +298,14 @@ public class GUtilities
         return val;
     }
     
-    public static native String getComputedStyleProperty(Element element, String propName) /*-{
-        if (element.currentStyle) {
-            return element.currentStyle[style];
-        } else if (window.getComputedStyle) {
-            return window.getComputedStyle(element, null).getPropertyValue(
-                    propName);
-        }
-    }-*/;    
+//    public static native String getComputedStyleProperty(Element element, String propName) /*-{
+//        if (element.currentStyle) {
+//            return element.currentStyle[style];
+//        } else if (window.getComputedStyle) {
+//            return window.getComputedStyle(element, null).getPropertyValue(
+//                    propName);
+//        }
+//    }-*/;    
     
     public static native void clearSelection() /*-{
         $wnd.getSelection().removeAllRanges();
@@ -341,43 +330,6 @@ public class GUtilities
             }
         }
     }    
-    
-    public static void loadTextResource(String url, AsyncCallback<String> callback)
-    {
-        try
-        {
-            RequestBuilder req = new RequestBuilder(RequestBuilder.GET, url);
-            req.sendRequest(null, new RequestCallback()
-            {
-                
-                @Override
-                public void onResponseReceived(Request request, Response response)
-                {
-                    int status = response.getStatusCode();
-                    if(status == 200  //OK
-                        || status == 0 && response.getText().length() > 0) //is zero on iphone or ipad
-                    {
-                        String text = response.getText();
-                        callback.onSuccess(text);
-                    }
-                    else
-                    {
-                        String text = "Unable to load resource " + url;
-                        callback.onFailure(new RuntimeException(text));
-                    }
-                }
-                
-                @Override
-                public void onError(Request request, Throwable exception)
-                {
-                    callback.onFailure(exception);
-                }
-            });
-        }
-        catch(RequestException ex)
-        {
-        }
-    }
 
     /**
      * 

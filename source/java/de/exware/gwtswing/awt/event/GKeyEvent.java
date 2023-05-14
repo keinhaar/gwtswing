@@ -1,5 +1,7 @@
 package de.exware.gwtswing.awt.event;
 
+import de.exware.gplatform.event.GPEvent;
+
 public class GKeyEvent extends GAWTEvent
 {
     public static final int VK_BACK_SPACE     = '\b';
@@ -26,23 +28,23 @@ public class GKeyEvent extends GAWTEvent
     private char character;
     private int keyCode;
     
-    public GKeyEvent(Object source, com.google.gwt.user.client.Event jsEvent)
+    public GKeyEvent(Object source, GPEvent jsEvent)
     {
         super(source); 
         isShift = jsEvent.getShiftKey();
         isAlt = jsEvent.getAltKey();
         isControl = jsEvent.getCtrlKey();
         keyCode = jsEvent.getKeyCode();
-        if(jsEvent.getTypeInt() == jsEvent.ONKEYPRESS)
+        if(jsEvent.getType() == GPEvent.Type.ONKEYPRESS)
         {
             character = (char)jsEvent.getCharCode();
             setId(KEY_TYPED);
         }
-        else if(jsEvent.getTypeInt() == jsEvent.ONKEYUP)
+        else if(jsEvent.getType() == GPEvent.Type.ONKEYUP)
         {
             setId(KEY_RELEASED);
         }
-        else if(jsEvent.getTypeInt() == jsEvent.ONKEYDOWN)
+        else if(jsEvent.getType() == GPEvent.Type.ONKEYDOWN)
         {
             setId(KEY_PRESSED);
         }

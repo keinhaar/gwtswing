@@ -1,16 +1,14 @@
 package de.exware.gwtswing.swing;
 
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.TextAreaElement;
-
+import de.exware.gplatform.GPElement;
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.element.GPTextAreaElement;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GFont;
 
 public class GTextArea extends GTextComponent
 {
-    protected TextAreaElement textElement;
+    protected GPTextAreaElement textElement;
 
     public GTextArea(String text)
     {
@@ -20,7 +18,7 @@ public class GTextArea extends GTextComponent
     public GTextArea(String text, int rows, int columns)
     {
         super();
-        textElement = Document.get().createTextAreaElement();
+        textElement = GPlatform.getDoc().createTextAreaElement();
         setPeer(textElement);
         setClassNames(textElement, "");
 //      getPeer().appendChild(textElement);
@@ -82,14 +80,14 @@ public class GTextArea extends GTextComponent
         GDimension dim = getCachedPreferredSize();
         if(dim == null)
         {
-            DivElement div = GUtilities.getMeasureElement();
-            TextAreaElement span = Document.get().createTextAreaElement();
+            GPElement div = GUtilities.getMeasureElement();
+            GPTextAreaElement span = GPlatform.getDoc().createTextAreaElement();
             span.setCols(textElement.getCols());
             span.setRows(textElement.getRows());
             span.setValue(getText());
             double fontSize = getFont().getSize2D();
             String family = getFont().getFamily();
-            span.getStyle().setFontSize(fontSize, Unit.PX);
+            span.getStyle().setFontSize((float) fontSize);
             span.getStyle().setProperty("fontFamily", family);
 //            span.setSize(textElement.getStyle().getWidth());
             div.appendChild(span);

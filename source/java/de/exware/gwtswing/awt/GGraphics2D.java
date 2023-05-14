@@ -3,10 +3,7 @@ package de.exware.gwtswing.awt;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.canvas.dom.client.CssColor;
-import com.google.gwt.canvas.dom.client.TextMetrics;
-
+import de.exware.gplatform.element.GPContext2d;
 import de.exware.gwtswing.awt.geom.Ellipse2D;
 
 /**
@@ -16,11 +13,11 @@ import de.exware.gwtswing.awt.geom.Ellipse2D;
  */
 public class GGraphics2D
 {
-    private Context2d graphics;
+    private GPContext2d graphics;
     private GFont font;
     private static Map<GFont, GFontMetrics> metricsCache = new HashMap<>();
 
-    public GGraphics2D(Context2d graphics)
+    public GGraphics2D(GPContext2d graphics)
     {
         this.graphics = graphics;
         graphics.setTransform(1,0,0,1,0,0);
@@ -71,7 +68,7 @@ public class GGraphics2D
         }
     }
 
-    private static void drawEllipseHelper(Context2d ctx, boolean fill, double x, double y, double w, double h) 
+    private static void drawEllipseHelper(GPContext2d ctx, boolean fill, double x, double y, double w, double h) 
     {
         double kappa = .5522848f;
         double ox = w / 2 * kappa; // control point offset horizontal
@@ -106,14 +103,13 @@ public class GGraphics2D
 
     public void setColor(GColor color)
     {
-        CssColor gwtcolor = CssColor.make(color.toHex());
-        graphics.setStrokeStyle(gwtcolor);
-        graphics.setFillStyle(gwtcolor);
+        graphics.setStrokeColor(color.toHex());
+        graphics.setFillColor(color.toHex());
     }
 
     public void drawImage(GImage image, int x, int y)
     {
-        graphics.drawImage(image.getImageElement(), x,y);
+        graphics.drawImage(image.getImageElement(), x, y);
     }
 
     public void drawImage(GImage image, int x, int y, int w, int h)
@@ -121,13 +117,6 @@ public class GGraphics2D
         graphics.drawImage(image.getImageElement(), x, y, w, h);
     }
 
-    public void drawImage(GImage image, int srcX, int srcY, int srcW, int srcH, int x, int y)
-    {
-        graphics.drawImage(image.getImageElement()
-            , x, y, x+(srcW), y+(srcH)
-            , srcX, srcY, srcX+srcW, srcY+srcH);
-    }
-    
     public void drawImage(GImage image, int destX, int destY, int destX2, int destY2, int srcX, int srcY, int srcX2, int srcY2)
     {
         graphics.drawImage(image.getImageElement()
@@ -171,14 +160,6 @@ public class GGraphics2D
     {
         graphics.setFont(gFont.toCSS());
         this.font = gFont;
-    }
-    
-    public int stringWidth(String text)
-    {
-        int width = 0;
-        TextMetrics tm = graphics.measureText(text);
-        width = (int) tm.getWidth();
-        return width;
     }
     
     public GFontMetrics getFontMetrics()
