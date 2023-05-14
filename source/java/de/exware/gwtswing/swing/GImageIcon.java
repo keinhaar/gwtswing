@@ -1,7 +1,7 @@
 package de.exware.gwtswing.swing;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.ImageElement;
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.element.GPImageElement;
 
 public class GImageIcon implements GIcon
 {
@@ -53,9 +53,9 @@ public class GImageIcon implements GIcon
         return h;
     }
 
-    static ImageElement createImageElement(GIcon icon)
+    static GPImageElement createImageElement(GIcon icon)
     {
-        ImageElement img = Document.get().createImageElement();
+        GPImageElement img = GPlatform.getDoc().createImageElement();
         img.setSrc(icon.getURL());
         img.setWidth(icon.getIconWidth());
         img.setHeight(icon.getIconHeight());

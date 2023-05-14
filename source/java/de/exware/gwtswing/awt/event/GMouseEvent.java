@@ -1,7 +1,6 @@
 package de.exware.gwtswing.awt.event;
 
-import com.google.gwt.user.client.Event;
-
+import de.exware.gplatform.event.GPEvent;
 import de.exware.gwtswing.awt.GInsets;
 import de.exware.gwtswing.awt.GPoint;
 import de.exware.gwtswing.swing.GComponent;
@@ -31,18 +30,18 @@ public class GMouseEvent extends GAWTEvent
         this.clickCount = clickcount;
     }
     
-    public GMouseEvent(Object source, com.google.gwt.user.client.Event jsEvent)
+    public GMouseEvent(Object source, GPEvent jsEvent)
     {
         this(source, jsEvent, 0);
     }
     
-    public GMouseEvent(Object source, Event jsEvent, int clickCount)
+    public GMouseEvent(Object source, GPEvent jsEvent, int clickCount)
     {
-        this(source, jsEvent, clickCount, jsEvent.getButton() == jsEvent.BUTTON_LEFT ? BUTTON1
-            : jsEvent.getButton() == jsEvent.BUTTON_MIDDLE ? BUTTON2 : BUTTON3);
+        this(source, jsEvent, clickCount, jsEvent.getButton() == GPEvent.Button.BUTTON_LEFT ? BUTTON1
+            : jsEvent.getButton() == GPEvent.Button.BUTTON_MIDDLE ? BUTTON2 : BUTTON3);
     }
     
-    public GMouseEvent(Object source, Event jsEvent, int clickCount, int button)
+    public GMouseEvent(Object source, GPEvent jsEvent, int clickCount, int button)
     {
         super(source); 
         this.mousebutton = button;
@@ -54,15 +53,15 @@ public class GMouseEvent extends GAWTEvent
         isShift = jsEvent.getShiftKey();
         isAlt = jsEvent.getAltKey();
         isControl = jsEvent.getCtrlKey();
-        if(jsEvent.getTypeInt() == jsEvent.ONMOUSEMOVE)
+        if(jsEvent.getType() == GPEvent.Type.ONMOUSEMOVE)
         {
             setId(MOUSE_MOVED);
         }
-        else if(jsEvent.getTypeInt() == jsEvent.ONMOUSEUP)
+        else if(jsEvent.getType() == GPEvent.Type.ONMOUSEUP)
         {
             setId(MOUSE_RELEASED);
         }
-        else if(jsEvent.getTypeInt() == jsEvent.ONCLICK)
+        else if(jsEvent.getType() == GPEvent.Type.ONCLICK)
         {
             setId(MOUSE_CLICKED);
         }

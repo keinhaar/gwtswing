@@ -1,8 +1,6 @@
 package de.exware.gwtswing.swing;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.ImageElement;
-
+import de.exware.gplatform.GPElement;
 import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GInsets;
@@ -11,7 +9,7 @@ import de.exware.gwtswing.swing.border.GBorderFactory;
 
 public class GToggleButton extends GAbstractButton
 {
-    private ImageElement img;
+    private GPElement img;
     private GIcon icon;
     private GColor background;
     private boolean selected;
@@ -67,14 +65,14 @@ public class GToggleButton extends GAbstractButton
     @Override
     public String getText()
     {
-        Element peer = getPeer();
+        GPElement peer = getPeer();
         return peer.getInnerText();
     }
 
     @Override
     public void setText(String text)
     {
-        Element peer = getPeer();
+        GPElement peer = getPeer();
         peer.setInnerHTML(text);
         if (img != null)
         {
@@ -87,7 +85,7 @@ public class GToggleButton extends GAbstractButton
     public void setIcon(GIcon icon)
     {
         this.icon = icon;
-        Element peer = getPeer();
+        GPElement peer = getPeer();
         if (icon == null)
         {
             if (img != null)
@@ -98,9 +96,9 @@ public class GToggleButton extends GAbstractButton
         }
         else
         {
-            ImageElement old = img;
+            GPElement old = img;
             img = GImageIcon.createImageElement(icon);
-            if (old != null && old.getParentNode() != null)
+            if (old != null && old.getParentElement() != null)
             {
                 peer.replaceChild(img, old);
             }

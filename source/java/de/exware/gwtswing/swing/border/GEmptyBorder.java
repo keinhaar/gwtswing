@@ -1,9 +1,6 @@
 package de.exware.gwtswing.swing.border;
 
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
-
+import de.exware.gplatform.GPStyle;
 import de.exware.gwtswing.awt.GInsets;
 import de.exware.gwtswing.swing.GComponent;
 
@@ -28,14 +25,14 @@ public class GEmptyBorder implements GBorder
     @Override
     public void install(GComponent component)
     {
-        Style style = component.getPeer().getStyle();
-        style.setBorderStyle(BorderStyle.SOLID);
-//        String col = StyleSheet.get(0).getCSSRule(".gwts-GComponent").getProperty("background-color");
+        GPStyle style = component.getPeer().getStyle();
+        style.setBorderStyle("solid");
+//        String col = GwtGPStyleSheet.get(0).getCSSRule(".gwts-GComponent").getProperty("background-color");
         style.setBorderColor("transparent");
-        style.setProperty("borderTopWidth", top, Unit.PX);
-        style.setProperty("borderLeftWidth", left, Unit.PX);
-        style.setProperty("borderBottomWidth", bottom, Unit.PX);
-        style.setProperty("borderRightWidth", right, Unit.PX);
-        style.setProperty("borderRadius", 0, Unit.PX);
+        style.setProperty("borderTopWidth", top + "px");
+        style.setProperty("borderLeftWidth", left + "px");
+        style.setProperty("borderBottomWidth", bottom + "px");
+        style.setProperty("borderRightWidth", right + "px");
+        style.setProperty("borderRadius", 0 + "px");
     }
 }

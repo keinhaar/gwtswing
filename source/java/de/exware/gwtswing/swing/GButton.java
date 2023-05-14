@@ -2,9 +2,8 @@ package de.exware.gwtswing.swing;
 
 import java.util.Objects;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.ImageElement;
-
+import de.exware.gplatform.GPElement;
+import de.exware.gplatform.element.GPImageElement;
 import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GInsets;
@@ -13,7 +12,7 @@ import de.exware.gwtswing.awt.event.GMouseEvent;
 
 public class GButton extends GAbstractButton
 {
-    private ImageElement img;
+    private GPImageElement img;
     private GColor background = GUIManager.getColor(".gwts-GButton/background-color");
 
     public GButton()
@@ -84,14 +83,14 @@ public class GButton extends GAbstractButton
     @Override
     public String getText()
     {
-        Element peer = getPeer();
+        GPElement peer = getPeer();
         return peer.getInnerText();
     }
 
     @Override
     public void setText(String text)
     {
-        Element peer = getPeer();
+        GPElement peer = getPeer();
         peer.setInnerHTML(text);
         if (img != null)
         {
@@ -106,7 +105,7 @@ public class GButton extends GAbstractButton
         if(Objects.equals(icon, getIcon()) == false)
         {
             super.setIcon(icon);
-            Element peer = getPeer();
+            GPElement peer = getPeer();
             if (icon == null)
             {
                 if (img != null)
@@ -117,9 +116,9 @@ public class GButton extends GAbstractButton
             }
             else
             {
-                ImageElement old = img;
+                GPImageElement old = img;
                 img = GImageIcon.createImageElement(icon);
-                if (old != null && old.getParentNode() != null)
+                if (old != null && old.getParentElement() != null)
                 {
                     peer.replaceChild(img, old);
                 }

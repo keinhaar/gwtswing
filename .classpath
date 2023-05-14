@@ -7,6 +7,7 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="com.gwtplugins.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.gplatform"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/de.exware.gplatform.gwt"/>
 	<classpathentry kind="output" path="out"/>
 </classpath>

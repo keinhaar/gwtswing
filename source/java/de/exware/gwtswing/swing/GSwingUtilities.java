@@ -1,8 +1,7 @@
 package de.exware.gwtswing.swing;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.RepeatingCommand;
-
+import de.exware.gplatform.timer.AbstractGPTimerTask;
+import de.exware.gplatform.timer.GPTimer;
 import de.exware.gwtswing.awt.GPoint;
 import de.exware.gwtswing.awt.GWindow;
 import de.exware.gwtswing.awt.event.GMouseEvent;
@@ -33,13 +32,14 @@ public class GSwingUtilities
     
     public static void invokeLater(final Runnable runner)
     {
-        Scheduler.get().scheduleFixedDelay(new RepeatingCommand()
+        GPTimer timer = GPTimer.createInstance();
+        timer.schedule(new AbstractGPTimerTask()
         {
+            
             @Override
-            public boolean execute()
+            public void execute()
             {
                 runner.run();
-                return false;
             }
         }, 10);
     }

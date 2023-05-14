@@ -1,23 +1,20 @@
 package de.exware.gwtswing.swing;
 
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.LabelElement;
-
+import de.exware.gplatform.GPElement;
+import de.exware.gplatform.GPlatform;
 import de.exware.gwtswing.awt.GDimension;
 
 public class GCheckBox extends GAbstractButton
 {
-    private LabelElement labelElement;
-    private DivElement textElement;
+    private GPElement labelElement;
+    private GPElement textElement;
     
     public GCheckBox(String text)
     {
-        super(Document.get().createCheckInputElement());
+        super(GPlatform.getDoc().createCheckInputElement());
         getPeer().removeChild(buttonElement);
-        labelElement = Document.get().createLabelElement();
-        textElement = Document.get().createDivElement();
+        labelElement = GPlatform.getDoc().createElement("label");
+        textElement = GPlatform.getDoc().createElement("div");
         getPeer().appendChild(labelElement);
         labelElement.appendChild(buttonElement);
         labelElement.appendChild(textElement);
@@ -66,7 +63,7 @@ public class GCheckBox extends GAbstractButton
         GDimension dim = getCachedPreferredSize();
         if(dim == null)
         {
-            DivElement div = GUtilities.getMeasureElement();
+            GPElement div = GUtilities.getMeasureElement();
             // SpanElement span = Document.get().createSpanElement();
             // span.setInnerText(getText());
             // double fontSize = getFont().getSize2D();
@@ -76,14 +73,14 @@ public class GCheckBox extends GAbstractButton
             // int h = span.getOffsetHeight() + getStyleExtraHeight();
             // div.removeChild(span);
             dim = new GDimension(0, 0);
-            Element clone = (Element) getPeer().cloneNode(true);
+            GPElement clone = getPeer().cloneNode(true);
             clone.getStyle().clearWidth();
             clone.getStyle().clearHeight();
             div.appendChild(clone);
-            Element label = (Element) clone.getChild(0);
-            Element cb = (Element) label.getChild(0);
+            GPElement label = clone.getChild(0);
+            GPElement cb = label.getChild(0);
             GLabel gl = new GLabel(getText());
-            Element text = (Element) label.getChild(1);
+            GPElement text = label.getChild(1);
             dim.width = cb.getOffsetWidth() + text.getOffsetWidth();
             dim.height = label.getOffsetHeight() > gl.getSize().getHeight() ? label.getOffsetHeight()
                 : gl.getSize().getHeight();

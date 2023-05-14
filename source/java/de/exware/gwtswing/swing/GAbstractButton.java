@@ -3,9 +3,8 @@ package de.exware.gwtswing.swing;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.InputElement;
-import com.google.gwt.user.client.Event;
-
+import de.exware.gplatform.element.GPInputElement;
+import de.exware.gplatform.event.GPEvent;
 import de.exware.gwtswing.awt.event.GAWTEvent;
 import de.exware.gwtswing.awt.event.GActionEvent;
 import de.exware.gwtswing.awt.event.GActionListener;
@@ -15,14 +14,14 @@ import de.exware.gwtswing.swing.event.GPropertyChangeListener;
 
 abstract public class GAbstractButton extends GComponent
 {
-    protected InputElement buttonElement;
+    protected GPInputElement buttonElement;
     private List<GActionListener> actionListeners;
     private GIcon icon;
     private GAction action;
     private String actionCommand;
     private GPropertyChangeListener propertyListener;
 
-    public GAbstractButton(InputElement element)
+    public GAbstractButton(GPInputElement element)
     {
         this();
         buttonElement = element;
@@ -31,7 +30,9 @@ abstract public class GAbstractButton extends GComponent
 
     protected GAbstractButton()
     {
-        initEventListener(Event.ONCLICK | Event.ONDBLCLICK | Event.ONKEYUP);
+        initEventListener(GPEvent.Type.ONCLICK
+            , GPEvent.Type.ONDBLCLICK 
+            , GPEvent.Type.ONKEYUP);
     }
     
     public void setAction(GAction action)
@@ -67,15 +68,15 @@ abstract public class GAbstractButton extends GComponent
     }
     
     @Override
-    public GAWTEvent handleEvent(Event event)
+    public GAWTEvent handleEvent(GPEvent event)
     {
         GAWTEvent bevent = super.handleEvent(event);
-        if(event.getTypeInt() == event.ONCLICK)
+        if(event.getType() == GPEvent.Type.ONCLICK)
         {
             bevent = fireActionEvent();
             event.stopPropagation();
         }
-        if(event.getTypeInt() == event.ONKEYUP)
+        if(event.getType() == GPEvent.Type.ONKEYUP)
         {
             GKeyEvent evt = (GKeyEvent) bevent;
             if(evt.getKeyCode() == GKeyEvent.VK_SPACE)

@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.gwt.storage.client.Storage;
-
+import de.exware.gplatform.GPStorage;
+import de.exware.gplatform.GPlatform;
 import de.exware.gwtswing.awt.event.GActionEvent;
 import de.exware.gwtswing.awt.event.GComponentAdapter;
 import de.exware.gwtswing.awt.event.GComponentEvent;
@@ -70,7 +70,7 @@ public class GTableManager
                     if(i>0) sb.append(';');
                     sb.append(table.getColumnWidth(i));
                 }
-                Storage storage = Storage.getLocalStorageIfSupported();
+                GPStorage storage = GPlatform.getInstance().getLocalStorage();
                 storage.setItem(GTableManager.this.storageKeyBase + ".columnSizes", sb.toString());
             }
         });
@@ -97,7 +97,7 @@ public class GTableManager
     
     public void resetColumnSizes()
     {
-        Storage storage = Storage.getLocalStorageIfSupported();
+        GPStorage storage = GPlatform.getInstance().getLocalStorage();
         String sizes = storage.getItem(storageKeyBase + ".columnSizes");
         if(sizes != null)
         {

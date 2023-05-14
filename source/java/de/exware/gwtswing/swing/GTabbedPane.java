@@ -10,10 +10,6 @@ package de.exware.gwtswing.swing;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.RepeatingCommand;
-import com.google.gwt.dom.client.Style.Unit;
-
 import de.exware.gwtswing.Constants;
 import de.exware.gwtswing.awt.GBorderLayout;
 import de.exware.gwtswing.awt.GColor;
@@ -156,7 +152,7 @@ public class GTabbedPane extends GComponent
                 }
             };
             tab.add(close, GBorderLayout.EAST);
-            close.getPeer().getStyle().setPadding(0, Unit.PX);
+            close.getPeer().getStyle().setPadding(0);
             close.putClientProperty("closeAction", "true");
             close.putClientProperty("tabIdentifier", tabIdentifier);
             close.setOpaque(false);
@@ -420,19 +416,22 @@ public class GTabbedPane extends GComponent
                     GTabListener l = tabListeners.get(i);
                     l.checkTabClosingAllowed(tevt);
                 }
-                Scheduler.get().scheduleFixedDelay(new RepeatingCommand()
+                GSwingUtilities.invokeLater(new Runnable()
                 {
-                    @Override
-                    public boolean execute()
-                    {
+                	@Override
+                	public void run() 
+                	{
                         CloseState cstate = tevt.getCloseState();
                         if (cstate == CloseState.CLOSE)
                         {
                             removeTab(tabIdentifier);
                         }
-                        return cstate == CloseState.IN_PROGRESS;
-                    }
-                }, 10);
+                        if(cstate == CloseState.IN_PROGRESS)
+                        {
+                        	GSwingUtilities.invokeLater(this);
+                        }
+                	}
+                });
             }
             else if(comp.isEnabled())
             {

@@ -1,36 +1,37 @@
 package de.exware.gwtswing.awt;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventListener;
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.element.GPImageElement;
+import de.exware.gplatform.event.GPEvent;
+import de.exware.gplatform.event.GPEventListener;
 
 public class GImage
 {
-    private ImageElement bitmap;
+    private GPImageElement bitmap;
     private boolean loaded;
     private boolean error;
     
     public GImage(String url)
     {
-        this.bitmap = Document.get().createImageElement();
-        Event.setEventListener(bitmap, new EventListener()
+        this.bitmap = GPlatform.getDoc().createImageElement();
+        bitmap.enabledEvents(GPEvent.Type.ONLOAD, GPEvent.Type.ONERROR);
+        bitmap.setEventListener(new GPEventListener()
         {
+            
             @Override
-            public void onBrowserEvent(Event event)
+            public void onBrowserEvent(GPEvent event)
             {
-                if(event.getTypeInt() == Event.ONLOAD)
+                if(event.getType() == GPEvent.Type.ONLOAD)
                 {
                     loaded = true;
                 }
-                else if(event.getTypeInt() == Event.ONERROR)
+                else if(event.getType() == GPEvent.Type.ONERROR)
                 {
                     error = true;
                 }
-                Event.setEventListener(bitmap, null);
+                bitmap.setEventListener(null);
             }
         });
-        Event.sinkEvents(bitmap, Event.ONLOAD | Event.ONERROR);
         bitmap.setSrc(url);
     }
 
@@ -46,7 +47,7 @@ public class GImage
         return nh;
     }
 
-    public ImageElement getImageElement()
+    public GPImageElement getImageElement()
     {
         return bitmap;
     }

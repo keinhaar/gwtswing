@@ -1,20 +1,17 @@
 package de.exware.gwtswing.swing;
 
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.InputElement;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Unit;
-
+import de.exware.gplatform.GPElement;
+import de.exware.gplatform.GPStyle;
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.element.GPInputElement;
+import de.exware.gplatform.style.GPStyleSheet;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GFont;
 import de.exware.gwtswing.awt.event.GKeyListener;
-import de.exware.gwtswing.lang.StyleSheet;
 
 public class GTextField extends GTextComponent
 {
-    protected InputElement textElement;
+    protected GPInputElement textElement;
 
     public GTextField(int length)
     {
@@ -39,7 +36,7 @@ public class GTextField extends GTextComponent
     }
 
     @Override
-    protected Element getInputElement()
+    protected GPInputElement getInputElement()
     {
         return textElement;
     }
@@ -58,9 +55,9 @@ public class GTextField extends GTextComponent
 //        initEventListener(textElement, Event.ONKEYDOWN | Event.ONKEYUP | Event.ONKEYPRESS);
     }
     
-    protected InputElement createInputElement()
+    protected GPInputElement createInputElement()
     {
-        return Document.get().createTextInputElement();        
+        return GPlatform.getDoc().createTextInputElement();        
     }
     
     @Override
@@ -87,21 +84,21 @@ public class GTextField extends GTextComponent
     public void setSize(int width, int height)
     {
         super.setSize(width, height);
-        Style style = textElement.getStyle();
-        int pw = StyleSheet.getInt(".gwts-textInput", "padding-right")
-            + StyleSheet.getInt(".gwts-textInput", "padding-left")
-            + StyleSheet.getInt(".gwts-textInput", "border-left-width")
-            + StyleSheet.getInt(".gwts-textInput", "border-right-width")
+        GPStyle style = textElement.getStyle();
+        int pw = GPStyleSheet.getInt(".gwts-textInput", "padding-right")
+            + GPStyleSheet.getInt(".gwts-textInput", "padding-left")
+            + GPStyleSheet.getInt(".gwts-textInput", "border-left-width")
+            + GPStyleSheet.getInt(".gwts-textInput", "border-right-width")
             ;
         width = width - pw;
-        int ph = StyleSheet.getInt(".gwts-textInput", "padding-top")
-            + StyleSheet.getInt(".gwts-textInput", "padding-bottom")
-            + StyleSheet.getInt(".gwts-textInput", "border-top-width")
-            + StyleSheet.getInt(".gwts-textInput", "border-bottom-width")
+        int ph = GPStyleSheet.getInt(".gwts-textInput", "padding-top")
+            + GPStyleSheet.getInt(".gwts-textInput", "padding-bottom")
+            + GPStyleSheet.getInt(".gwts-textInput", "border-top-width")
+            + GPStyleSheet.getInt(".gwts-textInput", "border-bottom-width")
             ;
         height = height - ph;
-        style.setWidth(width, Unit.PX);
-        style.setHeight(height, Unit.PX);
+        style.setWidth(width);
+        style.setHeight(height);
     }
     
     @Override
@@ -110,15 +107,15 @@ public class GTextField extends GTextComponent
         GDimension dim = getCachedPreferredSize();
         if(dim == null)
         {
-            DivElement div = GUtilities.getMeasureElement();
-            InputElement span = Document.get().createTextInputElement();
+            GPElement div = GUtilities.getMeasureElement();
+            GPInputElement span = GPlatform.getDoc().createTextInputElement();
             span.setValue(getText());
-            double fontSize = getFont().getSize2D();
+            float fontSize = getFont().getSize2D();
             String family = getFont().getFamily();
-            span.getStyle().setFontSize(fontSize, Unit.PX);
+            span.getStyle().setFontSize(fontSize);
             span.getStyle().setProperty("fontFamily", family);
             span.setSize(textElement.getSize());
-            span.getStyle().setBorderWidth(1, Unit.PX);
+            span.getStyle().setBorderWidth(1);
             div.appendChild(span);
             int w = span.getOffsetWidth() + getStyleExtraWidth();
             int h = span.getOffsetHeight() + getStyleExtraHeight() + 3;

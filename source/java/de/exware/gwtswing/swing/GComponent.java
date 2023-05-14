@@ -5,24 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.Visibility;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventListener;
-
+import de.exware.gplatform.GPElement;
+import de.exware.gplatform.GPStyle;
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.event.GPEvent;
+import de.exware.gplatform.event.GPEventListener;
 import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GCursor;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GFont;
+import de.exware.gwtswing.awt.GFontMetrics;
 import de.exware.gwtswing.awt.GInsets;
 import de.exware.gwtswing.awt.GLayoutManager;
 import de.exware.gwtswing.awt.GPoint;
@@ -46,7 +38,7 @@ import de.exware.gwtswing.swing.border.GBorder;
 public class GComponent
 {
     private static final long LONG_CLICK_TIME = 500;
-    private Element peer;
+    private GPElement peer;
     private List<GComponent> components;
     private GLayoutManager layout;
     private GComponent parent;
@@ -76,10 +68,10 @@ public class GComponent
 
     public GComponent()
     {
-        this(Document.get().createDivElement());
+        this(GPlatform.getDoc().createDivElement());
     }
 
-    protected GComponent(Element peer)
+    protected GComponent(GPElement peer)
     {
         setPeer(peer);
         setClassNames(peer, "");
@@ -99,7 +91,7 @@ public class GComponent
         return true;
     }
     
-    protected void setClassNames(Element el, String additionalName)
+    protected void setClassNames(GPElement el, String additionalName)
     {
         el.setClassName(additionalName);
         Class cl = getClass();
@@ -136,7 +128,9 @@ public class GComponent
         if(keyListeners == null)
         {
             keyListeners = new ArrayList<>();
-            initEventListener(Event.ONKEYDOWN | Event.ONKEYPRESS | Event.ONKEYUP);
+            initEventListener(GPEvent.Type.ONKEYDOWN
+                , GPEvent.Type.ONKEYPRESS
+                , GPEvent.Type.ONKEYUP);
         }
         if(keyListeners.contains(listener) == false)
         {
@@ -149,7 +143,7 @@ public class GComponent
         if(focusListeners == null)
         {
             focusListeners = new ArrayList<>();
-            initEventListener(Event.ONFOCUS);
+            initEventListener(GPEvent.Type.ONFOCUS);
         }
         if(focusListeners.contains(listener) == false)
         {
@@ -170,7 +164,13 @@ public class GComponent
         if(mouseListeners == null)
         {
             mouseListeners = new ArrayList<>();
-            initEventListener(Event.ONMOUSEOVER | Event.ONMOUSEOUT | Event.ONCLICK | Event.ONMOUSEDOWN | Event.ONMOUSEUP | Event.ONDBLCLICK | Event.ONCONTEXTMENU);
+            initEventListener(GPEvent.Type.ONMOUSEOVER
+                , GPEvent.Type.ONMOUSEOUT
+                , GPEvent.Type.ONCLICK
+                , GPEvent.Type.ONMOUSEDOWN
+                , GPEvent.Type.ONMOUSEUP 
+                , GPEvent.Type.ONDBLCLICK 
+                , GPEvent.Type.ONCONTEXTMENU);
         }
         if(mouseListeners.contains(listener) == false)
         {
@@ -183,7 +183,7 @@ public class GComponent
         if(mouseWheelListeners == null)
         {
             mouseWheelListeners = new ArrayList<>();
-            initEventListener(Event.ONMOUSEWHEEL);
+            initEventListener(GPEvent.Type.ONMOUSEWHEEL);
         }
         if(mouseWheelListeners.contains(listener) == false)
         {
@@ -196,10 +196,10 @@ public class GComponent
         if(touchListeners == null)
         {
             touchListeners = new ArrayList<>();
-            initEventListener(Event.ONTOUCHSTART | Event.ONTOUCHEND | Event.ONTOUCHMOVE);
-            DOM.sinkBitlessEvent(getPeer(), "touchstart");
-            DOM.sinkBitlessEvent(getPeer(), "touchmove");
-            DOM.sinkBitlessEvent(getPeer(), "touchend");
+//            initEventListener(Event.ONTOUCHSTART | Event.ONTOUCHEND | Event.ONTOUCHMOVE);
+//            DOM.sinkBitlessEvent(getPeer(), "touchstart");
+//            DOM.sinkBitlessEvent(getPeer(), "touchmove");
+//            DOM.sinkBitlessEvent(getPeer(), "touchend");
         }
         if(touchListeners.contains(listener) == false)
         {
@@ -212,7 +212,7 @@ public class GComponent
         if(mouseMotionListeners == null)
         {
             mouseMotionListeners = new ArrayList<>();
-            initEventListener(Event.ONMOUSEMOVE);
+            initEventListener(GPEvent.Type.ONMOUSEMOVE);
         }
         if(mouseMotionListeners.contains(listener) == false)
         {
@@ -236,10 +236,10 @@ public class GComponent
         }
     }
     
-    class SingleEventListener implements EventListener
+    class SingleEventListener implements GPEventListener
     {
         @Override
-        public void onBrowserEvent(Event event)
+        public void onBrowserEvent(GPEvent event)
         {
             GAWTEvent obj = handleEvent(event);
             if(obj == null)
@@ -261,27 +261,27 @@ public class GComponent
     /**
      * Sollte in allen addXXXListener Methoden aufgerufen werden.
      */
-    protected void initEventListener(int eventTypeMask)
+    protected void initEventListener(GPEvent.Type ... eventTypes)
     {
-        initEventListener(getInputElement(), eventTypeMask);
+        initEventListener(getInputElement(), eventTypes);
     }
     
     /**
      */
-    protected void initEventListener(Element element, int eventTypeMask)
+    protected void initEventListener(GPElement element, GPEvent.Type ... eventTypes)
     {
         if(eventListener == null)
         {
             eventListener = new SingleEventListener();
-            Event.setEventListener(element, eventListener);
+            element.setEventListener(eventListener);
         }
-        Event.sinkEvents(element, Event.getEventsSunk(element) | eventTypeMask);
+        element.enabledEvents( eventTypes );
     }
     
-    public GAWTEvent handleEvent(Event event)
+    public GAWTEvent handleEvent(GPEvent event)
     {
         GAWTEvent bevent = null;
-        if(event.getTypeInt() == event.ONMOUSEOVER)
+        if(event.getType() == GPEvent.Type.ONMOUSEOVER)
         {
             GMouseEvent evt = new GMouseEvent(this, event);
             bevent = evt;
@@ -290,7 +290,7 @@ public class GComponent
                 mouseListeners.get(i).mouseEntered(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONMOUSEOUT)
+        else if(event.getType() == GPEvent.Type.ONMOUSEOUT)
         {
             GMouseEvent evt = new GMouseEvent(this, event);
             bevent = evt;
@@ -300,7 +300,7 @@ public class GComponent
                 lis.mouseExited(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONCLICK && isEnabled())
+        else if(event.getType() == GPEvent.Type.ONCLICK && isEnabled())
         {
             if(isLongClickEnabled && longClickPerformed)
             {
@@ -316,7 +316,7 @@ public class GComponent
                 }
             }
         }
-        else if(event.getTypeInt() == event.ONCONTEXTMENU && isEnabled())
+        else if(event.getType() == GPEvent.Type.ONCONTEXTMENU && isEnabled())
         {
             event.preventDefault();
             GMouseEvent evt = new GMouseEvent(this, event, 1, GMouseEvent.BUTTON3);
@@ -326,7 +326,7 @@ public class GComponent
                 mouseListeners.get(i).mouseClicked(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONDBLCLICK && isEnabled())
+        else if(event.getType() == GPEvent.Type.ONDBLCLICK && isEnabled())
         {
             GMouseEvent evt = new GMouseEvent(this, event, 2);
             bevent = evt;
@@ -335,7 +335,7 @@ public class GComponent
                 mouseListeners.get(i).mouseClicked(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONMOUSEDOWN && isEnabled())
+        else if(event.getType() == GPEvent.Type.ONMOUSEDOWN && isEnabled())
         {
             if(isLongClickEnabled && supportsLongClick())
             {
@@ -348,7 +348,7 @@ public class GComponent
                 mouseListeners.get(i).mousePressed(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONMOUSEUP && isEnabled())
+        else if(event.getType() == GPEvent.Type.ONMOUSEUP && isEnabled())
         {
             if(isLongClickEnabled && supportsLongClick())
             {
@@ -371,7 +371,7 @@ public class GComponent
                 mouseListeners.get(i).mouseReleased(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONMOUSEMOVE)
+        else if(event.getType() == GPEvent.Type.ONMOUSEMOVE)
         {
             GMouseEvent evt = new GMouseEvent(this, event);
             bevent = evt;
@@ -380,7 +380,7 @@ public class GComponent
                 mouseMotionListeners.get(i).mouseMoved(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONMOUSEWHEEL)
+        else if(event.getType() == GPEvent.Type.ONMOUSEWHEEL)
         {
             GMouseWheelEvent evt = new GMouseWheelEvent(this, event);
             bevent = evt;
@@ -389,7 +389,7 @@ public class GComponent
                 mouseWheelListeners.get(i).mouseWheelMoved(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONTOUCHSTART)
+        else if(event.getType() == GPEvent.Type.ONTOUCHSTART)
         {
             GTouchEvent evt = new GTouchEvent(this, event);
             bevent = evt;
@@ -398,7 +398,7 @@ public class GComponent
                 touchListeners.get(i).touchStart(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONTOUCHMOVE)
+        else if(event.getType() == GPEvent.Type.ONTOUCHMOVE)
         {
             GTouchEvent evt = new GTouchEvent(this, event);
             bevent = evt;
@@ -407,7 +407,7 @@ public class GComponent
                 touchListeners.get(i).touchMove(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONTOUCHEND)
+        else if(event.getType() == GPEvent.Type.ONTOUCHEND)
         {
             GTouchEvent evt = new GTouchEvent(this, event);
             bevent = evt;
@@ -416,7 +416,7 @@ public class GComponent
                 touchListeners.get(i).touchEnd(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONKEYDOWN && isEnabled())
+        else if(event.getType() == GPEvent.Type.ONKEYDOWN && isEnabled())
         {
             GKeyEvent evt = new GKeyEvent(this, event);
             bevent = evt;
@@ -431,7 +431,7 @@ public class GComponent
                 }
             }
         }
-        else if(event.getTypeInt() == event.ONKEYUP && isEnabled())
+        else if(event.getType() == GPEvent.Type.ONKEYUP && isEnabled())
         {
             GKeyEvent evt = new GKeyEvent(this, event);
             bevent = evt;
@@ -446,7 +446,7 @@ public class GComponent
                 }
             }
         }
-        else if(event.getTypeInt() == event.ONKEYPRESS && isEnabled())
+        else if(event.getType() == GPEvent.Type.ONKEYPRESS && isEnabled())
         {
             GKeyEvent evt = new GKeyEvent(this, event);
             bevent = evt;
@@ -463,7 +463,7 @@ public class GComponent
                 }
             });
         }
-        else if(event.getTypeInt() == event.ONFOCUS)
+        else if(event.getType() == GPEvent.Type.ONFOCUS)
         {
             GFocusEvent evt = new GFocusEvent(this);
             bevent = evt;
@@ -472,16 +472,7 @@ public class GComponent
                 focusListeners.get(i).focusGained(evt);
             }
         }
-        else if(event.getTypeInt() == event.ONFOCUS)
-        {
-            GFocusEvent evt = new GFocusEvent(this);
-            bevent = evt;
-            for(int i=0;focusListeners != null && i< focusListeners.size();i++)
-            {
-                focusListeners.get(i).focusGained(evt);
-            }
-        }
-//        System.out.println("EVENT " + bevent + "; "  +event.getTypeInt());
+//        System.out.println("EVENT " + bevent + "; "  +event.getType());
         return bevent;
     }
 
@@ -583,7 +574,7 @@ public class GComponent
     public void setVisible(boolean visible)
     {
         this.visible = visible;
-        getPeer().getStyle().setVisibility(visible ? Visibility.VISIBLE : Visibility.HIDDEN);
+        getPeer().getStyle().setVisibility(visible ? "visible" : "hidden");
 //        int count = getComponentCount();
 //        for(int i=0;i<count;i++)
 //        {
@@ -614,17 +605,17 @@ public class GComponent
         return showing;
     }
     
-    public Element getPeer()
+    public GPElement getPeer()
     {
         return peer;
     }
 
-    protected Element getInputElement()
+    protected GPElement getInputElement()
     {
         return getPeer();
     }
     
-    protected void setPeer(Element peer)
+    protected void setPeer(GPElement peer)
     {
         this.peer = peer;
     }
@@ -663,8 +654,8 @@ public class GComponent
             }
             else if(dim == null)
             {
-                DivElement div = GUtilities.getMeasureElement();
-                Element clone = (Element) getPeer().cloneNode(true);
+                GPElement div = GUtilities.getMeasureElement();
+                GPElement clone = getPeer().cloneNode(true);
 //                if(this instanceof GLabel && ((GLabel)this).getText().contains("This is an"))
 //                {
 ////                    System.out.println("ABC");
@@ -672,9 +663,9 @@ public class GComponent
                 
                 clone.getStyle().clearWidth();
                 clone.getStyle().clearHeight();
-                clone.getStyle().setPosition(Position.RELATIVE);
-                clone.getStyle().setDisplay(Display.BLOCK);
-                clone.getStyle().setVisibility(Visibility.VISIBLE);
+                clone.getStyle().setPosition("relative");
+                clone.getStyle().setDisplay("block");
+                clone.getStyle().setVisibility("visible");
                 int ew = getStyleExtraWidth();
                 clone.getStyle().setProperty("maxWidth",(maxWidthForPreferredSize - ew) + "px");
                 String family = getFont().getFamily();
@@ -783,9 +774,9 @@ public class GComponent
 
     public void setLocation(int x,int y)
     {
-        Style style = getPeer().getStyle();
-        style.setLeft(x, Unit.PX);
-        style.setTop(y, Unit.PX);
+        GPStyle style = getPeer().getStyle();
+        style.setLeft(x);
+        style.setTop(y);
     }
     
     public void setSize(GDimension dim)
@@ -803,9 +794,9 @@ public class GComponent
             height -= getStyleExtraHeight();
             if(width < 0) width = 0;
             if(height < 0) height = 0;
-            Style style = getPeer().getStyle();
-            style.setWidth(width, Unit.PX);
-            style.setHeight(height, Unit.PX);
+            GPStyle style = getPeer().getStyle();
+            style.setWidth(width);
+            style.setHeight(height);
             GComponentEvent evt = new GComponentEvent(this);
             for(int i=0;componentListeners != null && i<componentListeners.size();i++)
             {
@@ -816,8 +807,8 @@ public class GComponent
     
     public GPoint getLocation()
     {
-        Style style = getPeer().getStyle();
-        GPoint loc = new GPoint(GUtilities.getPixelValue(style.getLeft()),GUtilities.getPixelValue(style.getTop()));
+        GPStyle style = getPeer().getStyle();
+        GPoint loc = new GPoint( style.getLeft(), style.getTop() );
         return loc;
     }
     
@@ -959,8 +950,8 @@ public class GComponent
         if(border == null)
         {
             getPeer().getStyle().setBorderColor("unset");
-            getPeer().getStyle().setBorderStyle(BorderStyle.NONE);
-            getPeer().getStyle().setBorderWidth(0, Unit.PX);
+            getPeer().getStyle().setBorderStyle("none");
+            getPeer().getStyle().setBorderWidth(0);
             getPeer().getStyle().setProperty("borderRadius", "0px");
         }
         if(border != null)
@@ -1013,13 +1004,13 @@ public class GComponent
         setCachedPreferredSize(null);
     }
     
-    protected void setFont(Element peer, GFont font)
+    protected void setFont(GPElement peer, GFont font)
     {
-        peer.getStyle().setFontSize(font.getSize2D(), Unit.PX);
+        peer.getStyle().setFontSize(font.getSize2D());
         peer.getStyle().setProperty("fontFamily", font.getFamily());
         if(font.getStyle() == font.BOLD)
         {
-            peer.getStyle().setFontWeight(FontWeight.BOLD);
+            peer.getStyle().setFontWeight("bold");
         }
     }
 
@@ -1077,5 +1068,10 @@ public class GComponent
 
     public void requestFocus()
     {
+    }
+    
+    public GFontMetrics getFontMetrics(GFont font)
+    {
+        return new GFontMetrics(font);
     }
 }

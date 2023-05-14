@@ -3,12 +3,11 @@ package de.exware.gwtswing.swing;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.OptionElement;
-import com.google.gwt.dom.client.SelectElement;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventListener;
-
+import de.exware.gplatform.GPlatform;
+import de.exware.gplatform.element.GPOptionElement;
+import de.exware.gplatform.element.GPSelectElement;
+import de.exware.gplatform.event.GPEvent;
+import de.exware.gplatform.event.GPEventListener;
 import de.exware.gwtswing.DefaultStringRenderer;
 import de.exware.gwtswing.StringRenderer;
 import de.exware.gwtswing.awt.GDimension;
@@ -23,19 +22,19 @@ import de.exware.gwtswing.awt.event.GActionListener;
  */
 public class GComboBox<T> extends GComponent
 {
-    private SelectElement selectElement;
+    private GPSelectElement selectElement;
     private List<GActionListener> actionListeners;
     private GComboBoxModel<T> model;
     private StringRenderer<T> renderer = new DefaultStringRenderer<>();
 
     public GComboBox(GComboBoxModel<T> model)
     {
-        selectElement = Document.get().createSelectElement();
-        Event.sinkEvents(selectElement, Event.ONCHANGE);
-        Event.setEventListener(selectElement, new EventListener()
+        selectElement = GPlatform.getDoc().createSelectElement();
+        selectElement.enabledEvents(GPEvent.Type.ONCHANGE);
+        selectElement.setEventListener(new GPEventListener()
         {
             @Override
-            public void onBrowserEvent(Event event)
+            public void onBrowserEvent(GPEvent event)
             {
                 int index = selectElement.getSelectedIndex();
                 setSelectedItem(GComboBox.this.model.getElementAt(index));
@@ -82,11 +81,11 @@ public class GComboBox<T> extends GComponent
 
     private void _addItem(T item)
     {
-        OptionElement opt = Document.get().createOptionElement();
+        GPOptionElement opt = GPlatform.getDoc().createOptionElement();
         String t = renderer.toString(item);
         opt.setValue(t);
         opt.setInnerHTML(t);
-        selectElement.add(opt, null);
+        selectElement.add(opt);
     }
     
     public T getSelectedItem()
@@ -161,7 +160,7 @@ public class GComboBox<T> extends GComponent
         if(actionListeners == null)
         {
             actionListeners = new ArrayList<>();
-            initEventListener(Event.ONCLICK);
+            initEventListener(GPEvent.Type.ONCLICK);
         }
         if(actionListeners.contains(listener) == false)
         {

@@ -11,8 +11,6 @@
  */
 package de.exware.gwtswing.swing;
 
-import com.google.gwt.dom.client.Style.Visibility;
-
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GInsets;
 import de.exware.gwtswing.awt.GLayoutManager;
@@ -88,7 +86,7 @@ public class CardPanel extends GComponent
     @Override
     public void setVisible(boolean visible)
     {
-        getPeer().getStyle().setVisibility(visible ? Visibility.VISIBLE : Visibility.HIDDEN);
+        super.setVisible(visible);
         GComponent comp = getCurrentComponent();
         if(comp != null)
         {

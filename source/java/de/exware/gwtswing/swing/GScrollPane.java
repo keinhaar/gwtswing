@@ -1,11 +1,7 @@
 package de.exware.gwtswing.swing;
 
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.Visibility;
-
+import de.exware.gplatform.GPElement;
+import de.exware.gplatform.GPlatform;
 import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GInsets;
@@ -15,20 +11,20 @@ import de.exware.gwtswing.swing.border.GBorderFactory;
 public class GScrollPane extends GComponent
 {
     private static int scrollbarWidth;
-    private DivElement innerDiv;
+    private GPElement innerDiv;
     private GDimension compDimensions;
     
     static
     {
-        DivElement div = Document.get().createDivElement();
-        div.getStyle().setOverflow(Overflow.SCROLL);
-        div.getStyle().setWidth(100, Unit.PX);
-        div.getStyle().setHeight(100, Unit.PX);
-        DivElement idiv = Document.get().createDivElement();
-        idiv.getStyle().setWidth(200, Unit.PX);
-        idiv.getStyle().setHeight(200, Unit.PX);
+        GPElement div = GPlatform.getDoc().createDivElement();
+        div.getStyle().setOverflow("scroll");
+        div.getStyle().setWidth(100);
+        div.getStyle().setHeight(100);
+        GPElement idiv = GPlatform.getDoc().createDivElement();
+        idiv.getStyle().setWidth(200);
+        idiv.getStyle().setHeight(200);
         div.appendChild(idiv);
-        Document.get().getBody().appendChild(div);
+        GPlatform.getDoc().getBody().appendChild(div);
         int w = div.getClientWidth();
         int ow = div.getOffsetWidth();
         scrollbarWidth = ow - w;
@@ -37,7 +33,7 @@ public class GScrollPane extends GComponent
     
     public GScrollPane(GComponent comp)
     {
-        innerDiv = Document.get().createDivElement();
+        innerDiv = GPlatform.getDoc().createDivElement();
         innerDiv.addClassName("gwts-GScrollPane-Viewport");
         getPeer().appendChild(innerDiv);
         setPreferredSize(new GDimension(200,100));
@@ -50,7 +46,7 @@ public class GScrollPane extends GComponent
     public void setVisible(boolean visible)
     {
         super.setVisible(visible);
-        innerDiv.getStyle().setVisibility(visible ? Visibility.VISIBLE : Visibility.HIDDEN);
+        innerDiv.getStyle().setVisibility(visible ? "visible" : "hidden");
     }
     
     @Override
@@ -87,8 +83,8 @@ public class GScrollPane extends GComponent
             int inv = insets.top + insets.bottom;
             int iw = width - inh;
             int ih = height - inv;
-            innerDiv.getStyle().setWidth(iw, Unit.PX);
-            innerDiv.getStyle().setHeight(ih, Unit.PX);
+            innerDiv.getStyle().setWidth(iw);
+            innerDiv.getStyle().setHeight(ih);
             int w = dim.width > iw ? dim.width : iw;
             int h = dim.height > ih ? dim.height : ih;
             if(dim.width < iw)
@@ -111,8 +107,8 @@ public class GScrollPane extends GComponent
         else
         {
             comp.setBounds(0, 0, 0, 0);
-            innerDiv.getStyle().setWidth(0, Unit.PX);
-            innerDiv.getStyle().setHeight(0, Unit.PX);
+            innerDiv.getStyle().setWidth(0);
+            innerDiv.getStyle().setHeight(0);
 //            compDimensions = new GDimension(0,0);
         }
     }
