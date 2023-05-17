@@ -130,15 +130,11 @@ public class GWindow extends GComponent
                     int dX = e.getX() + loc.x - mouseStartX;
                     int dY = e.getY() + loc.y - mouseStartY;
                     setLocation(dragStartX + dX, dragStartY + dY);
-                    clearSelection();
+                    GUtilities.clearSelection();
                 }
             }
         }
 
-        private native void clearSelection() /*-{
-            $wnd.getSelection().removeAllRanges();
-        }-*/;        
-        
         @Override
         public void eventDispatched(GAWTEvent event)
         {

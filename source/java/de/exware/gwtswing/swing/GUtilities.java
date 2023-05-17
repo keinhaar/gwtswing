@@ -123,11 +123,10 @@ public class GUtilities
         return measureElement;
     }
     
-    public native static double getDevicePixelRatio()
-    /*-{
-        return window.devicePixelRatio;
-    }-*/;
-
+    public static double getDevicePixelRatio()
+    {
+        return GPlatform.getInstance().getDevicePixelRatio();
+    }
     
 //    public static PixelStyle getComputedStyle(Element element) 
 //    {
@@ -307,9 +306,10 @@ public class GUtilities
 //        }
 //    }-*/;    
     
-    public static native void clearSelection() /*-{
-        $wnd.getSelection().removeAllRanges();
-    }-*/;
+    public static void clearSelection() 
+    {
+        GPlatform.getInstance().clearSelection();
+    }
 
     public static void focusFirstField(GComponent focusRoot)
     {
