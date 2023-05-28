@@ -23,6 +23,7 @@ Additionally you should add the css file to your html pages header
 ```
 
 After that, you can use the GWTSwing classes in your project.
+
 ```
 GPanel panel = new GPanel();
 panel.setLayout(new GGridLayout(1, 1));
@@ -39,9 +40,19 @@ Porting an existing Swing application is now nearly as easy as replacing all "J"
 ### TeaVM
 To use GWTSwing with teavm you need the contents of the following
 repositories: gplatform.teavm, gplatform and of course gwtswing.
+
 Then convert them into maven projects and include the gplatform.teavm
-and gwtswing as dependencies in your project. Now you need to
-initialize the TeavmGPPlatform class with a static call to the init method.
+and gwtswing as dependencies in your project. 
+
+Furthermore you need to include the contents of the resources folder in the webapp folder. 
+
+You have to manually link the css file with: 
+
+```
+<link href="./de/exware/gwtswing/gwtswing.css" rel="stylesheet">
+```
+Now you need to initialize the TeavmGPPlatform class with a static call to the init method.
+
 After that you are good to go and use the G classes of gwtswing.
 
 ## Demo
@@ -64,4 +75,5 @@ This looks like
 <br>
 <img src="media/ffm_gwtswing.png" width="800px"/>
 <br>compared to the original swing application:
+<br>
 <img src="media/ffm_swing.png" width="800px"/>
