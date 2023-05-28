@@ -1,5 +1,7 @@
 # GWTSwing
-This is an UI API similar to Java's Swing API, but on top of GWT. 
+This is an UI API similar to Java's Swing API, but on top of Java to Web transpilers like GWT and TeaVM. 
+Even though, the name is still GWTSwing, it has been ported to TeaVM by introducing a platform abstraction layer named
+gplatform, with implementations for GWT and TeaVM.
 
 There are 2 main differences between Swing an GWTSwing.
 1. There are no modal dialogs. Instead of that, callback objects can be used, to get notified if a dialog was closed.
@@ -8,7 +10,8 @@ There are 2 main differences between Swing an GWTSwing.
 There are no server calls after starting the application. Everything is handled locally on the client.
 
 ## How to use
-GWTSwing is used like other gwt libraries. Just add
+### GWT
+GWTSwing is used like other gwt libraries. Just add the gwtswing, gplatform and gplatform.gwt to your classpath and
 
 ```
   <inherits name='de.exware.gwtswing'/>
@@ -16,7 +19,7 @@ GWTSwing is used like other gwt libraries. Just add
 to your projects ```abc.gwt.xml```.
 Additionally you should add the css file to your html pages header
 ```
-   <link type="text/css" rel="stylesheet" href="de.exware.gwtswing.sample/de/exware/gwtswing/gwtswing.css">
+   <link type="text/css" rel="stylesheet" href="YOUR_PROJECT_NAME/de/exware/gwtswing/gwtswing.css">
 ```
 
 After that, you can use the GWTSwing classes in your project.
@@ -25,13 +28,21 @@ GPanel panel = new GPanel();
 panel.setLayout(new GGridLayout(1, 1));
 GLabel label = new GLabel("Hello World");
 panel.add(label);
-GUtilities.addToWidget(Document.get().getBody(), panel);
+GUtilities.addToBody(panel);
 ```
 Looks like Swing? Thats the goal! :-) 
 
-The call of 'GUtilities.addToWidget' appends your GWTSwing UI to the Web Page.
+The call of 'GUtilities.addToBody' appends your GWTSwing UI to the Web Page.
 
 Porting an existing Swing application is now nearly as easy as replacing all "J" with "G".
+
+### TeaVM
+To use GWTSwing with teavm you need the contents of the following
+repositories: gplatform.teavm, gplatform and of course gwtswing.
+Then convert them into maven projects and include the gplatform.teavm
+and gwtswing as dependencies in your project. Now you need to
+initialize the TeavmGPPlatform class with a static call to the init method.
+After that you are good to go and use the G classes of gwtswing.
 
 ## Demo
 A small demo application, which shows some of the main UI components can be found here:
@@ -48,4 +59,9 @@ An archive system for digital documents which allows to set markers on documents
 The companies homepage was made with GWTSwing just to prove, that it is possible.
 
 ### FFManager
-FFManager is an application to manage volunteer fire brigades. In it's newest release 4.0 the developers began to port the Swing UI to GWTSwing.
+FFManager is an application to manage volunteer fire brigades. In it's newest release 4.x the developers began to port the Swing UI to GWTSwing.
+This looks like 
+<br>
+<img src="media/ffm_gwtswing.png" width="800px"/>
+<br>compared to the original swing application:
+<img src="media/ffm_swing.png" width="800px"/>
