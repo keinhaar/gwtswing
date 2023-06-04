@@ -833,9 +833,7 @@ public class GComponent
     
     public void add(GComponent comp, Object constraints)
     {
-        int size = 0;
-        if(components != null ) size = components.size();
-        addImpl(comp, constraints, size);
+        addImpl(comp, constraints, -1);
     }
 
     public GComponent add(GComponent comp)
@@ -862,7 +860,14 @@ public class GComponent
         {
             components = new ArrayList<>();
         }
-        components.add(index,comp);
+        if(index == -1)
+        {
+            components.add(comp);
+        }
+        else
+        {
+            components.add(index, comp);
+        }
         comp.setParent(this);
         if(layout != null && constraints != null)
         {
