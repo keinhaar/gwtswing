@@ -25,7 +25,7 @@ public class GWindow extends GComponent
 
     public GWindow()
     {
-        setLayout(new GBorderLayout());
+        super.setLayout(new GBorderLayout());
         setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 3));
         header = new GPanel();
         GUtilities.insertClassNameBefore(header.getPeer(), "gwts-GPWindow-header");
@@ -45,10 +45,10 @@ public class GWindow extends GComponent
                 setVisible(false);
             }
         });
-        super.add(header, GBorderLayout.NORTH);
+        _add(header, GBorderLayout.NORTH);
         contentpane = new GPanel();
         contentpane.setLayout(new GGridLayout(1, 1));
-        super.add(contentpane, GBorderLayout.CENTER);
+        _add(contentpane, GBorderLayout.CENTER);
         dragListener = new DragListener();
         title.addMouseListener(dragListener);
         title.addMouseMotionListener(dragListener);
@@ -58,6 +58,12 @@ public class GWindow extends GComponent
     public GComponent getContentPane()
     {
         return contentpane;
+    }
+    
+    private void _add(GComponent comp, Object contraints)
+    {
+        int size = getComponentCount();
+        super.addImpl(comp, contraints, size);
     }
     
     public void setUndecorated(boolean b)

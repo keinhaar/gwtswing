@@ -26,6 +26,7 @@ public class GUIManager
 	                @Override
 	                public void onError(Throwable exception)
 	                {
+                        isInitialized = true;
 	                    GPlatform.getInstance().alert("" + exception);
 	                }
 	
