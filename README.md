@@ -29,6 +29,7 @@ GPanel panel = new GPanel();
 panel.setLayout(new GGridLayout(1, 1));
 GLabel label = new GLabel("Hello World");
 panel.add(label);
+panel.setSize(800,600);
 GUtilities.addToBody(panel);
 ```
 Looks like Swing? Thats the goal! :-) 
@@ -41,8 +42,26 @@ Porting an existing Swing application is now nearly as easy as replacing all "J"
 To use GWTSwing with teavm you need the contents of the following
 repositories: gplatform.teavm, gplatform and of course gwtswing.
 
-Then convert them into maven projects and include the gplatform.teavm
-and gwtswing as dependencies in your project. 
+For each of them call 
+
+```
+sh nobuto.sh -t installToMaven -vvv
+```
+to add them to your local maven repository.
+Then include the gplatform.teavm and gwtswing as dependencies in your project. 
+
+```
+<dependency>
+  <groupId>de.exware</groupId>
+  <artifactId>de.exware.gplatform.teavm</artifactId>
+  <version>1.0</version>
+</dependency>
+<dependency>
+  <groupId>de.exware</groupId>
+  <artifactId>de.exware.gwtswing</artifactId>
+  <version>1.0</version>
+</dependency>
+```
 
 Furthermore you need to include the contents of the resources folder in the webapp folder. 
 
@@ -52,6 +71,14 @@ You have to manually link the css file with:
 <link href="./de/exware/gwtswing/gwtswing.css" rel="stylesheet">
 ```
 Now you need to initialize the TeavmGPPlatform class with a static call to the init method.
+
+```java
+public static void main(String[] args) 
+{
+    TeavmGPlatform.init();
+    ...
+}
+```
 
 After that you are good to go and use the G classes of gwtswing.
 
