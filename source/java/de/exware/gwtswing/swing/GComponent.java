@@ -850,6 +850,11 @@ public class GComponent
         return comp;
     }
 
+    public void add(GComponent comp, Object constraints, int index)
+    {
+        addImpl(comp, constraints, index);
+    }
+    
     protected void addImpl(GComponent comp, Object constraints, int index)
     {
         getPeer().appendChild(comp.getPeer());

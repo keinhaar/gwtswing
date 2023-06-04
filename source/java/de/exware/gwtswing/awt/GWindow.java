@@ -65,6 +65,18 @@ public class GWindow extends GComponent
         header.setVisible(!b);
     }
     
+    @Override
+    protected void addImpl(GComponent comp, Object constraints, int index)
+    {
+        getContentPane().add(comp, constraints, index);
+    }
+    
+    @Override
+    public void setLayout(GLayoutManager layout)
+    {
+        getContentPane().setLayout(layout);
+    }
+    
     public void setLocationRelativeTo(GComponent c) 
     {
         GPoint pos = null;
