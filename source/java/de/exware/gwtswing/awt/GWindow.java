@@ -62,8 +62,7 @@ public class GWindow extends GComponent
     
     private void _add(GComponent comp, Object contraints)
     {
-        int size = getComponentCount();
-        super.addImpl(comp, contraints, size);
+        super.addImpl(comp, contraints, -1);
     }
     
     public void setUndecorated(boolean b)
@@ -75,6 +74,12 @@ public class GWindow extends GComponent
     protected void addImpl(GComponent comp, Object constraints, int index)
     {
         getContentPane().add(comp, constraints, index);
+    }
+    
+    @Override
+    public void remove(GComponent comp)
+    {
+        getContentPane().remove(comp);
     }
     
     @Override
