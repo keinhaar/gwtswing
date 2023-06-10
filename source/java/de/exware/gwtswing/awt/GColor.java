@@ -160,4 +160,8 @@ public class GColor
         }
         return col;
     }
+
+    public static GColor decode(String string) {
+        return fromHex(string);
+    }
 }

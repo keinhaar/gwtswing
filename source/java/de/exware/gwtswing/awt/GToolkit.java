@@ -3,6 +3,7 @@ package de.exware.gwtswing.awt;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.exware.gplatform.GPWindow;
 import de.exware.gplatform.GPlatform;
 import de.exware.gplatform.event.GPEvent;
 import de.exware.gwtswing.awt.event.GAWTEvent;
@@ -112,5 +113,10 @@ public class GToolkit
         {
             awtListeners.get(i).eventDispatched(evt);
         }
+    }
+
+    public GDimension getScreenSize() {
+        GPWindow window = GPlatform.getWin();
+        return new GDimension(window.getClientWidth(), window.getClientHeight());
     }
 }

@@ -14,7 +14,8 @@ public class GButton extends GAbstractButton
 {
     private GPImageElement img;
     private GColor background = GUIManager.getColor(".gwts-GButton/background-color");
-
+    private GColor active = GColor.GRAY;
+    
     public GButton()
     {
         this("");
@@ -37,7 +38,7 @@ public class GButton extends GAbstractButton
             public void mousePressed(GMouseEvent evt)
             {
                 super.mousePressed(evt);
-                GButton.super.setBackground(GColor.GRAY);
+                GButton.super.setBackground(active);
             }
             
             @Override
@@ -165,5 +166,13 @@ public class GButton extends GAbstractButton
             }
         }
         return dim;
+    }
+    
+    public void setActiveColor(GColor color) {
+        active = color;
+    }
+    
+    public GColor getActiveColor() {
+        return active;
     }
 }

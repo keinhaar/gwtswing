@@ -18,6 +18,7 @@ import de.exware.gwtswing.awt.GFontMetrics;
 import de.exware.gwtswing.awt.GInsets;
 import de.exware.gwtswing.awt.GLayoutManager;
 import de.exware.gwtswing.awt.GPoint;
+import de.exware.gwtswing.awt.GRectangle;
 import de.exware.gwtswing.awt.GToolkit;
 import de.exware.gwtswing.awt.event.GAWTEvent;
 import de.exware.gwtswing.awt.event.GComponentEvent;
@@ -1083,5 +1084,26 @@ public class GComponent
     public GFontMetrics getFontMetrics(GFont font)
     {
         return new GFontMetrics(font);
+    }
+    
+    public GRectangle getBounds() {
+        return new GRectangle(getLocation().x, getLocation().y, getWidth(), getHeight());
+    }
+    
+    private GComponentUI componentUI = null;
+    
+    public void setUI(GComponentUI ui) {
+        if(componentUI != null) {
+            componentUI.uninstallUI(this);
+        }
+        
+        componentUI = ui;
+        
+        if(componentUI != null) {
+            componentUI.installUI(this);
+        }
+    }
+    
+    public void updateUI() {
     }
 }
