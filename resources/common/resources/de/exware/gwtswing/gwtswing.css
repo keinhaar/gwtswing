@@ -207,4 +207,7 @@ input {
 	background-color: #943c36;
 }
 
+.gwts-GSlider-vertical {
+	-webkit-appearance: slider-vertical;
+}
 
