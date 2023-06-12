@@ -85,7 +85,8 @@ After that you are good to go and use the G classes of gwtswing.
 ## Demo
 A small demo application, which shows some of the main UI components can be found here:
 
-http://www.exware.de/gwtswing/demo.html
+with GWT:   http://www.exware.de/gwtswing/demo/gwt/demo.html
+with TeaVM: http://www.exware.de/gwtswing/demo/teavm/demo.html
 
 ## Real live usage
 Where is GWTSwing used
