@@ -983,6 +983,10 @@ public class GComponent
             getPeer().getStyle().setBorderStyle("none");
             getPeer().getStyle().setBorderWidth(0);
             getPeer().getStyle().setProperty("borderRadius", "0px");
+            getPeer().getStyle().setProperty("borderLeftWidth", "0px");
+            getPeer().getStyle().setProperty("borderTopWidth", "0px");
+            getPeer().getStyle().setProperty("borderBottomWidth", "0px");
+            getPeer().getStyle().setProperty("borderRightWidth", "0px");
         }
         if(border != null)
         {
