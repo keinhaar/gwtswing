@@ -6,6 +6,4 @@ public abstract class GComponentUI {
     
     public void uninstallUI(GComponent component) {
     }
-    
-    public abstract static 
 }
