@@ -89,7 +89,7 @@ public class GTabbedPane extends GComponent
         add(tabbedComponents, GBorderLayout.CENTER);
         if(position == RIGHT)
         {
-            selectedTabBorder = new SelectiveLineBorder(GColor.fromHex("#7a7463"), 1, 0, 1, 3);
+            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#7a7463"), 1, 0, 1, 3);
             tabBorder = new GEmptyBorder(1, 0, 1, 3);
             add(tabs, GBorderLayout.EAST);
             gbc.fill = gbc.HORIZONTAL;
@@ -98,8 +98,8 @@ public class GTabbedPane extends GComponent
         }
         else
         {
-            selectedTabBorder = new SelectiveLineBorder(GColor.fromHex("#6a6453"), 3, 1, 0, 1);
-            tabBorder = new SelectiveLineBorder(GColor.fromHex("#8a8473"), 3, 1, 0, 1);
+            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#6a6453"), 3, 1, 0, 1);
+            tabBorder = new SelectiveLineBorder(GColor.decode("#8a8473"), 3, 1, 0, 1);
             add(tabs, GBorderLayout.NORTH);
             gbc.fill = gbc.HORIZONTAL;
             gbc.insets.left = 3;

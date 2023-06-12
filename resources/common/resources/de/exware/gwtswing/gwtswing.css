@@ -131,6 +131,14 @@ input {
 	background-color: #bbbbbb;
 }
 
+.gwts-GButton-active {
+	background-color: #808080;
+}
+
+.gwts-GToggleButton-active {
+	background-color: #808080;
+}
+
 .gwts-GButton img {
 	vertical-align: top;
 }

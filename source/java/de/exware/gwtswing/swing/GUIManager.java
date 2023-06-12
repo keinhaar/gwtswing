@@ -80,7 +80,7 @@ public class GUIManager
             String cssrule = k.substring(0, index);
             String property = k.substring(index+1);
             String c = GPStyleSheet.getColor(cssrule, property);
-            col = GColor.fromHex(c);
+            col = GColor.decode(c);
             resources.put(key, col);
         }
         return col;

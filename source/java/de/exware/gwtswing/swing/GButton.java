@@ -13,7 +13,6 @@ import de.exware.gwtswing.awt.event.GMouseEvent;
 public class GButton extends GAbstractButton
 {
     private GPImageElement img;
-    private GColor background = GUIManager.getColor(".gwts-GButton/background-color");
 
     public GButton()
     {
@@ -30,21 +29,20 @@ public class GButton extends GAbstractButton
     {
         setText(text);
         setActionCommand(text);
-        setBackground(background);
         addMouseListener(new GMouseAdapter()
         {
             @Override
             public void mousePressed(GMouseEvent evt)
             {
                 super.mousePressed(evt);
-                GButton.super.setBackground(GColor.GRAY);
+                getPeer().addClassName("gwts-GButton-active");
             }
             
             @Override
             public void mouseReleased(GMouseEvent evt)
             {
                 super.mouseReleased(evt);
-                setBackground(background);
+                getPeer().removeClassName("gwts-GButton-active");
             }
         });
         getPeer().setTabIndex(0);
@@ -54,7 +52,6 @@ public class GButton extends GAbstractButton
     public void setBackground(GColor col)
     {
         super.setBackground(col);
-        background = col;
     }
     
     @Override

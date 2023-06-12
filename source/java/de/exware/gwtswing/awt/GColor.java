@@ -121,7 +121,7 @@ public class GColor
      *            Der die Farbe beschreibende String
      * @return Die erzeugte Farbe
      */
-    public static final GColor fromHex(String color)
+    public static final GColor decode(String color)
     {
         GColor col = null;
         if (color != null && color.length() > 0)

@@ -18,6 +18,7 @@ import de.exware.gwtswing.awt.GFontMetrics;
 import de.exware.gwtswing.awt.GInsets;
 import de.exware.gwtswing.awt.GLayoutManager;
 import de.exware.gwtswing.awt.GPoint;
+import de.exware.gwtswing.awt.GRectangle;
 import de.exware.gwtswing.awt.GToolkit;
 import de.exware.gwtswing.awt.event.GAWTEvent;
 import de.exware.gwtswing.awt.event.GComponentEvent;
@@ -514,7 +515,7 @@ public class GComponent
     public GColor getBackground()
     {
         String col = getPeer().getStyle().getBackgroundColor();
-        GColor gcol = GColor.fromHex(col);
+        GColor gcol = GColor.decode(col);
         if(gcol == null)
         {
             gcol = GUIManager.getColor(".gwts-GComponent/background-color");
@@ -525,7 +526,7 @@ public class GComponent
     public GColor getForeground()
     {
         String col = getPeer().getStyle().getColor();
-        GColor gcol = GColor.fromHex(col);
+        GColor gcol = GColor.decode(col);
         return gcol;
     }
     
@@ -753,6 +754,25 @@ public class GComponent
     public void setCursor(GCursor cursor)
     {
         getPeer().getStyle().setProperty("cursor", cursor.getCursorName());
+    }
+    
+    public GRectangle getBounds() 
+    {
+        GPoint loc = getLocation();
+        return new GRectangle(loc.x, loc.y, getWidth(), getHeight());
+    }
+    
+    public GRectangle getBounds(GRectangle rect) 
+    {
+        if(rect == null)
+        {
+            return getBounds();
+        }
+        else
+        {
+            GPoint loc = getLocation();
+            return new GRectangle(loc.x, loc.y, getWidth(), getHeight());
+        }
     }
     
     public void setBounds(int x, int y, int width, int height)

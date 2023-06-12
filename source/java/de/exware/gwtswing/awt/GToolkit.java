@@ -3,6 +3,7 @@ package de.exware.gwtswing.awt;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.exware.gplatform.GPWindow;
 import de.exware.gplatform.GPlatform;
 import de.exware.gplatform.event.GPEvent;
 import de.exware.gwtswing.awt.event.GAWTEvent;
@@ -48,6 +49,16 @@ public class GToolkit
         {
             awtListeners.add(listener);
         }
+    }
+    
+    /**
+     * Does not really return the Screen Size, but the Size of the "virtual" Screen - the Browsers Window.
+     * @return the Size of the Browsers Window without menu, toolbar, address bar a.s.o.
+     */
+    public GDimension getScreenSize() 
+    {
+        GPWindow window = GPlatform.getWin();
+        return new GDimension(window.getClientWidth(), window.getClientHeight());
     }
     
     class BaseMouseListener extends GMouseAdapter

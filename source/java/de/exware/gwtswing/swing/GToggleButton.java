@@ -11,7 +11,6 @@ public class GToggleButton extends GAbstractButton
 {
     private GPElement img;
     private GIcon icon;
-    private GColor background;
     private boolean selected;
 
     public GToggleButton()
@@ -29,8 +28,6 @@ public class GToggleButton extends GAbstractButton
     {
         setText(text);
         setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
-        background = GUIManager.getColor(".gwts-GButton/background-color");
-        setBackground(background);
     }
 
     @Override
@@ -47,7 +44,6 @@ public class GToggleButton extends GAbstractButton
     public void setBackground(GColor col)
     {
         super.setBackground(col);
-        background = col;
     }
     
     @Override
@@ -146,13 +142,11 @@ public class GToggleButton extends GAbstractButton
         selected = sel;
         if(selected)
         {
-            GColor b = background;
-            setBackground(b.darker());
-            background = b;
+            getPeer().addClassName("gwts-GToggleButton-active");
         }
         else
         {
-            setBackground(background);
+            getPeer().removeClassName("gwts-GToggleButton-active");
         }
     }
 }
