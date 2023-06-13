@@ -12,15 +12,29 @@ import de.exware.gwtswing.awt.event.GKeyListener;
 public class GTextField extends GTextComponent
 {
     protected GPInputElement textElement;
-
+    
+    private String placeholder = "";
+    
     public GTextField(int length)
     {
         this(null,length);
     }
     
+    public GTextField(int length, String placeholder)
+    {
+    	this(length);
+    	setPlaceholder(placeholder);
+    }
+    
     public GTextField(String text)
     {
         this(text, 5);
+    }
+    
+    public GTextField(String text, String placeholder)
+    {
+    	this(text);
+    	setPlaceholder(placeholder);
     }
 
     protected GTextField(String text, int length)
@@ -168,5 +182,14 @@ public class GTextField extends GTextComponent
     public int getSelectionEnd()
     {
         return textElement.getPropertyInt("selectionEnd");
+    }
+    
+    public void setPlaceholder(String text) {
+    	placeholder = text;
+    	textElement.setAttribute("placeholder", text);
+    }
+    
+    public String getPlaceholder() {
+    	return placeholder;
     }
 }

@@ -9,10 +9,20 @@ public class GPasswordField extends GTextField
     {
         super(text);
     }
+    
+    public GPasswordField(String text, String placeholder)
+    {
+    	super(text, placeholder);
+    }
 
     public GPasswordField(int cols)
     {
         super(cols);
+    }
+    
+    public GPasswordField(int cols, String placeholder)
+    {
+    	super(cols, placeholder);
     }
 
     @Override
