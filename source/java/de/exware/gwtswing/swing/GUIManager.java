@@ -102,7 +102,7 @@ public class GUIManager
 //                GwtGPStyleSheet.setPixel(cssrule, "font-size", size);
 //            }
             String family = GPStyleSheet.getProperty(cssrule,"font-family");
-            font = new GFont(family, size, GFont.PLAIN);
+            font = new GFont(family, GFont.PLAIN, size);
             resources.put(key, font);
         }
         return font;

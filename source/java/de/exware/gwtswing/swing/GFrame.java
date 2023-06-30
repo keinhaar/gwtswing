@@ -73,7 +73,7 @@ public class GFrame extends GWindow
             toolbarMenuContainer = new GPanel();
             toolbarMenuContainer.setLayout(new GGridBagLayout());
             GUtilities.insertClassNameBefore(toolbarMenuContainer.getPeer(), "toolbarMenuContainer");
-            add(toolbarMenuContainer, GBorderLayout.CENTER);
+            _add(toolbarMenuContainer, GBorderLayout.CENTER);
             GGridBagConstraints gbc = new GGridBagConstraints();
             gbc.gridx = 0;
             gbc.gridy = 3;

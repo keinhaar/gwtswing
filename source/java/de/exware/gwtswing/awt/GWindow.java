@@ -60,7 +60,7 @@ public class GWindow extends GComponent
         return contentpane;
     }
     
-    private void _add(GComponent comp, Object contraints)
+    protected void _add(GComponent comp, Object contraints)
     {
         super.addImpl(comp, contraints, -1);
     }

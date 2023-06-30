@@ -151,7 +151,7 @@ public class PartitionedPanel extends GComponent
             GLabel label = new GLabel(text);
             label.getPeer().addClassName("gwts-PartitionedPanel-Separator-text");
             GFont font = label.getFont();
-            font = new GFont(font.getFamily(), (int)font.getSize2D(), font.BOLD);
+            font = new GFont(font.getFamily(), font.BOLD, (int)font.getSize2D());
             label.setFont(font);
             add(label, gbc);
             linelabel = new GLabel()

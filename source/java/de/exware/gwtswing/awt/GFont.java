@@ -11,7 +11,7 @@ public class GFont
     private int size;
     private int style = PLAIN;
     
-    public GFont(String familyName, int size, int style)
+    public GFont(String familyName, int style, int size)
     {
         this.familyName = familyName;
         this.size = size;
@@ -25,12 +25,12 @@ public class GFont
 
     public GFont deriveFont(float size)
     {
-        return new GFont(familyName, (int) size, style);
+        return new GFont(familyName, style, (int) size);
     }
     
     public GFont deriveFont(int style)
     {
-        return new GFont(familyName, size, style);
+        return new GFont(familyName, style, size);
     }
     
     public String getFamily()

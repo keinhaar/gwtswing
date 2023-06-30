@@ -341,7 +341,7 @@ public class GTree<T> extends GComponent
             putClientProperty("value", value);
             if(font == null)
             {
-                font = new GFont("Courier New", (int) handle.getFont().getSize2D(), GFont.BOLD);
+                font = new GFont("Courier New", GFont.BOLD, (int) handle.getFont().getSize2D());
             }
             handle.setFont(font);
         }
