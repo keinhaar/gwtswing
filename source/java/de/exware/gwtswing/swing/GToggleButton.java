@@ -5,7 +5,6 @@ import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GInsets;
 import de.exware.gwtswing.awt.event.GActionEvent;
-import de.exware.gwtswing.swing.border.GBorderFactory;
 
 public class GToggleButton extends GAbstractButton
 {
@@ -27,7 +26,6 @@ public class GToggleButton extends GAbstractButton
     public GToggleButton(String text)
     {
         setText(text);
-        setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
     }
 
     @Override

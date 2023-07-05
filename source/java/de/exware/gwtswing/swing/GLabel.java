@@ -136,7 +136,6 @@ public class GLabel extends GComponent
                         {
                             canDoFastMeasuring = dim2.width >= dim.width - 1 && dim2.width <= dim.width +1;
                         }
-                        System.out.print("Use fast Measuring: " + canDoFastMeasuring);
                     }
                     else if(canDoFastMeasuring
                         && img == null && text.contains("<") == false)
