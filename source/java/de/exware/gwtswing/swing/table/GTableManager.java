@@ -27,7 +27,6 @@ import de.exware.gwtswing.swing.event.GTableModelListener;
 /**
  * A class, which can track the size of columns to store and recreate on next use. 
  * @author martin
- *
  */
 public class GTableManager
 {

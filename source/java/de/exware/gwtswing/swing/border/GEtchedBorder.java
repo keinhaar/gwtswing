@@ -37,4 +37,9 @@ public class GEtchedBorder implements GBorder
         }
         component.getPeer().getStyle().setBorderWidth(2);
     }
+    
+    public int getEtchType()
+    {
+        return type;
+    }
 }

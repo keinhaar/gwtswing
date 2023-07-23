@@ -27,7 +27,7 @@ public class GBevelBorder implements GBorder
     @Override
     public void install(GComponent component)
     {
-        if(type == RAISED)
+        if(getBevelType() == RAISED)
         {
             component.getPeer().getStyle().setProperty("borderStyle","outset");
         }
@@ -36,5 +36,10 @@ public class GBevelBorder implements GBorder
             component.getPeer().getStyle().setProperty("borderStyle","inset");
         }
         component.getPeer().getStyle().setBorderWidth(2);
+    }
+
+    public int getBevelType()
+    {
+        return type;
     }
 }

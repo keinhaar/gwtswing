@@ -14,6 +14,7 @@
 	background-color: #ddddbb;
 	color: #000000;
 	padding-left: 3px;
+	padding-right: 2px;
 	vertical-align: middle;
 }
 
@@ -231,3 +232,6 @@ input {
 	-webkit-appearance: slider-vertical;
 }
 
+.gwts-GTitledBorder {
+	color: #999999;
+}

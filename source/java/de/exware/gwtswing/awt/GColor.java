@@ -16,6 +16,7 @@ public class GColor
     public static final GColor PINK = new GColor(255, 175, 175);
     public static final GColor ORANGE = new GColor(255, 200, 0);
     public static final GColor YELLOW = new GColor(255, 255, 0);
+    public static final GColor NONE = new GColor(0,0,0);
 
     private int r, g, b, a;
 
@@ -39,6 +40,10 @@ public class GColor
      */
     public String toHex()
     {
+        if(this == NONE)
+        {
+            return "";
+        }
         String r = Integer.toHexString(this.r);
         String g = Integer.toHexString(this.g);
         String b = Integer.toHexString(this.b);
@@ -57,6 +62,10 @@ public class GColor
      */
     public String toRGBA()
     {
+        if(this == NONE)
+        {
+            return "";
+        }
         return "rgba(" + r + ", " + g + ", " + b + ", " + (a/255.0) + ")";
     }
 

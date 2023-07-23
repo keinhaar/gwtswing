@@ -27,6 +27,16 @@ public class GLineBorder implements GBorder
         this.linestyle = linestyle;
     }
 
+    public GColor getLineColor()
+    {
+        return color;
+    }
+    
+    public int getThickness()
+    {
+        return thickness;
+    }
+    
     @Override
     public GInsets getBorderInsets(GComponent c)
     {
