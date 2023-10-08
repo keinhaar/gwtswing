@@ -160,4 +160,10 @@ public class GTextArea extends GTextComponent
     {
         return textElement.getPropertyInt("selectionEnd");
     }
+
+    @Override
+    public boolean hasFocus()
+    {
+        return textElement.hasFocus();
+    }
 }

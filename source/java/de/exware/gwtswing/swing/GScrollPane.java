@@ -43,14 +43,17 @@ public class GScrollPane extends GComponent
         setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));*/
     }
     
-    public void setViewportView(GComponent comp) {
-        if(innerDiv != null) {
+    public void setViewportView(GComponent comp) 
+    {
+        if(innerDiv != null) 
+        {
             innerDiv.removeFromParent();
         }
 
         setPreferredSize(new GDimension(200,100));
 
-        if(comp == null) {
+        if(comp == null) 
+        {
             return;
         }
 

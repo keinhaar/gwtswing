@@ -118,7 +118,7 @@ public class GTabbedPane extends GComponent
         else if(position == BOTTOM)
         {
             selectedTabBorder = new SelectiveLineBorder(GColor.decode("#6a6453"), 0, 1, 3, 1);
-            tabBorder = new SelectiveLineBorder(GColor.decode("#8a8473"), 3, 1, 0, 1);
+            tabBorder = new SelectiveLineBorder(GColor.decode("#8a8473"), 0, 1, 3, 1);
             add(tabs, GBorderLayout.SOUTH);
             gbc.fill = GGridBagConstraints.HORIZONTAL;
             gbc.insets.left = 3;
@@ -187,7 +187,7 @@ public class GTabbedPane extends GComponent
             gbc.insets.top = 0;
         }
         tabs.add(tab, gbc);
-        if(position == TOP)
+        if(position == TOP || position == BOTTOM)
         {
             gbc.gridx++;
         }

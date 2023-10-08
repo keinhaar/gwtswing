@@ -1102,6 +1102,12 @@ public class GComponent
 
     public void requestFocus()
     {
+        getPeer().focus();
+    }
+
+    public boolean hasFocus()
+    {
+        return getPeer().hasFocus();
     }
     
     public GFontMetrics getFontMetrics(GFont font)
