@@ -33,9 +33,7 @@ import de.exware.gwtswing.swing.event.GTabListener;
 public class GTabbedPane extends GComponent
 {
     public static final int TOP = 0;
-    public static final int LEFT = 1;    
     public static final int RIGHT = 2;
-    public static final int BOTTOM = 3;
     private GPanel tabs;
     private CardPanel tabbedComponents;
     private TabMouseAdapter tabMouseAdapter = new TabMouseAdapter();
@@ -85,7 +83,7 @@ public class GTabbedPane extends GComponent
         });
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GGridBagConstraints.WEST;
+        gbc.anchor = gbc.WEST;
         tabbedComponents = new CardPanel();
         tabbedComponents.getPeer().addClassName("gwts-GTabbedPane-TabbedComponents");
         add(tabbedComponents, GBorderLayout.CENTER);
@@ -94,33 +92,16 @@ public class GTabbedPane extends GComponent
             selectedTabBorder = new SelectiveLineBorder(GColor.decode("#7a7463"), 1, 0, 1, 3);
             tabBorder = new GEmptyBorder(1, 0, 1, 3);
             add(tabs, GBorderLayout.EAST);
-            gbc.fill = GGridBagConstraints.HORIZONTAL;
-            gbc.insets.top = 3;
-            gbc.weightx = 1;
-        } 
-        else if(position == LEFT) 
-        {
-            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#7a7463"), 1, 3, 1, 0);
-            tabBorder = new GEmptyBorder(1, 0, 1, 3);
-            add(tabs, GBorderLayout.WEST);
-            gbc.fill = GGridBagConstraints.HORIZONTAL;
+            gbc.fill = gbc.HORIZONTAL;
             gbc.insets.top = 3;
             gbc.weightx = 1;
         }
-        else if(position == TOP)
+        else
         {
             selectedTabBorder = new SelectiveLineBorder(GColor.decode("#6a6453"), 3, 1, 0, 1);
             tabBorder = new SelectiveLineBorder(GColor.decode("#8a8473"), 3, 1, 0, 1);
             add(tabs, GBorderLayout.NORTH);
-            gbc.fill = GGridBagConstraints.HORIZONTAL;
-            gbc.insets.left = 3;
-        }
-        else if(position == BOTTOM)
-        {
-            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#6a6453"), 0, 1, 3, 1);
-            tabBorder = new SelectiveLineBorder(GColor.decode("#8a8473"), 3, 1, 0, 1);
-            add(tabs, GBorderLayout.SOUTH);
-            gbc.fill = GGridBagConstraints.HORIZONTAL;
+            gbc.fill = gbc.HORIZONTAL;
             gbc.insets.left = 3;
         }
     }
