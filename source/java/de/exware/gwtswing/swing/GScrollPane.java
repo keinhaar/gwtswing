@@ -33,10 +33,30 @@ public class GScrollPane extends GComponent
     
     public GScrollPane(GComponent comp)
     {
-        innerDiv = GPlatform.getDoc().createDivElement();
+        setViewportView(comp);
+        /*innerDiv = GPlatform.getDoc().createDivElement();
         innerDiv.addClassName("gwts-GScrollPane-Viewport");
         getPeer().appendChild(innerDiv);
         setPreferredSize(new GDimension(200,100));
+        add(comp);
+        innerDiv.appendChild(comp.getPeer());
+        setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));*/
+    }
+    
+    public void setViewportView(GComponent comp) {
+        if(innerDiv != null) {
+            innerDiv.removeFromParent();
+        }
+
+        setPreferredSize(new GDimension(200,100));
+
+        if(comp == null) {
+            return;
+        }
+
+        innerDiv = GPlatform.getDoc().createDivElement();
+        innerDiv.addClassName("gwts-GScrollPane-Viewport");
+        getPeer().appendChild(innerDiv);
         add(comp);
         innerDiv.appendChild(comp.getPeer());
         setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
