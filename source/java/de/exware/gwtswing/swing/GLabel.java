@@ -40,6 +40,16 @@ public class GLabel extends GComponent
         {
             getPeer().getStyle().setTextAlign("center");
         }
+        else
+        if(pos == GSwingConstants.LEFT)
+        {
+            getPeer().getStyle().setTextAlign("left");
+        }
+        else
+        if(pos == GSwingConstants.RIGHT)
+        {
+            getPeer().getStyle().setTextAlign("right");
+        }
     }
     
 //    @Override
