@@ -792,7 +792,7 @@ public class GComponent
 //        style.setHeight(height, Unit.PX);
     }
 
-    public void setLocation(int x,int y)
+    public void setLocation(int x, int y)
     {
         GPStyle style = getPeer().getStyle();
         style.setLeft(x);
@@ -1113,5 +1113,15 @@ public class GComponent
     public GFontMetrics getFontMetrics(GFont font)
     {
         return new GFontMetrics(font);
+    }
+
+    public int getX()
+    {
+        return getLocation().x;
+    }
+
+    public int getY()
+    {
+        return getLocation().y;
     }
 }
