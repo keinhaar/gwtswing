@@ -4,7 +4,6 @@ import de.exware.gplatform.GPElement;
 import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GInsets;
-import de.exware.gwtswing.awt.event.GActionEvent;
 
 public class GToggleButton extends GAbstractButton
 {
@@ -29,13 +28,13 @@ public class GToggleButton extends GAbstractButton
     }
 
     @Override
-    protected GActionEvent fireActionEvent()
+    protected void fireActionEvent()
     {
         if(isEnabled())
         {
             setSelected(!selected);
         }
-        return super.fireActionEvent();
+        super.fireActionEvent();
     }
     
     @Override

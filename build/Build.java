@@ -4,6 +4,7 @@ import java.io.IOException;
 import de.exware.nobuto.java.JavaBuilder;
 import de.exware.nobuto.maven.Maven;
 import de.exware.nobuto.maven.MavenDependency;
+import de.exware.nobuto.utils.OperatingSystem;
 import de.exware.nobuto.utils.Utilities;
 
 public class Build extends JavaBuilder
@@ -15,9 +16,16 @@ public class Build extends JavaBuilder
     
     public Build() throws IOException, InterruptedException
     {
-        super();
+        super(PROJECTNAME);
         Maven maven = Maven.getDefaultinstance();
-        maven.addRepository("file://" + maven.getLocalRepo() + "/");
+        if(OperatingSystem.isWindows())
+        {
+            maven.addRepository("file:///" + maven.getLocalRepo() + "/");
+        }
+        else
+        {
+            maven.addRepository("file://" + maven.getLocalRepo() + "/");
+        }
     }
 
     @Override

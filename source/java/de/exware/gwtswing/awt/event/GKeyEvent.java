@@ -31,6 +31,7 @@ public class GKeyEvent extends GAWTEvent
     public GKeyEvent(Object source, GPEvent jsEvent)
     {
         super(source); 
+        jsEvent.stopPropagation();
         isShift = jsEvent.getShiftKey();
         isAlt = jsEvent.getAltKey();
         isControl = jsEvent.getCtrlKey();

@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import de.exware.gplatform.GPElement;
 import de.exware.gplatform.GPStyle;
 import de.exware.gplatform.GPlatform;
 import de.exware.gplatform.event.GPEvent;
+import de.exware.gplatform.event.GPEvent.Type;
 import de.exware.gplatform.event.GPEventListener;
 import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GCursor;
@@ -66,6 +68,12 @@ public class GComponent
     private static long longClickStart;
     private static boolean longClickPerformed;
     private static Map<Class, GInsets> cssBorderCache = new HashMap<>();
+    /**
+     * A Stack of modal components (Most of the time GDialogs). If the Stack is not empty, then only
+     * Components inside the top most Stack element will process events.
+     */
+    private static Stack<GComponent> modalityStack = new Stack<>();
+    private boolean processEvent = true;
 
     public GComponent()
     {
@@ -76,11 +84,16 @@ public class GComponent
     {
         setPeer(peer);
         setClassNames(peer, "");
-//        if(GUtilities.getDevicePixelRatio() != 1 
-//            && GUIManager.isInitialized(".gwts-GComponent/font") == false)
-//        {
-//            getFont();
-//        }
+    }
+    
+    protected void setModalComponent(GComponent comp)
+    {
+        modalityStack.push(comp);
+    }
+    
+    protected void removeModalComponent()
+    {
+        modalityStack.pop();
     }
     
     /**
@@ -240,22 +253,39 @@ public class GComponent
     class SingleEventListener implements GPEventListener
     {
         @Override
-        public void onBrowserEvent(GPEvent event)
+        public void onBrowserEvent(GPEvent jsEvent)
         {
-            GAWTEvent obj = handleEvent(event);
-            if(obj == null)
+            processEvent = true;
+            if(modalityStack.isEmpty() == false && isMouseOrTouchEvent(jsEvent))
+            {
+                GComponent modalComponent = modalityStack.peek();
+                GPoint loc = modalComponent.getLocationOnScreen();
+                GDimension size = modalComponent.getSize();                
+                int x = jsEvent.getClientX();
+                int y = jsEvent.getClientY();
+                GRectangle rect = new GRectangle(loc.x, loc.y, size.width, size.height);
+                processEvent = rect.contains(x, y);
+            }
+            GAWTEvent evt = _handleEvent(jsEvent);
+            if(evt == null)
             {
 //                System.out.println("");
             }
             else
             {
-                GToolkit.getDefaultToolkit().handleAWTEvent(obj);
-                if(obj.isConsumed())
+                GToolkit.getDefaultToolkit().handleAWTEvent(evt);
+                if(evt.isConsumed())
                 {
-                    event.preventDefault();               
-                    event.stopPropagation();
+                    jsEvent.preventDefault();               
+                    jsEvent.stopPropagation();
                 }
             }
+        }
+
+        private boolean isMouseOrTouchEvent(GPEvent jsEvent)
+        {
+            Type t = jsEvent.getType();
+            return t.ordinal() < 12; // Ordinal Number for Mouse and Touch Events in the Type are >=0 && < 12
         }
     }
     
@@ -279,29 +309,31 @@ public class GComponent
         element.enabledEvents( eventTypes );
     }
     
-    public GAWTEvent handleEvent(GPEvent event)
+    private GMouseEvent handleMouseEnter(GPEvent event)
     {
-        GAWTEvent bevent = null;
-        if(event.getType() == GPEvent.Type.ONMOUSEOVER)
+        GMouseEvent evt = new GMouseEvent(this, event);
+        for(int i=0;processEvent && mouseListeners != null && i< mouseListeners.size();i++)
         {
-            GMouseEvent evt = new GMouseEvent(this, event);
-            bevent = evt;
-            for(int i=0;mouseListeners != null && i< mouseListeners.size();i++)
-            {
-                mouseListeners.get(i).mouseEntered(evt);
-            }
+            mouseListeners.get(i).mouseEntered(evt);
         }
-        else if(event.getType() == GPEvent.Type.ONMOUSEOUT)
+        return evt;
+    }
+    
+    private GMouseEvent handleMouseExited(GPEvent event)
+    {
+        GMouseEvent evt = new GMouseEvent(this, event);
+        for(int i=0;processEvent && mouseListeners != null && i< mouseListeners.size();i++)
         {
-            GMouseEvent evt = new GMouseEvent(this, event);
-            bevent = evt;
-            for(int i=0;mouseListeners != null && i< mouseListeners.size();i++)
-            {
-                GMouseListener lis = mouseListeners.get(i);
-                lis.mouseExited(evt);
-            }
+            GMouseListener lis = mouseListeners.get(i);
+            lis.mouseExited(evt);
         }
-        else if(event.getType() == GPEvent.Type.ONCLICK && isEnabled())
+        return evt;
+    }
+    
+    private GMouseEvent handleMouseClicked(GPEvent event)
+    {
+        GMouseEvent evt = null;
+        if(isEnabled())
         {
             if(isLongClickEnabled && longClickPerformed)
             {
@@ -309,47 +341,67 @@ public class GComponent
             }
             else
             {
-                GMouseEvent evt = new GMouseEvent(this, event, 1);
-                bevent = evt;
-                for(int i=0;mouseListeners != null && i< mouseListeners.size();i++)
+                evt = new GMouseEvent(this, event, 1);
+                for(int i=0;processEvent && mouseListeners != null && i< mouseListeners.size();i++)
                 {
                     mouseListeners.get(i).mouseClicked(evt);
                 }
             }
         }
-        else if(event.getType() == GPEvent.Type.ONCONTEXTMENU && isEnabled())
+        return evt;
+    }
+    
+    private GMouseEvent handleDoubleClick(GPEvent event)
+    {
+        GMouseEvent evt = null;
+        if(isEnabled())
+        {
+            evt = new GMouseEvent(this, event, 2);
+            for(int i=0;processEvent && mouseListeners != null && i< mouseListeners.size();i++)
+            {
+                mouseListeners.get(i).mouseClicked(evt);
+            }
+        }
+        return evt;
+    }
+    
+    private GMouseEvent handleContextMenu(GPEvent event)
+    {
+        GMouseEvent evt = null;
+        if(isEnabled())
         {
             event.preventDefault();
-            GMouseEvent evt = new GMouseEvent(this, event, 1, GMouseEvent.BUTTON3);
-            bevent = evt;
-            for(int i=0;mouseListeners != null && i< mouseListeners.size();i++)
+            evt = new GMouseEvent(this, event, 1, GMouseEvent.BUTTON3);
+            for(int i=0;processEvent && mouseListeners != null && i< mouseListeners.size();i++)
             {
                 mouseListeners.get(i).mouseClicked(evt);
             }
         }
-        else if(event.getType() == GPEvent.Type.ONDBLCLICK && isEnabled())
-        {
-            GMouseEvent evt = new GMouseEvent(this, event, 2);
-            bevent = evt;
-            for(int i=0;mouseListeners != null && i< mouseListeners.size();i++)
-            {
-                mouseListeners.get(i).mouseClicked(evt);
-            }
-        }
-        else if(event.getType() == GPEvent.Type.ONMOUSEDOWN && isEnabled())
+        return evt;
+    }
+    
+    private GMouseEvent handleMousePressed(GPEvent event)
+    {
+        GMouseEvent evt = null;
+        if(isEnabled())
         {
             if(isLongClickEnabled && supportsLongClick())
             {
                 longClickStart = System.currentTimeMillis();
             }
-            GMouseEvent evt = new GMouseEvent(this, event);
-            bevent = evt;
-            for(int i=0;mouseListeners != null && i< mouseListeners.size();i++)
+            evt = new GMouseEvent(this, event);
+            for(int i=0;processEvent && mouseListeners != null && i< mouseListeners.size();i++)
             {
                 mouseListeners.get(i).mousePressed(evt);
             }
         }
-        else if(event.getType() == GPEvent.Type.ONMOUSEUP && isEnabled())
+        return evt;
+    }
+    
+    private GMouseEvent handleMouseReleased(GPEvent event)
+    {
+        GMouseEvent evt = null;
+        if(isEnabled())
         {
             if(isLongClickEnabled && supportsLongClick())
             {
@@ -357,123 +409,215 @@ public class GComponent
                 if(diff > LONG_CLICK_TIME)
                 {
                     longClickPerformed = true;
-                    GMouseEvent evt = new GMouseEvent(this, event);
-                    for(int i=0;mouseListeners != null && i< mouseListeners.size();i++)
+                    evt = new GMouseEvent(this, event, 1);
+                    evt.setId(GMouseEvent.MOUSE_LONG_CLICK);
+                    for(int i=0;processEvent && mouseListeners != null && i< mouseListeners.size();i++)
                     {
                         mouseListeners.get(i).mouseClickedLong(evt);
                     }
                     GToolkit.getDefaultToolkit().handleAWTEvent(evt);
                 }
             }
-            GMouseEvent evt = new GMouseEvent(this, event);
-            bevent = evt;
-            for(int i=0;mouseListeners != null && i< mouseListeners.size();i++)
+            evt = new GMouseEvent(this, event);
+            for(int i=0;processEvent && mouseListeners != null && i< mouseListeners.size();i++)
             {
                 mouseListeners.get(i).mouseReleased(evt);
             }
         }
-        else if(event.getType() == GPEvent.Type.ONMOUSEMOVE)
+        return evt;
+    }
+    
+    private GMouseEvent handleMouseMoved(GPEvent event)
+    {
+        GMouseEvent evt = new GMouseEvent(this, event);
+        for(int i=0;processEvent && mouseMotionListeners != null && i< mouseMotionListeners.size();i++)
         {
-            GMouseEvent evt = new GMouseEvent(this, event);
-            bevent = evt;
-            for(int i=0;mouseMotionListeners != null && i< mouseMotionListeners.size();i++)
-            {
-                mouseMotionListeners.get(i).mouseMoved(evt);
-            }
+            mouseMotionListeners.get(i).mouseMoved(evt);
         }
-        else if(event.getType() == GPEvent.Type.ONMOUSEWHEEL)
+        return evt;
+    }
+    
+    private GMouseEvent handleMouseWheelMoved(GPEvent event)
+    {
+        GMouseWheelEvent evt = new GMouseWheelEvent(this, event);
+        for(int i=0;processEvent && mouseMotionListeners != null && i< mouseMotionListeners.size();i++)
         {
-            GMouseWheelEvent evt = new GMouseWheelEvent(this, event);
-            bevent = evt;
-            for(int i=0;mouseMotionListeners != null && i< mouseMotionListeners.size();i++)
-            {
-                mouseWheelListeners.get(i).mouseWheelMoved(evt);
-            }
+            mouseWheelListeners.get(i).mouseWheelMoved(evt);
         }
-        else if(event.getType() == GPEvent.Type.ONTOUCHSTART)
+        return evt;
+    }
+    
+    private GTouchEvent handleTouchStart(GPEvent event)
+    {
+        GTouchEvent evt = new GTouchEvent(this, event);
+        for(int i=0;processEvent && touchListeners != null && i< touchListeners.size();i++)
         {
-            GTouchEvent evt = new GTouchEvent(this, event);
-            bevent = evt;
-            for(int i=0;touchListeners != null && i< touchListeners.size();i++)
-            {
-                touchListeners.get(i).touchStart(evt);
-            }
+            touchListeners.get(i).touchStart(evt);
         }
-        else if(event.getType() == GPEvent.Type.ONTOUCHMOVE)
+        return evt;
+    }
+    
+    private GTouchEvent handleTouchMove(GPEvent event)
+    {
+        GTouchEvent evt = new GTouchEvent(this, event);
+        for(int i=0;processEvent && touchListeners != null && i< touchListeners.size();i++)
         {
-            GTouchEvent evt = new GTouchEvent(this, event);
-            bevent = evt;
-            for(int i=0;touchListeners != null && i< touchListeners.size();i++)
-            {
-                touchListeners.get(i).touchMove(evt);
-            }
+            touchListeners.get(i).touchMove(evt);
         }
-        else if(event.getType() == GPEvent.Type.ONTOUCHEND)
+        return evt;
+    }
+    
+    private GTouchEvent handleTouchEnd(GPEvent event)
+    {
+        GTouchEvent evt = new GTouchEvent(this, event);
+        for(int i=0;processEvent && touchListeners != null && i< touchListeners.size();i++)
         {
-            GTouchEvent evt = new GTouchEvent(this, event);
-            bevent = evt;
-            for(int i=0;touchListeners != null && i< touchListeners.size();i++)
-            {
-                touchListeners.get(i).touchEnd(evt);
-            }
+            touchListeners.get(i).touchEnd(evt);
         }
-        else if(event.getType() == GPEvent.Type.ONKEYDOWN && isEnabled())
+        return evt;
+    }
+    
+    private GKeyEvent handleKeyPressed(GPEvent event)
+    {
+        GKeyEvent evt = null;
+        if(isEnabled())
         {
-            GKeyEvent evt = new GKeyEvent(this, event);
-            bevent = evt;
-            for(int i=0;keyListeners != null && i< keyListeners.size();i++)
+            evt = new GKeyEvent(this, event);
+            for(int i=0;processEvent && keyListeners != null && i< keyListeners.size();i++)
             {
                 keyListeners.get(i).keyPressed(evt);
                 if(evt.isConsumed())
                 {
-                    event.preventDefault();
-                    event.stopPropagation();
                     break;
                 }
             }
         }
-        else if(event.getType() == GPEvent.Type.ONKEYUP && isEnabled())
+        return evt;
+    }
+    
+    private GKeyEvent handleKeyReleased(GPEvent event)
+    {
+        GKeyEvent evt = null;
+        if(isEnabled())
         {
-            GKeyEvent evt = new GKeyEvent(this, event);
-            bevent = evt;
-            for(int i=0;keyListeners != null && i< keyListeners.size();i++)
+            evt = new GKeyEvent(this, event);
+            for(int i=0;processEvent && keyListeners != null && i< keyListeners.size();i++)
             {
                 keyListeners.get(i).keyReleased(evt);
                 if(evt.isConsumed())
                 {
-                    event.preventDefault();
-                    event.stopPropagation();
                     break;
                 }
             }
         }
-        else if(event.getType() == GPEvent.Type.ONKEYPRESS && isEnabled())
+        return evt;
+    }
+    
+    private GKeyEvent handleKeyTyped(GPEvent event)
+    {
+        GKeyEvent evt = null;
+        if(isEnabled())
         {
-            GKeyEvent evt = new GKeyEvent(this, event);
-            bevent = evt;
-            //Dies ist asynchron, da ansonsten der Buchstabe noch nicht verarbeitet ist.
-            GSwingUtilities.invokeLater(new Runnable()
+            evt = new GKeyEvent(this, event);
+            GKeyEvent fevt = evt;
+            if(processEvent)
             {
-                @Override
-                public void run()
+                //Dies ist asynchron, da ansonsten der Buchstabe noch nicht verarbeitet ist.
+                GSwingUtilities.invokeLater(new Runnable()
                 {
-                    for(int i=0;keyListeners != null && i< keyListeners.size();i++)
+                    @Override
+                    public void run()
                     {
-                        keyListeners.get(i).keyTyped(evt);
+                        for(int i=0;keyListeners != null && i< keyListeners.size();i++)
+                        {
+                            keyListeners.get(i).keyTyped(fevt);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
-        else if(event.getType() == GPEvent.Type.ONFOCUS)
+        return evt;
+    }
+    
+    private GFocusEvent handleFocusGained(GPEvent event)
+    {
+        GFocusEvent evt = null;
+        if(isEnabled())
         {
-            GFocusEvent evt = new GFocusEvent(this);
-            bevent = evt;
-            for(int i=0;focusListeners != null && i< focusListeners.size();i++)
+            evt = new GFocusEvent(this);
+            for(int i=0;processEvent && focusListeners != null && i< focusListeners.size();i++)
             {
                 focusListeners.get(i).focusGained(evt);
             }
         }
-//        System.out.println("EVENT " + bevent + "; "  +event.getType());
+        return evt;
+    }
+    
+    public void handleEvent(GAWTEvent event)
+    {
+    }
+    
+    private GAWTEvent _handleEvent(GPEvent event)
+    {
+        GAWTEvent bevent = null;
+        switch(event.getType())
+        {
+            case ONMOUSEOVER:
+                bevent = handleMouseEnter(event);
+            break;
+            case ONMOUSEOUT:
+                bevent = handleMouseExited(event);
+            break;
+            case ONCLICK:
+                bevent = handleMouseClicked(event);
+            break;
+            case ONCONTEXTMENU:
+                bevent = handleContextMenu(event);
+            break;
+            case ONDBLCLICK:
+                bevent = handleDoubleClick(event);
+            break;
+            case ONMOUSEDOWN:
+                bevent = handleMousePressed(event);
+            break;
+            case ONMOUSEUP:
+                bevent = handleMouseReleased(event);
+            break;
+            case ONMOUSEMOVE:
+                bevent = handleMouseMoved(event);
+            break;
+            case ONMOUSEWHEEL:
+                bevent = handleMouseWheelMoved(event);
+            break;
+            case ONTOUCHSTART:
+                bevent = handleTouchStart(event);
+            break;
+            case ONTOUCHMOVE:
+                bevent = handleTouchMove(event);
+            break;
+            case ONTOUCHEND:
+                bevent = handleTouchEnd(event);
+            break;
+            case ONKEYDOWN:
+                bevent = handleKeyPressed(event);
+            break;
+            case ONKEYUP:
+                bevent = handleKeyReleased(event);
+            break;
+            case ONKEYPRESS:
+                bevent = handleKeyTyped(event);
+            break;
+            case ONFOCUS:
+                bevent = handleFocusGained(event);
+            break;
+            default:
+                //Nothing
+            break;
+        }
+        if(processEvent)
+        {   //Give Components a chance to do their own stuff.
+            handleEvent(bevent);
+        }
         return bevent;
     }
 

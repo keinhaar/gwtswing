@@ -12,6 +12,7 @@ import de.exware.gwtswing.swing.GButton;
 import de.exware.gwtswing.swing.GComponent;
 import de.exware.gwtswing.swing.GLabel;
 import de.exware.gwtswing.swing.GPanel;
+import de.exware.gwtswing.swing.GSwingUtilities;
 import de.exware.gwtswing.swing.GUtilities;
 import de.exware.gwtswing.swing.border.GBorderFactory;
 import de.exware.gwtswing.swing.border.SelectiveLineBorder;
@@ -145,29 +146,34 @@ public class GWindow extends GComponent
         @Override
         public void mouseMoved(GMouseEvent e)
         {
-            if(dragging)
-            {
-                GComponent comp = (GComponent) e.getSource();
-                {
-                    GPoint loc = comp.getLocationOnScreen();
-                    int dX = e.getX() + loc.x - mouseStartX;
-                    int dY = e.getY() + loc.y - mouseStartY;
-                    setLocation(dragStartX + dX, dragStartY + dY);
-                    GUtilities.clearSelection();
-                }
-            }
         }
 
         @Override
         public void eventDispatched(GAWTEvent event)
         {
+            //Events outside of the title, because the mouse moved to fast.
             if(event instanceof GMouseEvent && event.getId() == GMouseEvent.MOUSE_MOVED)
             {
-                mouseMoved((GMouseEvent) event);
+                move((GMouseEvent) event);
             }
             else if(event instanceof GMouseEvent && event.getId() == GMouseEvent.MOUSE_RELEASED)
             {
                 mouseReleased((GMouseEvent) event);
+            }
+        }
+        
+        private void move(GMouseEvent e)
+        {
+            if(dragging)
+            {
+                GComponent comp = (GComponent) e.getSource();
+                GPoint point = e.getPoint();
+                point = GSwingUtilities.convertPoint(comp, point.x, point.y, title);
+                GPoint loc = title.getLocationOnScreen();
+                int dX = point.x + loc.x - mouseStartX;
+                int dY = point.y + loc.y - mouseStartY;
+                setLocation(dragStartX + dX, dragStartY + dY);
+                GUtilities.clearSelection();
             }
         }
     }

@@ -4,7 +4,7 @@ Even though, the name is still GWTSwing, it has been ported to TeaVM by introduc
 gplatform, with implementations for GWT and TeaVM.
 
 There are 2 main differences between Swing an GWTSwing.
-1. There are no modal dialogs. Instead of that, callback objects can be used, to get notified if a dialog was closed.
+1. Modal dialogs don't stop event execution. Instead of that, callback objects can be used, to get notified if a dialog was closed.
 2. All Classnames beginn with "G" instead of "J" (GTextField instead of JTextField). This was done to avoid license problems, because the API is now different from Oracles Swing and to avoid confusion while developing with GWTSwing.
 
 There are no server calls after starting the application. Everything is handled locally on the client.
