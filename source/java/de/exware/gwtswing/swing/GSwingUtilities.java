@@ -21,12 +21,15 @@ public class GSwingUtilities
 
     public static GPoint convertPoint(GComponent source, int x, int y, GComponent target)
     {
-        GPoint p = source.getLocationOnScreen();
-        x = p.x + x;
-        y = p.y + y;
-        p = target.getLocationOnScreen();
-        x = x - p.x;
-        y = y - p.y;
+        if(source != target) 
+        {
+            GPoint p = source.getLocationOnScreen();
+            x = p.x + x;
+            y = p.y + y;
+            p = target.getLocationOnScreen();
+            x = x - p.x;
+            y = y - p.y;
+        }
         return new GPoint(x,y);
     }
     

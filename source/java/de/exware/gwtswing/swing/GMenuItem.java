@@ -1,7 +1,6 @@
 package de.exware.gwtswing.swing;
 
 import de.exware.gwtswing.awt.GInsets;
-import de.exware.gwtswing.awt.event.GActionEvent;
 
 public class GMenuItem extends GButton
 {
@@ -23,9 +22,9 @@ public class GMenuItem extends GButton
     }
     
     @Override
-    protected GActionEvent fireActionEvent()
+    protected void fireActionEvent()
     {
-        GActionEvent evt = super.fireActionEvent();
+        super.fireActionEvent();
         GComponent parent = this;
         while(parent != null && parent instanceof GPopupMenu == false)
         {
@@ -35,6 +34,5 @@ public class GMenuItem extends GButton
         {
             ((GPopupMenu)parent).setVisible(false);
         }
-        return evt;
     }
 }

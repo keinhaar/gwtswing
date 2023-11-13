@@ -8,9 +8,14 @@ import de.exware.gwtswing.swing.GComponent;
 public class GMouseEvent extends GAWTEvent
 {
     public static final int MOUSE_MOVED = 1;
-    public static final int MOUSE_RELEASED = 2;
-    public static final int MOUSE_CLICKED = 3;
+    public static final int MOUSE_PRESSED = 2;
+    public static final int MOUSE_RELEASED = 3;
+    public static final int MOUSE_CLICKED = 4;
+    public static final int MOUSE_ENTERED = 5;
+    public static final int MOUSE_EXITED = 6;
     public static final int MOUSE_WHEEL = 7;
+    public static final int MOUSE_DRAGGED = 8;
+    public static final int MOUSE_LONG_CLICK = 9;
     public static final int NOBUTTON = 0;
     public static final int BUTTON1 = 1;
     public static final int BUTTON2 = 2;
@@ -44,6 +49,7 @@ public class GMouseEvent extends GAWTEvent
     public GMouseEvent(Object source, GPEvent jsEvent, int clickCount, int button)
     {
         super(source); 
+        jsEvent.stopPropagation();
         this.mousebutton = button;
         GComponent c = (GComponent) source;
         GPoint loc = c.getLocationOnScreen();
@@ -53,17 +59,29 @@ public class GMouseEvent extends GAWTEvent
         isShift = jsEvent.getShiftKey();
         isAlt = jsEvent.getAltKey();
         isControl = jsEvent.getCtrlKey();
-        if(jsEvent.getType() == GPEvent.Type.ONMOUSEMOVE)
+        switch(jsEvent.getType())
         {
-            setId(MOUSE_MOVED);
-        }
-        else if(jsEvent.getType() == GPEvent.Type.ONMOUSEUP)
-        {
-            setId(MOUSE_RELEASED);
-        }
-        else if(jsEvent.getType() == GPEvent.Type.ONCLICK)
-        {
-            setId(MOUSE_CLICKED);
+            case ONMOUSEMOVE:
+                setId(MOUSE_MOVED);
+            break;
+            case ONMOUSEUP:
+                setId(MOUSE_RELEASED);
+            break;
+            case ONMOUSEDOWN:
+                setId(MOUSE_PRESSED);
+            break;
+            case ONCLICK:
+                setId(MOUSE_CLICKED);
+            break;
+            case ONMOUSEWHEEL:
+                setId(MOUSE_WHEEL);
+            break;
+            case ONMOUSEOVER:
+                setId(MOUSE_ENTERED);
+            break;
+            case ONMOUSEOUT:
+                setId(MOUSE_EXITED);
+            break;
         }
         this.clickCount = clickCount;
     }

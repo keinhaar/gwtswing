@@ -245,6 +245,7 @@ public class GOptionPane extends GComponent
     public GDialog createDialog(String title)
     {
         dlg = new GDialog();
+        dlg.setModal(true);
         dlg.setTitle(title);
         return dlg;
     }

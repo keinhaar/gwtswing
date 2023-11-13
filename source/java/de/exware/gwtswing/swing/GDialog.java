@@ -11,19 +11,51 @@ public class GDialog extends GWindow
     private GDialogCallback callback;
     private GAbstractButton defaultButton;
     private GAWTEventListener listener;
+    private boolean isModal = false;
     
     public GDialog()
     {
+        this((GFrame)null, (GDialogCallback)null);
     }
 
     public GDialog(GDialogCallback callback)
     {
+        this((GWindow)null, callback);
+    }
+
+    public GDialog(GWindow parent, GDialogCallback callback)
+    {
+        this(parent, null, callback);
+    }
+
+    public GDialog(GWindow parent, String title, GDialogCallback callback)
+    {
+        this(parent, title, false, callback);
+    }
+
+    public GDialog(GWindow parent, String title)
+    {
+        this(parent, title, false, null);
+    }
+
+    public GDialog(GWindow parent, String title, boolean modal)
+    {
+        this(parent, title, modal, null);
+    }
+
+    public GDialog(GWindow parent, String title, boolean modal, GDialogCallback callback)
+    {
         this.callback = callback;
+        setTitle(title);
+        setModal(modal);
     }
 
     public void setModal(boolean modal)
     {
-        
+        if(modal != isModal)
+        {
+            isModal = modal;
+        }
     }
     
     protected void callback()
@@ -49,12 +81,9 @@ public class GDialog extends GWindow
         {
             callback();
         }
-        if(visible == false)
+        if(visible)
         {
-            GToolkit.getDefaultToolkit().removeAWTEventListener(listener);            
-        }
-        else
-        {
+            setModalComponent(this);
             listener = new GAWTEventListener()
             {
                 @Override
@@ -77,6 +106,11 @@ public class GDialog extends GWindow
             };
             GToolkit.getDefaultToolkit().addAWTEventListener(listener, 0);
             GUtilities.focusFirstField(this);
+        }
+        else
+        {
+            GToolkit.getDefaultToolkit().removeAWTEventListener(listener);            
+            removeModalComponent();
         }
     }
  

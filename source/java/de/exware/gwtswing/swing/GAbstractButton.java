@@ -5,10 +5,12 @@ import java.util.List;
 
 import de.exware.gplatform.element.GPInputElement;
 import de.exware.gplatform.event.GPEvent;
+import de.exware.gwtswing.awt.GToolkit;
 import de.exware.gwtswing.awt.event.GAWTEvent;
 import de.exware.gwtswing.awt.event.GActionEvent;
 import de.exware.gwtswing.awt.event.GActionListener;
 import de.exware.gwtswing.awt.event.GKeyEvent;
+import de.exware.gwtswing.awt.event.GMouseEvent;
 import de.exware.gwtswing.swing.event.GPropertyChangeEvent;
 import de.exware.gwtswing.swing.event.GPropertyChangeListener;
 
@@ -68,27 +70,29 @@ abstract public class GAbstractButton extends GComponent
     }
     
     @Override
-    public GAWTEvent handleEvent(GPEvent event)
+    public void handleEvent(GAWTEvent event)
     {
-        GAWTEvent bevent = super.handleEvent(event);
-        if(event.getType() == GPEvent.Type.ONCLICK)
+        super.handleEvent(event);
+        if(event instanceof GMouseEvent)
         {
-            bevent = fireActionEvent();
-            event.stopPropagation();
-        }
-        if(event.getType() == GPEvent.Type.ONKEYUP)
-        {
-            GKeyEvent evt = (GKeyEvent) bevent;
-            if(evt.getKeyCode() == GKeyEvent.VK_SPACE)
+            GMouseEvent evt = (GMouseEvent) event;
+            if(evt.getId() == GMouseEvent.MOUSE_CLICKED)
             {
-                bevent = fireActionEvent();
-                event.stopPropagation();
+                fireActionEvent();
             }
         }
-        return bevent;
+        else if(event instanceof GKeyEvent)
+        {
+            GKeyEvent evt = (GKeyEvent) event;
+            if(evt.getId() == GKeyEvent.KEY_RELEASED
+                && evt.getKeyCode() == GKeyEvent.VK_SPACE)
+            {
+                fireActionEvent();
+            }
+        }
     }
     
-    protected GActionEvent fireActionEvent()
+    protected void fireActionEvent()
     {
         if(isEnabled())
         {
@@ -101,9 +105,8 @@ abstract public class GAbstractButton extends GComponent
             {
                 action.actionPerformed(evt);
             }
-            return evt;
+            GToolkit.getDefaultToolkit().handleAWTEvent(evt);
         }
-        return null;
     }
 
     public void addActionListener(GActionListener listener)
