@@ -24,6 +24,10 @@
 
 .gwts-GComboBox select {
 	width: inherit;
+	border-radius: 5px;
+	border-width: 1px;
+	border-color: #555555;
+	border-style: solid;
 }
 
 img.disabled {
@@ -175,10 +179,18 @@ input {
 	border-width: 1px;
 	border-color: #555555;
 	border-style: solid;
+	border-radius: 5px;
 	resize: none;
 	padding: 2px;
 	background-color: #ffffff;
 	overflow: initial;
+}
+
+.gwts-GScrollPane {
+	border-radius: 5px;
+	border-width: 1px;
+	border-color: #555555;
+	border-style: solid;
 }
 
 .gwts-GScrollPane-Viewport {
@@ -186,6 +198,7 @@ input {
 	position: absolute;
 	display: inline;
 }
+
 .gwts-GList {
 	background-color: #eeeecc;
 	overflow: hidden;
