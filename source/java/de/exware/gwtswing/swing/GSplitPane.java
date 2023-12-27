@@ -164,16 +164,28 @@ public class GSplitPane extends GComponent
         GDimension size = getSize();
         if(orientation == HORIZONTAL_SPLIT)
         {
-            leftComponent.setSize(dividerLocation, size.height);
-            rightComponent.setBounds(dividerLocation + dividerSize, 0
-                , size.width - dividerLocation - dividerSize, size.height);
+            if(leftComponent != null)
+            {
+                leftComponent.setSize(dividerLocation, size.height);
+            }
+            if(rightComponent != null)
+            {
+                rightComponent.setBounds(dividerLocation + dividerSize, 0
+                    , size.width - dividerLocation - dividerSize, size.height);
+            }
             divider.setBounds(dividerLocation, 0, dividerSize, size.height);
         }
         else
         {
-            leftComponent.setSize(size.width, dividerLocation);
-            rightComponent.setBounds(0, dividerLocation + dividerSize
-                , size.width, size.height - dividerLocation - dividerSize);
+            if(leftComponent != null)
+            {
+                leftComponent.setSize(size.width, dividerLocation);
+            }
+            if(rightComponent != null)
+            {
+                rightComponent.setBounds(0, dividerLocation + dividerSize
+                    , size.width, size.height - dividerLocation - dividerSize);
+            }
             divider.setBounds(0, dividerLocation, size.width, dividerSize);
         }
         validateChildren();
