@@ -2,11 +2,9 @@ package de.exware.gwtswing.swing;
 
 import de.exware.gplatform.GPElement;
 import de.exware.gplatform.GPlatform;
-import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GInsets;
 import de.exware.gwtswing.awt.GPoint;
-import de.exware.gwtswing.swing.border.GBorderFactory;
 
 public class GScrollPane extends GComponent
 {
@@ -62,7 +60,6 @@ public class GScrollPane extends GComponent
         getPeer().appendChild(innerDiv);
         add(comp);
         innerDiv.appendChild(comp.getPeer());
-        setBorder(GBorderFactory.createLineBorder(GColor.DARK_GRAY, 1));
     }
 
     @Override

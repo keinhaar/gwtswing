@@ -175,7 +175,7 @@ public class GList<T> extends GComponent
                 
                     clickHandler = new ClickHandler();
                     GPTimer timer = GPlatform.getInstance().createTimer();
-                    timer.schedule(clickHandler, 300);
+                    timer.schedule(clickHandler, 50);
                 }
             }
         };
