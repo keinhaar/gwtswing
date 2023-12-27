@@ -6,9 +6,9 @@ public class GMouseWheelEvent extends GMouseEvent
 {
     private int amount;
     
-    public GMouseWheelEvent(Object source, int x, int y, int clickcount)
+    public GMouseWheelEvent(Object source, int x, int y, int clickcount, int button)
     {
-        super(source, x, y, clickcount);
+        super(source, x, y, clickcount, button);
     }
     
     public GMouseWheelEvent(Object source, GPEvent jsEvent)

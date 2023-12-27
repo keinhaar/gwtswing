@@ -173,6 +173,14 @@ public class GComponent
         }
     }
     
+    public void removeTouchListener(GTouchListener listener)
+    {
+        if(touchListeners != null)
+        {
+            touchListeners.remove(listener);
+        }
+    }
+    
     public void addMouseListener(GMouseListener listener)
     {
         if(mouseListeners == null)
@@ -210,10 +218,9 @@ public class GComponent
         if(touchListeners == null)
         {
             touchListeners = new ArrayList<>();
-//            initEventListener(Event.ONTOUCHSTART | Event.ONTOUCHEND | Event.ONTOUCHMOVE);
-//            DOM.sinkBitlessEvent(getPeer(), "touchstart");
-//            DOM.sinkBitlessEvent(getPeer(), "touchmove");
-//            DOM.sinkBitlessEvent(getPeer(), "touchend");
+            initEventListener(GPEvent.Type.ONTOUCHSTART
+                , GPEvent.Type.ONTOUCHEND
+                , GPEvent.Type.ONTOUCHMOVE);
         }
         if(touchListeners.contains(listener) == false)
         {

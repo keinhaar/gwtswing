@@ -11,6 +11,7 @@ import java.util.Stack;
 import de.exware.gwtswing.awt.GBorderLayout;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GFont;
+import de.exware.gwtswing.awt.GPoint;
 import de.exware.gwtswing.awt.event.GMouseAdapter;
 import de.exware.gwtswing.awt.event.GMouseEvent;
 import de.exware.gwtswing.awt.event.GMouseListener;
@@ -289,7 +290,8 @@ public class GTree<T> extends GComponent
                         treeSelectionListeners.get(i).valueChanged(tevt);
                     }
                 }
-                GMouseEvent tevt = new GMouseEvent(GTree.this, evt.getX(), evt.getY(), evt.getClickCount());
+                GPoint point = GSwingUtilities.convertPoint((GComponent) evt.getSource(), evt.getX(), evt.getY(), GTree.this);
+                GMouseEvent tevt = new GMouseEvent(GTree.this, point.x, point.y, evt.getClickCount(), evt.getButton());
                 for(int i=0;GTree.this.mouseListeners != null && i < GTree.this.mouseListeners.size();i++)
                 {
                     GMouseListener l = GTree.this.mouseListeners.get(i);
@@ -297,7 +299,29 @@ public class GTree<T> extends GComponent
                 }
                 iw.updateElement();
             }
-        };
+            else
+            {
+                GPoint point = GSwingUtilities.convertPoint((GComponent) evt.getSource(), evt.getX(), evt.getY(), GTree.this);
+                GMouseEvent tevt = new GMouseEvent(GTree.this, point.x, point.y, evt.getClickCount(), evt.getButton());
+                for(int i=0;GTree.this.mouseListeners != null && i < GTree.this.mouseListeners.size();i++)
+                {
+                    GMouseListener l = GTree.this.mouseListeners.get(i);
+                    l.mouseClicked(tevt);
+                }
+            }
+        }
+        
+        @Override
+        public void mouseClickedLong(GMouseEvent evt) 
+        {
+            GPoint point = GSwingUtilities.convertPoint((GComponent) evt.getSource(), evt.getX(), evt.getY(), GTree.this);
+            GMouseEvent tevt = new GMouseEvent(GTree.this, point.x, point.y, evt.getClickCount(), evt.getButton());
+            for(int i=0;GTree.this.mouseListeners != null && i < GTree.this.mouseListeners.size();i++)
+            {
+                GMouseListener l = GTree.this.mouseListeners.get(i);
+                l.mouseClickedLong(tevt);
+            }
+        }
     };
 
     private static GFont font;

@@ -17,6 +17,7 @@ public class GPopupMenu extends GComponent
     private GPopup popup;
     private static GPopupMenu visibleMenu;
     private static GAWTEventListener awtListener;
+    private boolean visible;
     
     public GPopupMenu()
     {
@@ -66,6 +67,7 @@ public class GPopupMenu extends GComponent
     @Override
     public void setVisible(boolean visible)
     {
+        this.visible = visible;
 //        super.setVisible(visible);
         if(popup != null && visible == false)
         {
@@ -75,12 +77,19 @@ public class GPopupMenu extends GComponent
         }
     }
     
+    @Override
+    public boolean isVisible()
+    {
+        return visible;
+    }
+    
     public void show(GComponent comp, int x, int y)
     {
         if(visibleMenu != null)
         {
             visibleMenu.setVisible(false);
         }
+        setVisible(true);
         GPoint p = comp.getLocationOnScreen();
         popup = GPopupFactory.getSharedInstance().getPopup(comp, this, p.x + x, p.y + y);
         popup.show();

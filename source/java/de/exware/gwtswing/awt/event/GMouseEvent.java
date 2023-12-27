@@ -27,12 +27,13 @@ public class GMouseEvent extends GAWTEvent
     private int mousebutton;
     private int clickCount;
     
-    public GMouseEvent(Object source, int x, int y, int clickcount)
+    public GMouseEvent(Object source, int x, int y, int clickcount, int button)
     {
         super(source);
         this.x = x;
         this.y = y;
         this.clickCount = clickcount;
+        this.mousebutton = button;
     }
     
     public GMouseEvent(Object source, GPEvent jsEvent)

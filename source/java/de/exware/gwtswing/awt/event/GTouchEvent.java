@@ -10,12 +10,17 @@ import de.exware.gwtswing.swing.GComponent;
 
 public class GTouchEvent extends GAWTEvent
 {
+    private static final int TOUCH_START = 1;
+    private static final int TOUCH_MOVE = 2;
+    private static final int TOUCH_END = 3;
+    
     private GPoint[] points;
     private GPoint[] changedPoints;
     
     public GTouchEvent(Object source, GPEvent jsEvent)
     {
         super(source, jsEvent); 
+        jsEvent.stopPropagation();
         GComponent c = (GComponent) source;
         GPoint loc = c.getLocationOnScreen();
         GInsets insets = c.getInsets();
@@ -37,6 +42,20 @@ public class GTouchEvent extends GAWTEvent
             int y = t.getClientY() - loc.y - insets.top;
             changedPoints[i] = new GPoint(x, y);
         }
+        switch(jsEvent.getType())
+        {
+            case ONTOUCHSTART:
+                setId(TOUCH_START);
+            break;
+            case ONTOUCHMOVE:
+                setId(TOUCH_MOVE);
+            break;
+            case ONTOUCHEND:
+                setId(TOUCH_END);
+            break;
+            default:
+                break;
+        }
     }
 
     public GPoint[] getPoints()
@@ -48,5 +67,4 @@ public class GTouchEvent extends GAWTEvent
     {
         return changedPoints;
     }
-
 }
