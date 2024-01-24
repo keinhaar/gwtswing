@@ -61,4 +61,16 @@ public class GSwingUtilities
     {
         return parent.getTopLevelAncestor();
     }
+    
+    public static void updateComponentTreeUI(GComponent c)
+    {
+    	if(c != null) 
+    	{
+    		c.updateUI();
+    		for(GComponent component : c.getComponents())
+        	{
+        		updateComponentTreeUI(component);
+        	}
+    	}
+    }
 }

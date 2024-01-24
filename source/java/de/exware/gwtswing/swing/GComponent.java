@@ -37,6 +37,7 @@ import de.exware.gwtswing.awt.event.GMouseWheelListener;
 import de.exware.gwtswing.awt.event.GTouchEvent;
 import de.exware.gwtswing.awt.event.GTouchListener;
 import de.exware.gwtswing.swing.border.GBorder;
+import de.exware.gwtswing.swing.plaf.ComponentUI;
 
 public class GComponent
 {
@@ -74,6 +75,7 @@ public class GComponent
      */
     private static Stack<GComponent> modalityStack = new Stack<>();
     private boolean processEvent = true;
+    private ComponentUI componentUI;
 
     public GComponent()
     {
@@ -1274,5 +1276,28 @@ public class GComponent
     public int getY()
     {
         return getLocation().y;
+    }
+    
+    public ComponentUI getUI()
+    {
+    	return componentUI;
+    }
+    
+    public void setUI(ComponentUI componentUI)
+    {
+    	if(this.componentUI != null)
+    	{
+    		this.componentUI.uninstallUI(this);
+    	}
+    	
+    	if(componentUI != null)
+    	{
+    		componentUI.installUI(this);
+    	}
+    }
+    
+    public void updateUI()
+    {
+    	setUI(GUIManager.getUI(this));
     }
 }

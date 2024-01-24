@@ -10,11 +10,13 @@ import de.exware.gplatform.style.GPStyleSheet;
 import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GFont;
 import de.exware.gwtswing.awt.GInsets;
+import de.exware.gwtswing.swing.plaf.ComponentUI;
 
 public class GUIManager
 {
     private static Map<Object, Object> resources = new HashMap<>();
     private static boolean isInitialized;
+    private static GLookAndFeel lookAndFeel = null;
     
     static
     {
@@ -199,5 +201,27 @@ public class GUIManager
     public static boolean isInitialized()
     {
         return isInitialized;
+    }
+    
+    public static ComponentUI getUI(GComponent component)
+    {
+    	if(lookAndFeel != null)
+    	{
+    		return lookAndFeel.getDefaults().getUI(component);
+    	}
+    	
+    	return null;
+    }
+    
+    public static void setLookAndFeel(GLookAndFeel lookAndFeel)
+    {
+    	if(GUIManager.lookAndFeel != null)
+    	{
+    		GUIManager.lookAndFeel.uninitialize();
+    	}
+    	
+    	lookAndFeel.initialize();
+    	
+    	GUIManager.lookAndFeel = lookAndFeel;
     }
 }
