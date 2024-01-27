@@ -8,4 +8,6 @@ public interface GBorder
     public void install(GComponent component);
     
     GInsets getBorderInsets(GComponent c);
+
+    public void uninstall(GComponent component);
 }

@@ -18,6 +18,9 @@ public class GTitledBorder implements GBorder
 	private int titleHeight;
 	private String title;
     private String style;
+    private GPElement divB;
+    private GPElement divT;
+    private GPElement div;
 	
     public GTitledBorder(String title)
     {
@@ -84,8 +87,6 @@ public class GTitledBorder implements GBorder
         this.font = font;
     }
     
-    
-    
     @Override
     public GInsets getBorderInsets(GComponent c)
     {
@@ -102,7 +103,7 @@ public class GTitledBorder implements GBorder
         component.getPeer().getStyle().setProperty("borderTopWidth", titleHeight + "px");
         component.getPeer().getStyle().setProperty("borderTopColor", component.getBackground().toHex());
         
-        GPElement divB = GPlatform.getDoc().createDivElement();
+        divB = GPlatform.getDoc().createDivElement();
         divB.getStyle().setPosition("absolute");
         divB.getStyle().setTop(-titleHeight);
         divB.getStyle().setLeft(-width);
@@ -111,7 +112,7 @@ public class GTitledBorder implements GBorder
         divB.getStyle().setBackgroundColor(component.getBackground().toHex());
         component.getPeer().appendChild(divB);
 
-        GPElement divT = GPlatform.getDoc().createDivElement();
+        divT = GPlatform.getDoc().createDivElement();
         divT.getStyle().setPosition("absolute");
         divT.getStyle().setTop(-titleHeight/2-width/2);
         divT.getStyle().setLeft(-width);
@@ -123,7 +124,7 @@ public class GTitledBorder implements GBorder
         divT.getStyle().setProperty("borderRight", style + " " + width + "px " + color.toHex());
         component.getPeer().appendChild(divT);
 
-        GPElement div = GPlatform.getDoc().createDivElement();
+        div = GPlatform.getDoc().createDivElement();
         div.setInnerText(title);
         div.getStyle().setPosition("absolute");
         div.getStyle().setTop(-titleHeight);
@@ -133,5 +134,19 @@ public class GTitledBorder implements GBorder
         div.getStyle().setColor(color.toHex());
         div.getStyle().setBackgroundColor(component.getBackground().toHex());
         component.getPeer().appendChild(div);
+    }
+
+    @Override
+    public void uninstall(GComponent component)
+    {
+        component.getPeer().getStyle().clearProperty("borderColor");
+        component.getPeer().getStyle().clearProperty("borderStyle");
+        component.getPeer().getStyle().clearProperty("borderWidth");
+        component.getPeer().getStyle().clearProperty("overflow");
+        component.getPeer().getStyle().clearProperty("borderTopWidth");
+        component.getPeer().getStyle().clearProperty("borderTopColor");
+        div.removeFromParent();
+        divT.removeFromParent();
+        divB.removeFromParent();
     }
 }

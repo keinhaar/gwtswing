@@ -74,6 +74,10 @@ public class GComponent
      */
     private static Stack<GComponent> modalityStack = new Stack<>();
     private boolean processEvent = true;
+    /**
+     * If true, all mouseEvent Propagation is stopped on this Component.
+     */
+    private boolean stopMousePropagation = true;
 
     public GComponent()
     {
@@ -378,7 +382,7 @@ public class GComponent
         if(isEnabled())
         {
             event.preventDefault();
-            evt = new GMouseEvent(this, event, 1, GMouseEvent.BUTTON3);
+            evt = new GMouseEvent(this, event, true, 1, GMouseEvent.BUTTON3);
             for(int i=0;processEvent && mouseListeners != null && i< mouseListeners.size();i++)
             {
                 mouseListeners.get(i).mouseClicked(evt);
@@ -436,7 +440,7 @@ public class GComponent
     
     private GMouseEvent handleMouseMoved(GPEvent event)
     {
-        GMouseEvent evt = new GMouseEvent(this, event);
+        GMouseEvent evt = new GMouseEvent(this, event, isStopMousePropagation());
         for(int i=0;processEvent && mouseMotionListeners != null && i< mouseMotionListeners.size();i++)
         {
             mouseMotionListeners.get(i).mouseMoved(evt);
@@ -1128,16 +1132,9 @@ public class GComponent
 
     public void setBorder(GBorder border)
     {
-        if(border == null)
+        if(this.border != null)
         {
-            getPeer().getStyle().setBorderColor("unset");
-            getPeer().getStyle().setBorderStyle("none");
-            getPeer().getStyle().setBorderWidth(0);
-            getPeer().getStyle().setProperty("borderRadius", "0px");
-            getPeer().getStyle().setProperty("borderLeftWidth", "0px");
-            getPeer().getStyle().setProperty("borderTopWidth", "0px");
-            getPeer().getStyle().setProperty("borderBottomWidth", "0px");
-            getPeer().getStyle().setProperty("borderRightWidth", "0px");
+            this.border.uninstall(this);
         }
         if(border != null)
         {
@@ -1274,5 +1271,15 @@ public class GComponent
     public int getY()
     {
         return getLocation().y;
+    }
+
+    protected boolean isStopMousePropagation()
+    {
+        return stopMousePropagation;
+    }
+
+    protected void setStopMousePropagation(boolean stopMousePropagation)
+    {
+        this.stopMousePropagation = stopMousePropagation;
     }
 }

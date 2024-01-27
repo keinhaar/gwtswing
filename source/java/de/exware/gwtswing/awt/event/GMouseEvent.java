@@ -41,16 +41,30 @@ public class GMouseEvent extends GAWTEvent
         this(source, jsEvent, 0);
     }
     
-    public GMouseEvent(Object source, GPEvent jsEvent, int clickCount)
+    public GMouseEvent(Object source, GPEvent jsEvent, boolean stopPropagation)
     {
-        this(source, jsEvent, clickCount, jsEvent.getButton() == GPEvent.Button.BUTTON_LEFT ? BUTTON1
+        this(source, jsEvent, 0, stopPropagation);
+    }
+    
+    public GMouseEvent(Object source, GPEvent jsEvent, int clickCount, boolean stopPropagation)
+    {
+        this(source, jsEvent, stopPropagation, clickCount, jsEvent.getButton() == GPEvent.Button.BUTTON_LEFT ? BUTTON1
             : jsEvent.getButton() == GPEvent.Button.BUTTON_MIDDLE ? BUTTON2 : BUTTON3);
     }
     
-    public GMouseEvent(Object source, GPEvent jsEvent, int clickCount, int button)
+    public GMouseEvent(Object source, GPEvent jsEvent, int clickCount)
     {
-        super(source); 
-        jsEvent.stopPropagation();
+        this(source, jsEvent, true, clickCount, jsEvent.getButton() == GPEvent.Button.BUTTON_LEFT ? BUTTON1
+            : jsEvent.getButton() == GPEvent.Button.BUTTON_MIDDLE ? BUTTON2 : BUTTON3);
+    }
+    
+    public GMouseEvent(Object source, GPEvent jsEvent, boolean stopPropagation, int clickCount, int button)
+    {
+        super(source);
+        if(stopPropagation)
+        {
+            jsEvent.stopPropagation();
+        }
         this.mousebutton = button;
         GComponent c = (GComponent) source;
         GPoint loc = c.getLocationOnScreen();

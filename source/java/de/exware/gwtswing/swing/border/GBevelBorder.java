@@ -38,6 +38,13 @@ public class GBevelBorder implements GBorder
         component.getPeer().getStyle().setBorderWidth(2);
     }
 
+    @Override
+    public void uninstall(GComponent component)
+    {
+        component.getPeer().getStyle().clearProperty("borderWidth");
+        component.getPeer().getStyle().clearProperty("borderStyle");
+    }
+    
     public int getBevelType()
     {
         return type;

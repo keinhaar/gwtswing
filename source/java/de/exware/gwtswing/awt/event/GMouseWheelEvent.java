@@ -23,7 +23,7 @@ public class GMouseWheelEvent extends GMouseEvent
     
     public GMouseWheelEvent(Object source, GPEvent jsEvent, int clickCount, int button)
     {        
-        super(source, jsEvent, clickCount, button);
+        super(source, jsEvent, true, clickCount, button);
         amount = jsEvent.getMouseWheelVelocityY();
         if(jsEvent.getType() == GPEvent.Type.ONMOUSEWHEEL)
         {

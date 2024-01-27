@@ -30,6 +30,7 @@ public class GSplitPane extends GComponent
     public GSplitPane(int orientation)
     {
         this.orientation = orientation;
+        setStopMousePropagation(false);
         divider.setBackground(GUIManager.getColor(".gwts-GComponent/background-color").darker());
         getPeer().appendChild(divider.getPeer());
         DividerListener dListener = new DividerListener();
@@ -81,29 +82,6 @@ public class GSplitPane extends GComponent
         }
         
         @Override
-        public void mouseMoved(GMouseEvent e)
-        {
-            if(loaded)
-            {
-                GDimension size = getSize();
-                int dividerLocation = 0;
-                if(orientation == HORIZONTAL_SPLIT)
-                {
-                    dividerLocation = e.getX() + diff;
-                    if(dividerLocation < 0) dividerLocation = 0;
-                    else if(dividerLocation > size.width - dividerSize) dividerLocation = size.width - dividerSize;
-                }
-                else if(orientation == VERTICAL_SPLIT)
-                {
-                    dividerLocation = e.getY() + diff;
-                    if(dividerLocation < 0) dividerLocation = 0;
-                    else if(dividerLocation > size.height - dividerSize) dividerLocation = size.height - dividerSize;
-                }
-                setDividerLocation(dividerLocation);
-            }
-        }
-
-        @Override
         public void touchStart(GTouchEvent evt)
         {
             GPoint p = evt.getPoints()[0];
@@ -134,27 +112,58 @@ public class GSplitPane extends GComponent
         @Override
         public void touchMove(GTouchEvent e)
         {
-            GPoint p = e.getPoints()[0];
-            int x = (int) p.getX();
-            int y = (int) p.getY();
-            if(loaded && x >= 0)
+            if(loaded)
             {
-                GDimension size = getSize();
-                int dividerLocation = 0;
-                if(orientation == HORIZONTAL_SPLIT)
+                GPoint p = e.getPoints()[0];
+                int x = (int) p.getX();
+                if(x >= 0)
                 {
-                    dividerLocation = x + diff;
-                    if(dividerLocation < 0) dividerLocation = 0;
-                    else if(dividerLocation > size.width - dividerSize) dividerLocation = size.width - dividerSize;
+                    int y = (int) p.getY();
+                    adjustDividerLocation(x, y);
                 }
-                else if(orientation == VERTICAL_SPLIT)
-                {
-                    dividerLocation = y + diff;
-                    if(dividerLocation < 0) dividerLocation = 0;
-                    else if(dividerLocation > size.height - dividerSize) dividerLocation = size.height - dividerSize;
-                }
-                setDividerLocation(dividerLocation);
             }
+        }
+
+        @Override
+        public void mouseMoved(GMouseEvent e)
+        {
+            if(loaded)
+            {
+                int x = e.getX();
+                int y = e.getY();
+                adjustDividerLocation(x, y);
+            }
+        }
+        
+        private void adjustDividerLocation(int x, int y)
+        {
+            GDimension size = getSize();
+            int dividerLocation = 0;
+            if(orientation == HORIZONTAL_SPLIT)
+            {
+                dividerLocation = x + diff;
+                if(dividerLocation < 0) 
+                {
+                    dividerLocation = 0;
+                }
+                else if(dividerLocation > size.width - dividerSize)
+                {
+                    dividerLocation = size.width - dividerSize;
+                }
+            }
+            else if(orientation == VERTICAL_SPLIT)
+            {
+                dividerLocation = y + diff;
+                if(dividerLocation < 0)
+                {
+                    dividerLocation = 0;
+                }
+                else if(dividerLocation > size.height - dividerSize)
+                {
+                    dividerLocation = size.height - dividerSize;
+                }
+            }
+            setDividerLocation(dividerLocation);
         }
     }
     

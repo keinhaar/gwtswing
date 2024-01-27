@@ -35,4 +35,17 @@ public class GEmptyBorder implements GBorder
         style.setProperty("borderRightWidth", right + "px");
         style.setProperty("borderRadius", 0 + "px");
     }
+
+    @Override
+    public void uninstall(GComponent component)
+    {
+        component.getPeer().getStyle().clearProperty("borderColor");
+        component.getPeer().getStyle().clearProperty("borderStyle");
+        component.getPeer().getStyle().clearProperty("borderTopWidth");
+        component.getPeer().getStyle().clearProperty("borderLeftWidth");
+        component.getPeer().getStyle().clearProperty("borderBottomWidth");
+        component.getPeer().getStyle().clearProperty("borderRightWidth");
+        component.getPeer().getStyle().clearProperty("borderRadius");
+    }
+    
 }

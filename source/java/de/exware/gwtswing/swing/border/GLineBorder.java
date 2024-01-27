@@ -50,4 +50,13 @@ public class GLineBorder implements GBorder
         component.getPeer().getStyle().setBorderColor(color.toHex());
         component.getPeer().getStyle().setBorderWidth(thickness);
     }
+
+    @Override
+    public void uninstall(GComponent component)
+    {
+        component.getPeer().getStyle().clearProperty("borderWidth");
+        component.getPeer().getStyle().clearProperty("borderStyle");
+        component.getPeer().getStyle().clearProperty("borderColor");
+    }
+
 }
