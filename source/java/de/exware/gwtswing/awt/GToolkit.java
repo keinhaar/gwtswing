@@ -1,12 +1,17 @@
 package de.exware.gwtswing.awt;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.exware.gplatform.GPWindow;
 import de.exware.gplatform.GPlatform;
 import de.exware.gwtswing.awt.event.GAWTEvent;
 import de.exware.gwtswing.awt.event.GAWTEventListener;
+import de.exware.gwtswing.awt.event.GComponentEvent;
+import de.exware.gwtswing.awt.event.GContainerEvent;
+import de.exware.gwtswing.awt.event.GFocusEvent;
 import de.exware.gwtswing.awt.event.GKeyEvent;
 import de.exware.gwtswing.awt.event.GKeyListener;
 import de.exware.gwtswing.awt.event.GMouseAdapter;
@@ -19,7 +24,7 @@ import de.exware.gwtswing.swing.GComponent;
 public class GToolkit
 {
     private static GToolkit instance = new GToolkit();
-    private List<GAWTEventListener> awtListeners;
+    private Map<Class, List<GAWTEventListener>> awtListeners;
     private BaseComponent rootcomp;
     private BaseMouseListener baseListener;
     
@@ -34,9 +39,29 @@ public class GToolkit
     
     public void addAWTEventListener(GAWTEventListener listener, long eventMask)
     {
+        if((eventMask & GAWTEvent.COMPONENT_EVENT_MASK) > 0)
+        {
+            addAWTEventListener(listener, GComponentEvent.class);
+        }
+        if((eventMask & GAWTEvent.CONTAINER_EVENT_MASK) > 0)
+        {
+            addAWTEventListener(listener, GContainerEvent.class);
+        }
+        if((eventMask & GAWTEvent.FOCUS_EVENT_MASK) > 0)
+        {
+            addAWTEventListener(listener, GFocusEvent.class);
+        }
+        if((eventMask & GAWTEvent.MOUSE_EVENT_MASK) > 0)
+        {
+            addAWTEventListener(listener, GMouseEvent.class);
+        }
+    }
+    
+    public void addAWTEventListener(GAWTEventListener listener, Class eventClass)
+    {
         if(awtListeners == null)
         {
-            awtListeners = new ArrayList<>();
+            awtListeners = new HashMap<>();
             rootcomp = new BaseComponent();
         }
         if(awtListeners.size() == 0)
@@ -47,9 +72,15 @@ public class GToolkit
             rootcomp.addKeyListener(baseListener);
             rootcomp.addTouchListener(baseListener);
         }
-        if(awtListeners.contains(listener) == false)
+        List<GAWTEventListener> list = awtListeners.get(eventClass);
+        if(list == null)
         {
-            awtListeners.add(listener);
+            list = new ArrayList<>();
+            awtListeners.put(eventClass, list);
+        }
+        if(list.contains(listener) == false)
+        {
+            list.add(listener);
         }
     }
 
@@ -67,15 +98,18 @@ public class GToolkit
     {
         if(awtListeners != null)
         {
-            awtListeners.remove(listener);
-            if(awtListeners.size() == 0)
+            for(List<GAWTEventListener> list: awtListeners.values())
             {
-                rootcomp.removeMouseListener(baseListener);
-                rootcomp.removeMouseMotionListener(baseListener);
-                rootcomp.removeKeyListener(baseListener);
-                rootcomp.removeTouchListener(baseListener);
-                baseListener = null;
+                list.remove(listener);
             }
+//            if(awtListeners.size() == 0)
+//            {
+//                rootcomp.removeMouseListener(baseListener);
+//                rootcomp.removeMouseMotionListener(baseListener);
+//                rootcomp.removeKeyListener(baseListener);
+//                rootcomp.removeTouchListener(baseListener);
+//                baseListener = null;
+//            }
         }
     }
     
@@ -83,10 +117,14 @@ public class GToolkit
     {
         if(awtListeners != null)
         {
-            List<GAWTEventListener> listeners = new ArrayList<>(awtListeners);
-            for(int i=0;i<listeners.size();i++)
+            List<GAWTEventListener> list = awtListeners.get(evt.getClass());
+            if(list != null)
             {
-                listeners.get(i).eventDispatched(evt);
+                List<GAWTEventListener> listeners = new ArrayList<>(list);
+                for(int i=0;i<listeners.size();i++)
+                {
+                    listeners.get(i).eventDispatched(evt);
+                }
             }
         }
     }

@@ -89,7 +89,7 @@ public class GDialog extends GWindow
                 @Override
                 public void eventDispatched(GAWTEvent event)
                 {
-                    if(event instanceof GKeyEvent && defaultButton != null)
+                    if(defaultButton != null)
                     {
                         GKeyEvent evt = (GKeyEvent) event;
                         if(evt.getId() == GKeyEvent.KEY_RELEASED)
@@ -104,7 +104,7 @@ public class GDialog extends GWindow
                     }
                 }
             };
-            GToolkit.getDefaultToolkit().addAWTEventListener(listener, 0);
+            GToolkit.getDefaultToolkit().addAWTEventListener(listener, GAWTEvent.KEY_EVENT_MASK);
             GUtilities.focusFirstField(this);
         }
         else

@@ -5,6 +5,12 @@ import de.exware.gwtswing.util.GEventObject;
 
 public abstract class GAWTEvent extends GEventObject
 {
+    public final static long COMPONENT_EVENT_MASK = 0x01;
+    public final static long CONTAINER_EVENT_MASK = 0x02;
+    public final static long FOCUS_EVENT_MASK = 0x04;
+    public final static long KEY_EVENT_MASK = 0x08;
+    public final static long MOUSE_EVENT_MASK = 0x10;
+
     private int id;
     protected boolean consumed = false;
     private GPEvent jsEvent;

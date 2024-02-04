@@ -17,7 +17,6 @@ public class GPopup
 //        popup.getStyle().setZIndex(Integer.MAX_VALUE);
         popup.getStyle().setLeft(x);
         popup.getStyle().setTop(y);
-        popup.getStyle().setBackgroundColor("#ff0000");
         this.owner = owner;
         this.contents = contents;
     }

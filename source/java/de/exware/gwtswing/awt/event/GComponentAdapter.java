@@ -7,4 +7,14 @@ public class GComponentAdapter
     public void componentResized(GComponentEvent e)
     {
     }
+
+    @Override
+    public void componentShown(GComponentEvent e)
+    {
+    }
+
+    @Override
+    public void componentHidden(GComponentEvent e)
+    {
+    }
 }

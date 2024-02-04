@@ -28,7 +28,7 @@ public class GPopupMenu extends GComponent
                 @Override
                 public void eventDispatched(GAWTEvent event)
                 {
-                    if(visibleMenu != null && event instanceof GMouseEvent
+                    if(visibleMenu != null 
                         && ((GMouseEvent)event).getClickCount() > 0
                         )
                     {
@@ -41,7 +41,7 @@ public class GPopupMenu extends GComponent
                     }
                 }
             };    
-            GToolkit.getDefaultToolkit().addAWTEventListener(awtListener, 0);
+            GToolkit.getDefaultToolkit().addAWTEventListener(awtListener, GAWTEvent.MOUSE_EVENT_MASK);
         }
         setLayout(new GGridBagLayout());
         gbc.gridx = 0;
@@ -74,6 +74,14 @@ public class GPopupMenu extends GComponent
             popup.hide();
             popup = null;
             visibleMenu = null;
+        }
+        if(visible)
+        {
+            fireComponentShown();
+        }
+        else
+        {
+            fireComponentHidden();
         }
     }
     

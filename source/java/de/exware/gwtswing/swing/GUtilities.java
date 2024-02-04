@@ -478,4 +478,28 @@ public class GUtilities
         angle = getAngle(new GPoint(100,100), new GPoint(150,99));
         System.out.println(angle * 180 / Math.PI);
     }
+    
+    /**
+     * Workaround for GWT not emulating Class.isAssignableFrom().
+     * This method will check if the given object is an instance of the given class
+     * Object, but ignores any interfaces.
+     * @param obj
+     * @param clazz
+     * @return
+     */
+    public static boolean instanceOf(Object obj, Class clazz)
+    {
+        boolean isInstance = false;
+        Class oclazz = obj.getClass();
+        while(oclazz != null)
+        {
+            if(oclazz.equals(clazz))
+            {
+                isInstance = true;
+                break;
+            }
+            oclazz = oclazz.getSuperclass();
+        }
+        return isInstance;
+    }
 }

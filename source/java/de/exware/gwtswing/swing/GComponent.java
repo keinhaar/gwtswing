@@ -25,6 +25,8 @@ import de.exware.gwtswing.awt.GToolkit;
 import de.exware.gwtswing.awt.event.GAWTEvent;
 import de.exware.gwtswing.awt.event.GComponentEvent;
 import de.exware.gwtswing.awt.event.GComponentListener;
+import de.exware.gwtswing.awt.event.GContainerEvent;
+import de.exware.gwtswing.awt.event.GContainerListener;
 import de.exware.gwtswing.awt.event.GFocusEvent;
 import de.exware.gwtswing.awt.event.GFocusListener;
 import de.exware.gwtswing.awt.event.GKeyEvent;
@@ -57,6 +59,7 @@ public class GComponent
     private List<GMouseMotionListener> mouseMotionListeners;
     private List<GKeyListener> keyListeners;
     private List<GComponentListener> componentListeners;
+    private List<GContainerListener> containerListeners;
     private List<GFocusListener> focusListeners;
     private Map<Object, Object> clientProperties;
     private int maxWidthForPreferredSize = Integer.MAX_VALUE;
@@ -133,11 +136,31 @@ public class GComponent
         }
     }
     
+    public void addContainerListener(GContainerListener listener)
+    {
+        if(containerListeners == null)
+        {
+            containerListeners = new ArrayList<>();
+        }
+        if(containerListeners.contains(listener) == false)
+        {
+            containerListeners.add(listener);
+        }
+    }
+    
     public void removeComponentListener(GComponentListener listener)
     {
         if(componentListeners != null)
         {
             componentListeners.remove(listener);
+        }
+    }
+    
+    public void removeContainerListener(GContainerListener listener)
+    {
+        if(containerListeners != null)
+        {
+            containerListeners.remove(listener);
         }
     }
     
@@ -729,13 +752,42 @@ public class GComponent
     
     public void setVisible(boolean visible)
     {
-        this.visible = visible;
-        getPeer().getStyle().setVisibility(visible ? "visible" : "hidden");
+        if(this.visible != visible)
+        {
+            this.visible = visible;
+            getPeer().getStyle().setVisibility(visible ? "visible" : "hidden");
+            if(visible)
+            {
+                fireComponentShown();
+            }
+            else
+            {
+                fireComponentHidden();
+            }
+        }
 //        int count = getComponentCount();
 //        for(int i=0;i<count;i++)
 //        {
 //            getComponent(i).setVisible(visible);
 //        }
+    }
+    
+    protected void fireComponentShown()
+    {
+        GComponentEvent evt = new GComponentEvent(this);
+        for(int i=0;componentListeners != null && i<componentListeners.size();i++)
+        {
+            componentListeners.get(i).componentShown(evt);
+        }
+    }
+    
+    protected void fireComponentHidden()
+    {
+        GComponentEvent evt = new GComponentEvent(this);
+        for(int i=0;componentListeners != null && i<componentListeners.size();i++)
+        {
+            componentListeners.get(i).componentHidden(evt);
+        }
     }
     
     public boolean isVisible()
@@ -1048,6 +1100,15 @@ public class GComponent
         {
             layout.addLayoutComponent(comp, constraints);
         }
+        GContainerEvent evt = new GContainerEvent(this, comp);
+        if(containerListeners != null)
+        {
+            for(int i=0;i<containerListeners.size();i++)
+            {
+                containerListeners.get(i).componentAdded(evt);
+            }
+        }
+        GToolkit.getDefaultToolkit().handleAWTEvent(evt);
         setCachedPreferredSize(null);
         revalidate();
     }
@@ -1085,6 +1146,15 @@ public class GComponent
                 layout.removeLayoutComponent(comp);
             }
             setCachedPreferredSize(null);
+            GContainerEvent evt = new GContainerEvent(this, comp);
+            if(containerListeners != null)
+            {
+                for(int i=0;i<containerListeners.size();i++)
+                {
+                    containerListeners.get(i).componentRemoved(evt);
+                }
+            }
+            GToolkit.getDefaultToolkit().handleAWTEvent(evt);
         }
     }
     

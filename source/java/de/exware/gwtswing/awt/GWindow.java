@@ -152,11 +152,11 @@ public class GWindow extends GComponent
         public void eventDispatched(GAWTEvent event)
         {
             //Events outside of the title, because the mouse moved to fast.
-            if(event instanceof GMouseEvent && event.getId() == GMouseEvent.MOUSE_MOVED)
+            if(event.getId() == GMouseEvent.MOUSE_MOVED)
             {
                 move((GMouseEvent) event);
             }
-            else if(event instanceof GMouseEvent && event.getId() == GMouseEvent.MOUSE_RELEASED)
+            else if(event.getId() == GMouseEvent.MOUSE_RELEASED)
             {
                 mouseReleased((GMouseEvent) event);
             }
@@ -190,7 +190,7 @@ public class GWindow extends GComponent
         if(visible)
         {
             GPlatform.getDoc().getBody().appendChild(getPeer());
-            GToolkit.getDefaultToolkit().addAWTEventListener(dragListener, 0);
+            GToolkit.getDefaultToolkit().addAWTEventListener(dragListener, GAWTEvent.MOUSE_EVENT_MASK);
             revalidate();
         }
         else
