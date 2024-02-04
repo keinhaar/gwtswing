@@ -248,3 +248,30 @@ input {
 .gwts-GTitledBorder {
 	color: #999999;
 }
+
+@keyframes fadeIn {
+	0% {opacity: 0;	}
+	100% {opacity: 1; }
+}
+
+@keyframes fadeOut {
+	0% {opacity: 1; }
+	100% {opacity: 0; }
+}
+
+@keyframes expandHorizontal {
+	0% {width: 0px;	}
+	100% {}
+}
+
+.gwts-animation-fadeIn {
+    animation: fadeIn;
+}
+
+.gwts-animation-fadeOut {
+    animation: fadeOut;
+}
+
+.gwts-animation-expandHorizontal {
+    animation: expandHorizontal;
+}
