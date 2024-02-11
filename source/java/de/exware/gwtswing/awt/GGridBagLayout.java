@@ -68,12 +68,13 @@ public class GGridBagLayout implements GLayoutManager
     /**
      * Get LayoutInfo
      */
-    protected LayoutManagerInfo getLayoutInfo(GComponent parent)
+    protected LayoutManagerInfo getLayoutInfo(final GComponent parent)
     {
         int i =0;
         LayoutManagerInfo linfo = new LayoutManagerInfo();
         //get grid size.
-        for(;i<parent.getComponentCount();i++)
+        int compCount = parent.getComponentCount(); 
+        for(;i<compCount;i++)
         {
             GComponent comp = parent.getComponent(i);
             if(comp.isVisible() == false) continue;
@@ -91,8 +92,7 @@ public class GGridBagLayout implements GLayoutManager
         linfo.columnwidth = new int[linfo.columns];
         linfo.rowWeight = new double[linfo.rows];
         linfo.columnWeight = new double[linfo.columns];
-        int largestMultiColumnWidth = -1;
-        for(i=0;i<parent.getComponentCount();i++)
+        for(i=0;i<compCount;i++)
         {
             GComponent comp = parent.getComponent(i);
             if(comp.isVisible() == false) continue;
@@ -165,14 +165,14 @@ public class GGridBagLayout implements GLayoutManager
         }
         
         //multi column calculation
-        for(i=0;i<parent.getComponentCount();i++)
+        for(i=0;i<compCount;i++)
         {
             GComponent comp = parent.getComponent(i);
             if(comp.isVisible() == false) continue;
-            GDimension size = comp.getPreferredSize();
             GGridBagConstraints constr = constraints.get(comp);
             if(constr.gridwidth > 1)
             {
+                GDimension size = comp.getPreferredSize();
                 int colWidth = size.width + constr.insets.left + constr.insets.right;
                 int width = linfo.columnwidth[constr.gridx];
                 for(int x = constr.gridx + 1; x < constr.gridx + constr.gridwidth && x < linfo.columnwidth.length;x++)

@@ -115,7 +115,7 @@ public class GUIManager
     
     public static GInsets getPadding(Class<?> clazz)
     {
-        String key = ".gwts-" + clazz.getSimpleName() + "/padding";
+        String key = ".gwts-" + clazz.getName() + "/padding";
         GInsets padding = (GInsets) resources.get(key);
         if(padding == null && resources.containsKey(key) == false)
         {
@@ -145,7 +145,7 @@ public class GUIManager
 
     public static GInsets getBorderSize(Class<?> clazz)
     {
-        String key = ".gwts-" + clazz.getSimpleName() + "/border-width";
+        String key = ".gwts-" + clazz.getName() + "/border-width";
         GInsets border = (GInsets) resources.get(key);
         if(border == null && resources.containsKey(key) == false)
         {
@@ -178,7 +178,7 @@ public class GUIManager
         Integer i = null;
         while(i == null && clazz != null)
         {
-            String cssrule = prefix + clazz.getSimpleName();        
+            String cssrule = prefix + clazz.getSimpleName();
             i = GPStyleSheet.getInt(cssrule, rule);
             clazz = clazz.getSuperclass();
         }

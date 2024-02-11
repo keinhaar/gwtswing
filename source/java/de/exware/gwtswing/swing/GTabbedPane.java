@@ -61,28 +61,9 @@ public class GTabbedPane extends GComponent
     {
         this.position = position;
         setLayout(new GBorderLayout());
-        tabs = new GPanel()
-        {
-            @Override
-            public GDimension getPreferredSize()
-            {
-                return super.getPreferredSize();
-            }
-        };
+        tabs = new GPanel();
         tabs.getPeer().addClassName("gwts-GTabbedPane-Tabs");
-        tabs.setLayout(new GGridBagLayout()
-        {
-            @Override
-            public GDimension preferredLayoutSize(GComponent parent)
-            {
-                return super.preferredLayoutSize(parent);
-            }
-            @Override
-            public void layoutContainer(GComponent parent)
-            {
-                super.layoutContainer(parent);
-            }
-        });
+        tabs.setLayout(new GGridBagLayout());
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GGridBagConstraints.WEST;
