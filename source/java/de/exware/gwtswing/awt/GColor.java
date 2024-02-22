@@ -141,6 +141,16 @@ public class GColor
                 {
                     
                 }
+                else if(color.startsWith("rgba"))
+                {
+                	color = color.substring(5, color.length()-1);
+                    String[] str = color.split(",");
+                    int r = Integer.parseInt(str[0].trim());
+                    int gr = Integer.parseInt(str[1].trim());
+                    int b = Integer.parseInt(str[2].trim());
+                    int a = Integer.parseInt(str[3].trim());
+                    col = new GColor(r, gr, b, a);
+                }
                 else if(color.startsWith("rgb"))
                 {
                     color = color.substring(4, color.length()-1);
