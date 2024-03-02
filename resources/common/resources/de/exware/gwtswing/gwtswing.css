@@ -255,12 +255,17 @@ input {
 }
 
 @keyframes fadeOut {
-	0% {opacity: 1; }
-	100% {opacity: 0; }
+	0% { opacity: 1; visibility: visible; }
+	100% { opacity: 0; visibility: visible; }
 }
 
 @keyframes expandHorizontal {
-	0% {width: 0px;	}
+	0% { width: 0px;	}
+	100% {}
+}
+
+@keyframes expandVertical {
+	0% { height: 0px; }
 	100% {}
 }
 
@@ -274,4 +279,8 @@ input {
 
 .gwts-animation-expandHorizontal {
     animation: expandHorizontal;
+}
+
+.gwts-animation-expandVertical {
+    animation: expandVertical;
 }

@@ -7,8 +7,6 @@ import de.exware.gwtswing.PartitionedPanel;
 import de.exware.gwtswing.awt.GToolkit;
 import de.exware.gwtswing.awt.event.GAWTEvent;
 import de.exware.gwtswing.awt.event.GAWTEventListener;
-import de.exware.gwtswing.awt.event.GComponentAdapter;
-import de.exware.gwtswing.awt.event.GComponentEvent;
 import de.exware.gwtswing.awt.event.GContainerEvent;
 import de.exware.gwtswing.swing.GComponent;
 import de.exware.gwtswing.swing.GUtilities;
@@ -99,25 +97,7 @@ abstract public class AbstractAnimation implements Animation
     public void install(GComponent comp)
     {
         TriggerEvent trigger = getTriggerEvent();
-        if(TriggerEvent.VISIBILITY.equals(trigger))
-        {
-            GComponentAdapter adapter = new GComponentAdapter()
-            {
-                @Override
-                public void componentShown(GComponentEvent e)
-                {
-                    enable(comp);
-                }
-
-                @Override
-                public void componentHidden(GComponentEvent e)
-                {
-                    disable(comp);
-                }
-            };
-            comp.addComponentListener(adapter);
-            comp.putClientProperty("AnimationAdapter-" + getId(), adapter);
-        }
+        trigger.install(this, comp);
         float duration = getAnimationDuration();
         comp.getPeer().getStyle().setProperty("animationDuration", duration + "s");
         enable(comp);
@@ -127,16 +107,9 @@ abstract public class AbstractAnimation implements Animation
     public void uninstall(GComponent comp)
     {
         TriggerEvent trigger = getTriggerEvent();
-        if(TriggerEvent.VISIBILITY.equals(trigger))
-        {
-            GComponentAdapter adapter = (GComponentAdapter) comp.getClientProperty("AnimationAdapter-" + getId());
-            comp.removeComponentListener(adapter);
-        }
+        trigger.uninstall(this, comp);
     }
     
-    abstract void enable(GComponent comp);
-    abstract void disable(GComponent comp);
-
     @Override
     public float getAnimationDuration()
     {

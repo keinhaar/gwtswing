@@ -2,14 +2,13 @@ package de.exware.gwtswing.animation;
 
 import de.exware.gwtswing.swing.GComponent;
 
+/**
+ * Interface for Animations of GComponents
+ * @author martin
+ *
+ */
 public interface Animation
 {
-    public enum TriggerEvent
-    {
-        NONE
-        , VISIBILITY
-    }
-    
     /**
      * Liefert eine eindeutige ID.
      * @return
@@ -35,4 +34,18 @@ public interface Animation
     public void uninstall(GComponent comp);
     
     public TriggerEvent getTriggerEvent();
+
+    /**
+     * Used internally to trigger animation.
+     * Do not call manually!
+     * @param comp
+     */
+    public void enable(GComponent comp);
+
+    /**
+     * Used internally to trigger animation
+     * Do not call manually!
+     * @param comp
+     */
+    public void disable(GComponent comp);
 }

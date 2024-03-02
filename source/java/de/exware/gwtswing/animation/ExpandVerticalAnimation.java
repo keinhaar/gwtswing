@@ -4,19 +4,19 @@ import de.exware.gwtswing.animation.trigger.VisibilityOnTrigger;
 import de.exware.gwtswing.swing.GComponent;
 
 /**
- * Changes the Opacity of the Component from 0% to 100%
+ * Expands the Component from zero height to normal height
  * @author martin
  */
-public class FadeInAnimation extends AbstractAnimation
+public class ExpandVerticalAnimation extends AbstractAnimation
 {
-    private static final String animationClass = "gwts-animation-fadeIn";
+    private static final String animationClass = "gwts-animation-expandVertical";
 
-    public FadeInAnimation()
+    public ExpandVerticalAnimation()
     {
         this(VisibilityOnTrigger.INSTANCE, 0.5f);
     }
     
-    public FadeInAnimation(TriggerEvent evt, float duration)
+    public ExpandVerticalAnimation(TriggerEvent evt, float duration)
     {
         super(evt, duration);
     }

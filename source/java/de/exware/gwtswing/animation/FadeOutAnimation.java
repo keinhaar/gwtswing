@@ -4,19 +4,19 @@ import de.exware.gwtswing.animation.trigger.VisibilityOnTrigger;
 import de.exware.gwtswing.swing.GComponent;
 
 /**
- * Changes the Opacity of the Component from 0% to 100%
+ * Changes the Opacity of the Component from 100% to 0%
  * @author martin
  */
-public class FadeInAnimation extends AbstractAnimation
+public class FadeOutAnimation extends AbstractAnimation
 {
-    private static final String animationClass = "gwts-animation-fadeIn";
+    private static final String animationClass = "gwts-animation-fadeOut";
 
-    public FadeInAnimation()
+    public FadeOutAnimation()
     {
         this(VisibilityOnTrigger.INSTANCE, 0.5f);
     }
     
-    public FadeInAnimation(TriggerEvent evt, float duration)
+    public FadeOutAnimation(TriggerEvent evt, float duration)
     {
         super(evt, duration);
     }
@@ -25,7 +25,10 @@ public class FadeInAnimation extends AbstractAnimation
     public
     void enable(GComponent comp)
     {
-        comp.getPeer().addClassName(animationClass);
+        if(comp.isVisible() == false)
+        {
+            comp.getPeer().addClassName(animationClass);
+        }
     }
     
     @Override
