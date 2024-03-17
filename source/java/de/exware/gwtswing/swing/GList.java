@@ -161,10 +161,8 @@ public class GList<T> extends GComponent
                 {
                     int current = renderedItems.indexOf(evt.getSource());
                     boolean selected = selectedItems.contains(current);
-                    for(int i=0;i<selectedItems.size();i++)
-                    {
-                        indexesToRevalidate.add(selectedItems.get(i));
-                    }
+                    indexesToRevalidate.clear();
+                    indexesToRevalidate.addAll(selectedItems);
                     selectedItems.clear();
                     if(!selected)
                     {
@@ -270,4 +268,20 @@ public class GList<T> extends GComponent
         }
         return items;
     }
+
+    public void setSelectedIndex(int index)
+    {
+        indexesToRevalidate.clear();
+        indexesToRevalidate.addAll(selectedItems);
+        indexesToRevalidate.add(index);
+        selectedItems.clear();
+        selectedItems.add(index);
+        for(int i=0;i<indexesToRevalidate.size();i++)
+        {
+            revalidateRenderedItem(indexesToRevalidate.get(i));
+        }
+        validate();
+    }
+
 }
+

@@ -108,6 +108,7 @@ abstract public class AbstractAnimation implements Animation
     {
         TriggerEvent trigger = getTriggerEvent();
         trigger.uninstall(this, comp);
+        disable(comp);
     }
     
     @Override

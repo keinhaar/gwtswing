@@ -18,7 +18,7 @@ public class GSplitPane extends GComponent
     private int orientation = HORIZONTAL_SPLIT;
     private GComponent leftComponent;
     private GComponent rightComponent;
-    private GPanel divider = new GPanel();
+    private Divider divider = new Divider();
     private int dividerLocation = 100;
     private int dividerSize = 8;
     
@@ -31,7 +31,6 @@ public class GSplitPane extends GComponent
     {
         this.orientation = orientation;
         setStopMousePropagation(false);
-        divider.setBackground(GUIManager.getColor(".gwts-GComponent/background-color").darker());
         getPeer().appendChild(divider.getPeer());
         DividerListener dListener = new DividerListener();
         addMouseMotionListener(dListener);
@@ -247,5 +246,10 @@ public class GSplitPane extends GComponent
     {
         this.dividerLocation = dividerLocation;
         revalidate();
+    }
+    
+    class Divider extends GComponent
+    {
+        
     }
 }

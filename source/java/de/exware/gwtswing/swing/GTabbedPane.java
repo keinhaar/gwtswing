@@ -266,15 +266,15 @@ public class GTabbedPane extends GComponent
             {
                 GComponent lastActiveTab = tabs.getComponent(selectedTab);
                 lastActiveTab.setBorder(tabBorder);
-                lastActiveTab.setOpaque(false);
+//                lastActiveTab.setOpaque(false);
+                lastActiveTab.getPeer().removeClassName("gwts-GTabbedPane-selectedTab");
             }
             selectedTab = i;
             GComponent tabcomp = tabs.getComponent(i);
             tabcomp.setBorder(selectedTabBorder);
             String tabIdentifier = (String) tabcomp.getClientProperty("tabIdentifier");
             tabbedComponents.showCard(tabIdentifier);
-            GColor color = GUIManager.getColor(".gwts-GComponent/background-color");
-            tabcomp.setBackground(color);
+            tabcomp.getPeer().addClassName("gwts-GTabbedPane-selectedTab");
             GComponent comp = tabbedComponents.getComponent(i);
             GUtilities.focusFirstField(comp);
             GTabEvent evt = new GTabEvent(this, tabcomp, comp);

@@ -21,6 +21,11 @@ public class ExpandHorizontalAnimation extends AbstractAnimation
         super(evt, duration);
     }
     
+    public ExpandHorizontalAnimation(float duration)
+    {
+        this(VisibilityOnTrigger.INSTANCE, duration);
+    }
+
     @Override
     public
     void enable(GComponent comp)

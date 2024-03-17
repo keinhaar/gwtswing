@@ -21,6 +21,11 @@ public class FadeInAnimation extends AbstractAnimation
         super(evt, duration);
     }
     
+    public FadeInAnimation(float duration)
+    {
+        this(VisibilityOnTrigger.INSTANCE, duration);
+    }
+
     @Override
     public
     void enable(GComponent comp)

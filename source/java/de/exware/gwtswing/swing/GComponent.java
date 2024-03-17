@@ -661,8 +661,7 @@ public class GComponent
     {
         if(opaque)
         {
-            GColor color = GUIManager.getColor(getStylename() + "/background-color");
-            setBackground(color);
+            getPeer().getStyle().clearProperty("backgroundColor");
         }
         else
         {
@@ -672,7 +671,12 @@ public class GComponent
     
     protected String getStylename()
     {
-        return ".gwts-" + getClass().getSimpleName();
+        return getStylename(getClass());
+    }
+    
+    protected String getStylename(Class clazz)
+    {
+        return ".gwts-" + clazz.getSimpleName();
     }
     
     public void setForeground(GColor col)
@@ -698,7 +702,16 @@ public class GComponent
         GColor gcol = GColor.decode(col);
         if(gcol == null)
         {
-            gcol = GUIManager.getColor(".gwts-GComponent/background-color");
+            gcol = GUIManager.getColor(getStylename() + "/background-color");
+        }
+        if(gcol == null)
+        {
+            Class clazz = getClass().getSuperclass();
+            while (clazz != null && gcol == null)
+            {
+                gcol = GUIManager.getColor(getStylename(clazz) + "/background-color");
+                clazz = clazz.getSuperclass();
+            }
         }
         return gcol;
     }
@@ -1184,6 +1197,11 @@ public class GComponent
             {
                 c.validate();
             }
+        }
+        if(getBorder() != null)
+        {
+            border = getBorder();
+            border.install(this);
         }
     }
 

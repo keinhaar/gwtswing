@@ -101,7 +101,8 @@ public class GTitledBorder implements GBorder
         component.getPeer().getStyle().setBorderStyle(style);
         component.getPeer().getStyle().setOverflow("unset");
         component.getPeer().getStyle().setProperty("borderTopWidth", titleHeight + "px");
-        component.getPeer().getStyle().setProperty("borderTopColor", component.getBackground().toHex());
+//        component.getPeer().getStyle().setProperty("borderTopColor", component.getBackground().toHex());
+//        component.getPeer().addClassName("gwts-GTitledBorder-topBorder");
         
         divB = GPlatform.getDoc().createDivElement();
         divB.getStyle().setPosition("absolute");

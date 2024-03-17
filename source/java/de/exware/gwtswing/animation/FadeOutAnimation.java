@@ -1,6 +1,6 @@
 package de.exware.gwtswing.animation;
 
-import de.exware.gwtswing.animation.trigger.VisibilityOnTrigger;
+import de.exware.gwtswing.animation.trigger.VisibilityOffTrigger;
 import de.exware.gwtswing.swing.GComponent;
 
 /**
@@ -13,7 +13,7 @@ public class FadeOutAnimation extends AbstractAnimation
 
     public FadeOutAnimation()
     {
-        this(VisibilityOnTrigger.INSTANCE, 0.5f);
+        this(VisibilityOffTrigger.INSTANCE, 0.5f);
     }
     
     public FadeOutAnimation(TriggerEvent evt, float duration)
@@ -21,6 +21,11 @@ public class FadeOutAnimation extends AbstractAnimation
         super(evt, duration);
     }
     
+    public FadeOutAnimation(float duration)
+    {
+        this(VisibilityOffTrigger.INSTANCE, duration);
+    }
+
     @Override
     public
     void enable(GComponent comp)

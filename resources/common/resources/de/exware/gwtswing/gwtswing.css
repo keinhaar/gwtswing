@@ -1,18 +1,30 @@
+:root {
+	--background: #ddddbb;
+	--textcolor: #000000;
+	--listBackground: #eeeecc;
+	--selectedBackground: #bbbbdd;
+}
+
 .gwts-GMenuItem input {
 	border: none;
 }
 
 .gwts-GComponent {
-	background-color: #ddddbb;
+	background-color: var(--background);
 	font-size: 16px;
 	position: absolute;
 	display: inline;
 	font-family: sans-serif;
 	overflow: hidden;
 }
+
+.gwts-Divider {
+	background-color: #aaaa88; 
+}
+
 .gwts-GLabel {
-	background-color: #ddddbb;
-	color: #000000;
+	background-color: var(--background);
+	color: var(--textcolor);
 	padding-left: 3px;
 	padding-right: 2px;
 	vertical-align: middle;
@@ -56,7 +68,7 @@ img.disabled {
 }
 	
 .gwts-GTree {
-	background: #eeeecc;
+	background-color: var(--listBackground);
 	cursor: default;
 }
 
@@ -66,7 +78,7 @@ img.disabled {
 }
 
 .gwts-GTable-content {
-	background: #f1f1f1;
+	background-color: var(--listBackground);
 	cursor: default;
 }
 
@@ -92,6 +104,10 @@ input {
 	margin: auto;
 }
 
+.gwts-GAbstractButton {
+	color: var(--textcolor);
+}
+
 .gwts-GButton {
 	position: absolute;
 	cursor: default;
@@ -100,11 +116,11 @@ input {
 	padding-left: 3px;
 	padding-right: 3px;
 	vertical-align: middle;
-	background-color: #bbbbbb;
 	border-radius: 4px;
 	border-width: 2px;
 	border-style: solid;
 	border-color: #303030;
+	background-color: #bbbbbb;
 }
 
 .gwts-GToggleButton {
@@ -115,11 +131,11 @@ input {
 	padding-left: 3px;
 	padding-right: 3px;
 	vertical-align: middle;
-	background-color: #bbbbbb;
 	border-radius: 4px;
 	border-width: 2px;
 	border-style: solid;
 	border-color: #303030;
+	background-color: #bbbbbb;
 }
 
 .gwts-GMenuItem {
@@ -145,6 +161,10 @@ input {
 	padding-left: 3px;
 	padding-right: 3px;
 	vertical-align: middle;
+	background-color: #bbbbbb;
+}
+
+.gwts-GMenuBar {
 	background-color: #bbbbbb;
 }
 
@@ -200,13 +220,21 @@ input {
 }
 
 .gwts-GList {
-	background-color: #eeeecc;
+	background-color: var(--listBackground);
 	overflow: hidden;
 	cursor: default;
 }
 
+.gwts-GList-selected {
+	background-color: var(--selectedBackground);	
+}
+
 .gwts-GTabbedPane-Tab {
 	background: transparent;
+}
+
+.gwts-GTabbedPane-selectedTab {
+	background-color: var(--background);	
 }
 
 .gwts-GTabbedPane-Tabs {
@@ -215,7 +243,7 @@ input {
 }
 
 .gwts-GTree-selected {
-	background-color: #bbbbdd;
+	background-color: var(--selectedBackground);	
 }
 
 .gwts-TitledPanel .gwts-HeaderPanel {
@@ -247,6 +275,10 @@ input {
 
 .gwts-GTitledBorder {
 	color: #999999;
+}
+
+.gwts-GTitledBorder-topBorder {
+	background-color: var(--background);
 }
 
 @keyframes fadeIn {

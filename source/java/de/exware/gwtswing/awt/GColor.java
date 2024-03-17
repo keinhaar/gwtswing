@@ -1,5 +1,7 @@
 package de.exware.gwtswing.awt;
 
+import de.exware.gplatform.GPlatform;
+
 /**
  * Allows to use Colors like in Swing
  */
@@ -159,6 +161,12 @@ public class GColor
                     int gr = Integer.parseInt(str[1].trim());
                     int b = Integer.parseInt(str[2].trim());
                     col = new GColor(r, gr, b);
+                }
+                else if(color.startsWith("var("))
+                {
+                    String ncolor = color.substring(4, color.length()-1);
+                    ncolor = GPlatform.getWin().getComputedStyleProperty(GPlatform.getDoc().getDocumentElement(), ncolor);
+                    col = GColor.decode(ncolor);
                 }
                 else
                 {

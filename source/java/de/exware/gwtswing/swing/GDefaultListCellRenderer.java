@@ -1,7 +1,5 @@
 package de.exware.gwtswing.swing;
 
-import de.exware.gwtswing.awt.GColor;
-
 public class GDefaultListCellRenderer<T> implements GListCellRenderer<T>
 {
     @Override
@@ -11,7 +9,7 @@ public class GDefaultListCellRenderer<T> implements GListCellRenderer<T>
         label.setOpaque(selected);
         if(selected)
         {
-            label.setBackground(new GColor(200,200,255));
+            label.setBackground(GUIManager.getColor(".gwts-GList-selected/background-color"));
         }
         return label;
     }

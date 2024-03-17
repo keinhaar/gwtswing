@@ -15,6 +15,7 @@ import de.exware.gwtswing.swing.plaf.ComponentUI;
 public class GUIManager
 {
     private static Map<Object, Object> resources = new HashMap<>();
+    private static Map<Object, Object> uiResources = new HashMap<>();
     private static boolean isInitialized;
     private static GLookAndFeel lookAndFeel = null;
     
@@ -72,9 +73,14 @@ public class GUIManager
         }
     }
     
+    public static final void resetCache()
+    {
+        uiResources.clear();
+    }
+    
     public static GColor getColor(Object key)
     {
-        GColor col = (GColor) resources.get(key);
+        GColor col = (GColor) uiResources.get(key);
         if(col == null)
         {
             String k = key.toString();
@@ -83,14 +89,14 @@ public class GUIManager
             String property = k.substring(index+1);
             String c = GPStyleSheet.getColor(cssrule, property);
             col = GColor.decode(c);
-            resources.put(key, col);
+            uiResources.put(key, col);
         }
         return col;
     }
 
     public static GFont getFont(Object key)
     {
-        GFont font = (GFont) resources.get(key);
+        GFont font = (GFont) uiResources.get(key);
         if(font == null)
         {
             String k = key.toString();
@@ -105,7 +111,7 @@ public class GUIManager
 //            }
             String family = GPStyleSheet.getProperty(cssrule,"font-family");
             font = new GFont(family, GFont.PLAIN, size);
-            resources.put(key, font);
+            uiResources.put(key, font);
         }
         return font;
     }
@@ -118,8 +124,8 @@ public class GUIManager
     public static GInsets getPadding(Class<?> clazz)
     {
         String key = ".gwts-" + clazz.getName() + "/padding";
-        GInsets padding = (GInsets) resources.get(key);
-        if(padding == null && resources.containsKey(key) == false)
+        GInsets padding = (GInsets) uiResources.get(key);
+        if(padding == null && uiResources.containsKey(key) == false)
         {
             Integer pad = getInt(".gwts-", clazz, "padding");
             Integer pl = getInt(".gwts-", clazz, "padding-left");
@@ -135,11 +141,11 @@ public class GUIManager
             if(pl != null && pr != null && pt != null && pb != null)
             {
                 padding = new GInsets(pt, pl, pb, pr);
-                resources.put(key, padding);
+                uiResources.put(key, padding);
             }
             else
             {
-                resources.put(key, null);
+                uiResources.put(key, null);
             }
         }
         return padding;
@@ -148,8 +154,8 @@ public class GUIManager
     public static GInsets getBorderSize(Class<?> clazz)
     {
         String key = ".gwts-" + clazz.getName() + "/border-width";
-        GInsets border = (GInsets) resources.get(key);
-        if(border == null && resources.containsKey(key) == false)
+        GInsets border = (GInsets) uiResources.get(key);
+        if(border == null && uiResources.containsKey(key) == false)
         {
             Integer bord = getInt(".gwts-", clazz, "border-width");
             Integer pl = getInt(".gwts-", clazz, "border-left");
@@ -165,11 +171,11 @@ public class GUIManager
             if(pl != null && pr != null && pt != null && pb != null)
             {
                 border = new GInsets(pt, pl, pb, pr);
-                resources.put(key, border);
+                uiResources.put(key, border);
             }
             else
             {
-                resources.put(key, null);
+                uiResources.put(key, null);
             }
         }
         return border;
@@ -181,7 +187,13 @@ public class GUIManager
         while(i == null && clazz != null)
         {
             String cssrule = prefix + clazz.getSimpleName();
-            i = GPStyleSheet.getInt(cssrule, rule);
+            String key = cssrule + "/border-width";
+            i = (Integer) uiResources.get(key);
+            if(i == null && uiResources.containsKey(key) == false)
+            {
+                i = GPStyleSheet.getInt(cssrule, rule);
+                uiResources.put(key, i);
+            }
             clazz = clazz.getSuperclass();
         }
         return i;

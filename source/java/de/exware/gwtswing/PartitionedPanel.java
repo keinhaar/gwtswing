@@ -154,16 +154,9 @@ public class PartitionedPanel extends GComponent
             font = new GFont(font.getFamily(), font.BOLD, (int)font.getSize2D());
             label.setFont(font);
             add(label, gbc);
-            linelabel = new GLabel()
-            {
-                @Override
-                protected String getStylename()
-                {
-                    return ".gwts-PartitionedPanel-Separator-line";
-                }
-            };
-            linelabel.setOpaque(true);
+            linelabel = new GLabel();
             linelabel.getPeer().addClassName("gwts-PartitionedPanel-Separator-line");
+            linelabel.setOpaque(true);
             gbc.gridx++;
             gbc.anchor = GGridBagConstraints.CENTER;
             gbc.fill = gbc.HORIZONTAL;

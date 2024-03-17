@@ -126,6 +126,13 @@ public class GTable<T> extends GComponent
         });
     }
     
+    @Override
+    public void setBackground(GColor col)
+    {
+        super.setBackground(col);
+        content.setBackground(col);
+    }
+    
     public GListSelectionModel getSelectionModel() 
     {
         if(selectionModel == null)
