@@ -10,6 +10,9 @@ There are 2 main differences between Swing an GWTSwing.
 There are no server calls after starting the application. Everything is handled locally on the client.
 
 ## What's new
+### 2024-12-21 Version 1.2.1
+This version fixes an issue with padding on GLabels and conatins better looking Tabs as well as some other small fixes and enhancements.
+
 ### 2024-03-17 Version 1.2
 GWTSwing can now dynamically switch between different Stylesheets. To see that in action just have a look at the demos listed below. Inside the demo select "Look" on the left, and then press one of the available style buttons like "Dark" for the Dark Mode.
 
