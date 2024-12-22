@@ -187,7 +187,7 @@ public class GUIManager
         while(i == null && clazz != null)
         {
             String cssrule = prefix + clazz.getSimpleName();
-            String key = cssrule + "/border-width";
+            String key = cssrule + "/" + rule;
             i = (Integer) uiResources.get(key);
             if(i == null && uiResources.containsKey(key) == false)
             {

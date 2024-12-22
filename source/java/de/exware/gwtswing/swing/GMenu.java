@@ -84,4 +84,9 @@ public class GMenu extends GMenuItem
     {
         items.add(pos, item);
     }
+
+    protected List<GMenuItem> getItems()
+    {
+        return items;
+    }
 }

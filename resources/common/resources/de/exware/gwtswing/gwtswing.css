@@ -16,6 +16,7 @@
 	display: inline;
 	font-family: sans-serif;
 	overflow: hidden;
+	line-height: 1.2;
 }
 
 .gwts-Divider {
@@ -102,6 +103,7 @@ div {
 
 input {
 	margin: auto;
+	line-height: 1;
 }
 
 .gwts-GAbstractButton {

@@ -71,7 +71,8 @@ public class GTree<T> extends GComponent
 
     public void expandRow(int row) 
     {
-        expanded.set(row, true);
+        ItemWrapper item = renderedItems.get(row);
+        setExpandedState(item);
         validate();
     }
 
@@ -240,14 +241,19 @@ public class GTree<T> extends GComponent
         {
             GComponent comp = (GComponent) evt.getSource();
             ItemWrapper iw = (GTree<T>.ItemWrapper) comp.getParent();
-            int index = (int) iw.getClientProperty("row");
-            boolean exp = expanded.get(index);
-            expanded.set(index, !exp);
-            iw.updateHandle(!exp);
-            setCachedPreferredSize(null);
+            setExpandedState(iw);
             getParent().validate();
         };
     };
+    
+    private void setExpandedState(ItemWrapper iw)
+    {
+        int index = (int) iw.getClientProperty("row");
+        boolean exp = expanded.get(index);
+        expanded.set(index, !exp);
+        iw.updateHandle(!exp);
+        setCachedPreferredSize(null);
+    }
     
     public GTreePath getSelectionPath()
     {
@@ -352,7 +358,7 @@ public class GTree<T> extends GComponent
         {
             this.indentation = indentation;
             this.renderedItem = renderedItem;
-            handle.setText("+");
+            handle.setText("\u25b9");
             setOpaque(false);
             handle.setOpaque(false);
             this.row = row;
@@ -408,7 +414,7 @@ public class GTree<T> extends GComponent
 
         public void updateHandle(boolean expanded)
         {            
-            handle.setText(expanded ? "-" : "+");
+            handle.setText(expanded ? "\u25bf" : "\u25b9");
         }
 
         protected int getRow()

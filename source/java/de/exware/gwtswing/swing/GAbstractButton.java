@@ -41,7 +41,7 @@ abstract public class GAbstractButton extends GComponent
     {
         if(propertyListener == null)
         {
-            propertyListener = new PropertyListener();
+            propertyListener = createActionPropertyChangeListener(action);
         }
         if(this.action != null)
         {
@@ -60,6 +60,11 @@ abstract public class GAbstractButton extends GComponent
         }
     }
     
+    protected GPropertyChangeListener createActionPropertyChangeListener(GAction a) 
+    {
+        return new PropertyListener();
+    }
+
     public boolean isSelected()
     {
         return false;

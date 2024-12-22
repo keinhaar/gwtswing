@@ -68,7 +68,7 @@ public class GToolBar extends GComponent
      */
     public void add(String group, GAction action)
     {
-        GToolBarButton item = new GToolBarButton(action);
+        GToolBarButton item = createGToolBarButton(action);
         GIcon icon = (GIcon) action.getValue(GAction.ICON);
         if(icon != null)
         {
@@ -98,6 +98,11 @@ public class GToolBar extends GComponent
         item.putClientProperty("id",action.getValue("id"));
     }
 
+    protected GToolBarButton createGToolBarButton(GAction action)
+    {
+        return new GToolBarButton(action);
+    }
+
     private int getItemIndex(String id)
     {
         int index = -1;
@@ -113,7 +118,7 @@ public class GToolBar extends GComponent
         return index;
     }
 
-    class GToolBarButton extends GButton
+    protected class GToolBarButton extends GButton
     {
 
         public GToolBarButton(GAction action)

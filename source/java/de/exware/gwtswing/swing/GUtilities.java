@@ -55,6 +55,7 @@ public class GUtilities
         GGridBagConstraints gbc = new GGridBagConstraints();
         gbc.gridx = 1;
         gbc.insets.right = 3;
+        gbc.fill = GGridBagConstraints.VERTICAL;
         for(int i=0;i<comps.length;i++)
         {
             panel.add(comps[i], gbc);
@@ -354,7 +355,7 @@ public class GUtilities
             if(comp instanceof GTextComponent)
             {
 //                ((GTextComponent)comp).setEditable(enabled);
-                ((GTextComponent)comp).setEnabled(enabled);
+                comp.setEnabled(enabled);
             }
             else if(comp instanceof GTabbedPane)
             {
