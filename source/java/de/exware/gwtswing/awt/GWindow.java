@@ -108,6 +108,14 @@ public class GWindow extends GComponent
         GDimension dim2 = this.getSize();
         x -= dim2.width / 2;
         y -= dim2.height / 2;
+        if(x < 0)
+        {
+            x = 0;
+        }
+        if(y < 0)
+        {
+            y = 0;
+        }
         setLocation(x, y);
     }
     

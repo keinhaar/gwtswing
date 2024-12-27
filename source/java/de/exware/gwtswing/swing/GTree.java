@@ -40,6 +40,7 @@ public class GTree<T> extends GComponent
     private List<GTreeSelectionListener> treeSelectionListeners;
     private boolean rootVisible = true;
     private ModelListener modelListener = new ModelListener();
+    private int itemSpacing = 0;
 
     public GTree()
     {
@@ -190,10 +191,10 @@ public class GTree<T> extends GComponent
                         stack.push(cobj);
                     }
                 }
-                y += dim.height;
+                y += dim.height + itemSpacing;
                 comp.validate();
+                preferredHeight += dim.height + itemSpacing;
             }
-            preferredHeight += dim.height;
             if(preferredWidth < (indent * 10 + dim.width + 2))
             {
                 preferredWidth = (indent * 10 + dim.width +2);
@@ -492,5 +493,15 @@ public class GTree<T> extends GComponent
             }
         }
         return path;
+    }
+
+    public int getItemSpacing()
+    {
+        return itemSpacing;
+    }
+
+    public void setItemSpacing(int itemSpacing)
+    {
+        this.itemSpacing = itemSpacing;
     }
 }

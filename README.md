@@ -7,9 +7,15 @@ There are 2 main differences between Swing an GWTSwing.
 1. Modal dialogs don't stop event execution. Instead of that, callback objects can be used, to get notified if a dialog was closed.
 2. All Classnames beginn with "G" instead of "J" (GTextField instead of JTextField). This was done to avoid license problems, because the API is now different from Oracles Swing and to avoid confusion while developing with GWTSwing.
 
-There are no server calls after starting the application. Everything is handled locally on the client.
+One of the main benefits is, that there are no server calls after starting the application. Everything is handled locally on the client, until you do server calls by yourself.
 
 ## What's new
+### 2024-12-27 Version 1.3
+- DefaultGestureListener will now create useful calls on Swiping, Scaling and Clicking
+- GPopupMenus will always be inside the visible Browser area. If the requested popup position is outside, then it is moved into the visible area.
+- Fixed oversized GTree
+- other Small fixes
+
 ### 2024-12-21 Version 1.2.1
 This version fixes an issue with padding on GLabels and conatins better looking Tabs as well as some other small fixes and enhancements.
 

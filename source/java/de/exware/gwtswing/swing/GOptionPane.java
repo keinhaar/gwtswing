@@ -4,10 +4,8 @@ import java.util.List;
 
 import de.exware.gwtswing.PartitionedPanel;
 import de.exware.gwtswing.awt.GBorderLayout;
-import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GGridBagConstraints;
 import de.exware.gwtswing.awt.GGridBagLayout;
-import de.exware.gwtswing.awt.GPoint;
 import de.exware.gwtswing.awt.event.GActionEvent;
 import de.exware.gwtswing.awt.event.GActionListener;
 import de.exware.gwtswing.swing.border.GBorderFactory;
@@ -120,17 +118,17 @@ public class GOptionPane extends GComponent
         dlg.getContentPane().setBorder(GBorderFactory.createEmptyBorder(10, 10, 10, 10));
         dlg.pack();
         dlg.setLocationRelativeTo(parent);
-        GPoint loc = dlg.getLocation();
-        if(loc.x < 0)
-        {
-            loc.x = 0;
-        }
-        if(loc.y < 0)
-        {
-            loc.y = 0;
-        }
-        GDimension size = dlg.getSize();
-        dlg.setBounds(loc.x, loc.y, size.width, size.height);
+//        GPoint loc = dlg.getLocation();
+//        if(loc.x < 0)
+//        {
+//            loc.x = 0;
+//        }
+//        if(loc.y < 0)
+//        {
+//            loc.y = 0;
+//        }
+//        GDimension size = dlg.getSize();
+//        dlg.setBounds(loc.x, loc.y, size.width, size.height);
         dlg.show();
     }
     

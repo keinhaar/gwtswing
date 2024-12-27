@@ -465,6 +465,7 @@ public class GComponent
     
     private GMouseEvent handleMouseMoved(GPEvent event)
     {
+        longClickPerformed = false;
         GMouseEvent evt = new GMouseEvent(this, event, isStopMousePropagation());
         for(int i=0;processEvent && mouseMotionListeners != null && i< mouseMotionListeners.size();i++)
         {
