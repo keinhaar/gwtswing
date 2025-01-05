@@ -83,7 +83,10 @@ public class GDialog extends GWindow
         }
         if(visible)
         {
-            setModalComponent(this);
+            if(isModal)
+            {
+                setModalComponent(this);
+            }
             listener = new GAWTEventListener()
             {
                 @Override
@@ -109,8 +112,11 @@ public class GDialog extends GWindow
         }
         else
         {
-            GToolkit.getDefaultToolkit().removeAWTEventListener(listener);            
-            removeModalComponent();
+            GToolkit.getDefaultToolkit().removeAWTEventListener(listener);   
+            if(isModal)
+            {
+                removeModalComponent();
+            }
         }
     }
  

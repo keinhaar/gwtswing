@@ -102,7 +102,10 @@ public class GComponent
     
     protected void removeModalComponent()
     {
-        modalityStack.pop();
+        if(modalityStack.isEmpty() == false)
+        {
+            modalityStack.pop();
+        }
     }
     
     /**

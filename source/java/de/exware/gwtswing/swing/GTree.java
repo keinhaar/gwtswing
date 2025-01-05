@@ -463,7 +463,10 @@ public class GTree<T> extends GComponent
             else
             {
                 ItemWrapper ciw = reverseMap.get(val);
-                ciw.updateElement();
+                if(ciw != null)
+                {
+                    ciw.updateElement();
+                }
 //                for(int i=0;i<model.getChildCount(val);i++)
 //                {
 //                    Object child = model.getChild(val, i);
