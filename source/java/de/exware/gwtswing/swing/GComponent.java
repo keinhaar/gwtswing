@@ -71,6 +71,7 @@ public class GComponent
     private static boolean isLongClickEnabled = true;
     private static long longClickStart;
     private static boolean longClickPerformed;
+    private static GPoint lastTouchStart;
     private static Map<Class, GInsets> cssBorderCache = new HashMap<>();
     /**
      * A Stack of modal components (Most of the time GDialogs). If the Stack is not empty, then only
@@ -490,6 +491,7 @@ public class GComponent
     private GTouchEvent handleTouchStart(GPEvent event)
     {
         GTouchEvent evt = new GTouchEvent(this, event);
+        lastTouchStart = evt.getPoints()[0];
         for(int i=0;processEvent && touchListeners != null && i< touchListeners.size();i++)
         {
             touchListeners.get(i).touchStart(evt);
@@ -507,14 +509,24 @@ public class GComponent
         return evt;
     }
     
-    private GTouchEvent handleTouchEnd(GPEvent event)
+    private GAWTEvent handleTouchEnd(GPEvent event)
     {
         GTouchEvent evt = new GTouchEvent(this, event);
+        GAWTEvent aevt = evt;
         for(int i=0;processEvent && touchListeners != null && i< touchListeners.size();i++)
         {
             touchListeners.get(i).touchEnd(evt);
         }
-        return evt;
+        if(evt.isConsumed() == false)
+        {
+            GMouseEvent mevt = new GMouseEvent(this, lastTouchStart.x, lastTouchStart.y, 1, GMouseEvent.BUTTON1);
+            aevt = mevt;
+            for(int i=0;processEvent && mouseListeners != null && i< mouseListeners.size();i++)
+            {
+                mouseListeners.get(i).mouseClicked(mevt);
+            }
+        }
+        return aevt;
     }
     
     private GKeyEvent handleKeyPressed(GPEvent event)
@@ -912,6 +924,11 @@ public class GComponent
         return dim;
     }
 
+    protected int getMaxWidthForPreferredSize()
+    {
+        return maxWidthForPreferredSize;
+    }
+    
     public int getComponentCount()
     {
         if(components != null)

@@ -5,6 +5,7 @@ import de.exware.gplatform.log.LogFactory;
 import de.exware.gwtswing.awt.GPoint;
 import de.exware.gwtswing.awt.event.GTouchEvent;
 import de.exware.gwtswing.awt.event.GTouchListener;
+import de.exware.gwtswing.swing.GComponent;
 import de.exware.gwtswing.swing.GUtilities;
 
 public class DefaultGestureListener implements GTouchListener
@@ -15,6 +16,9 @@ public class DefaultGestureListener implements GTouchListener
     private GPoint[] startPoints;
     private boolean isScaling;
     private boolean isSwiping;
+    private boolean compensateScrolling = true;
+    private GPoint startLocation;
+    
     public enum SwipeDirection
     {
         UP
@@ -39,7 +43,8 @@ public class DefaultGestureListener implements GTouchListener
         isScaling = false;
         startPoints = null;
         startPoint = evt.getPoints()[0];
-        evt.consume();
+        startLocation = ((GComponent)evt.getSource()).getLocationOnScreen();
+//        evt.consume();
     }
 
     @Override
@@ -47,13 +52,20 @@ public class DefaultGestureListener implements GTouchListener
     {
         if(evt.getPoints().length == 0)
         {
-//            LOG.debug("Swipe/Scale: " + isSwiping + "/" + isScaling);
-            GPoint a = startPoint;
-            GPoint b = lastPoint;
-            if(isSwiping && GUtilities.getDistance(startPoint, lastPoint) > 5)
+            GPoint start = startPoint;
+            GPoint end = new GPoint(lastPoint.x, lastPoint.y);
+            if(compensateScrolling)
             {
-                double x = b.getX() - a.getX();
-                double y = b.getY() - a.getY();
+                GPoint endLocation = ((GComponent)evt.getSource()).getLocationOnScreen();
+                int diffX = endLocation.x - startLocation.x;
+                int diffY = endLocation.y - startLocation.y;
+                end.x += diffX; 
+                end.y += diffY; 
+            }
+            if(isSwiping && GUtilities.getDistance(start, end) > 10)
+            {
+                double x = end.getX() - start.getX();
+                double y = end.getY() - start.getY();
                 double absX = Math.abs(x);
                 double absY = Math.abs(y);
                 SwipeDirection direction = null;
@@ -65,18 +77,22 @@ public class DefaultGestureListener implements GTouchListener
                 {
                     direction = y > 0 ? SwipeDirection.DOWN : SwipeDirection.UP;
                 }
-                onSwipe(a, b , direction);
-//                LOG.debug("Swipe END: " + direction.name());
-                evt.consume();
+                boolean consume = onSwipe(start, end , direction);
+                if(consume)
+                {
+                    evt.consume();
+                }
             }
             else if(isScaling)
             {
-//                LOG.debug("Scale END: ");
             }
             else
             {
-                onClick(startPoint);
-//                LOG.debug("onClick ");
+                boolean consume = onClick(startPoint);
+                if(consume)
+                {
+                    evt.consume();
+                }
             }
             isScaling = false;
             isSwiping = false;
@@ -125,18 +141,18 @@ public class DefaultGestureListener implements GTouchListener
         }
     }
 
-    public void onSwipe(GPoint start, GPoint end, SwipeDirection direction)
+    public boolean onSwipe(GPoint start, GPoint end, SwipeDirection direction)
     {
-        
+        return true;
     }
     
     public void onScale(GPoint center, double scale)
     {
     }
     
-    public void onClick(GPoint startPoint)
+    public boolean onClick(GPoint startPoint)
     {
-        
+        return false;
     }
 
     protected boolean isScaling()

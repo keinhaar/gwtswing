@@ -148,7 +148,7 @@ public class GLabel extends GComponent
                         }
                     }
                     else if(canDoFastMeasuring
-                        && img == null && text.contains("<") == false)
+                        && img == null && text.contains("<") == false && getMaxWidthForPreferredSize() == Integer.MAX_VALUE)
                     {
                         dim = new GDimension();
                         dim.width += GPlatform.getInstance().stringWidth(getFont().toCSS(), text);

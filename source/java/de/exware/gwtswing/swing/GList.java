@@ -8,6 +8,8 @@ import de.exware.gplatform.GPlatform;
 import de.exware.gplatform.timer.AbstractGPTimerTask;
 import de.exware.gplatform.timer.GPTimer;
 import de.exware.gwtswing.awt.GDimension;
+import de.exware.gwtswing.awt.GPoint;
+import de.exware.gwtswing.awt.GRectangle;
 import de.exware.gwtswing.awt.event.GMouseAdapter;
 import de.exware.gwtswing.awt.event.GMouseEvent;
 import de.exware.gwtswing.awt.event.GMouseListener;
@@ -45,22 +47,32 @@ public class GList<T> extends GComponent
         @Override
         public void contentsChanged(GListDataEvent e)
         {
-            setModel(model);
+            if(e.getIndex0() == 0 && e.getIndex1() == 0)
+            {
+                setModel(model);
+            }
+            else
+            {
+                revalidate();
+            }
         }
     };
 
     public GList(T[] data)
     {
         setListData(data);
+        addMouseListener(selectionListener);
     }
 
     public GList()
     {
+        addMouseListener(selectionListener);
     }
 
     public GList(GDefaultListModel<T> model)
     {
         setModel(model);
+        addMouseListener(selectionListener);
     }
 
     public void addListSelectionListener(GListSelectionListener listener)
@@ -76,6 +88,11 @@ public class GList<T> extends GComponent
     {        
         GListModel<T> model = new GDefaultListModel<>(data);
         setModel(model);
+    }
+    
+    public GListModel<T> getModel()
+    {
+        return model;
     }
     
     public void setModel(GListModel<T> model)
@@ -96,7 +113,6 @@ public class GList<T> extends GComponent
         {
             GComponent comp = renderer.getListCellRendererComponent(this, model.getElementAt(i), false);
             comp.putClientProperty("value", model.getElementAt(i));
-            comp.addMouseListener(selectionListener);
             comp.setOpaque(false);
             renderedItems.add(comp);
             getPeer().appendChild(comp.getPeer());
@@ -117,9 +133,11 @@ public class GList<T> extends GComponent
         preferredHeight = 0;
         preferredWidth = 0;
         GDimension size = getSize();
+        int maxWidth = getWidth();
         for(int i=0;i<renderedItems.size();i++)
         {
             GComponent comp = renderedItems.get(i);
+            comp.setMaxWidthForPreferredSize(maxWidth > 0 ? maxWidth: Integer.MAX_VALUE);
             GDimension dim = comp.getPreferredSize();
             comp.setBounds(0, preferredHeight, size.width, dim.height);
             preferredHeight += dim.height;
@@ -128,6 +146,12 @@ public class GList<T> extends GComponent
                 preferredWidth = dim.width;
             }
         }
+    }
+    
+    @Override
+    public void setSize(int width, int height)
+    {
+        super.setSize(width, height);
     }
     
     @Override
@@ -159,7 +183,7 @@ public class GList<T> extends GComponent
             {
                 if(clickHandler == null)
                 {
-                    int current = renderedItems.indexOf(evt.getSource());
+                    int current = locationToIndex(evt.getPoint());
                     boolean selected = selectedItems.contains(current);
                     indexesToRevalidate.clear();
                     indexesToRevalidate.addAll(selectedItems);
@@ -170,7 +194,6 @@ public class GList<T> extends GComponent
                         selectedItems.add(current);
                     }
                     indexesToRevalidate.add(current);
-                
                     clickHandler = new ClickHandler();
                     GPTimer timer = GPlatform.getInstance().createTimer();
                     timer.schedule(clickHandler, 50);
@@ -237,10 +260,8 @@ public class GList<T> extends GComponent
             previous = c.getPeer();
         }
         comp.getPeer().removeFromParent();
-        comp.removeMouseListener(selectionListener);
         comp = renderer.getListCellRendererComponent(GList.this, value, selected);
         comp.putClientProperty("value", value);
-        comp.addMouseListener(selectionListener);
         renderedItems.set(current, comp);
         getPeer().insertAfter(comp.getPeer(), previous);
     }
@@ -255,7 +276,7 @@ public class GList<T> extends GComponent
         this.renderer = renderer;
         if(model != null)
         {
-            setModel(model);
+            revalidate();
         }
     }
 
@@ -283,5 +304,18 @@ public class GList<T> extends GComponent
         validate();
     }
 
+    public int locationToIndex(GPoint start)
+    {
+        for(int i=0;i<renderedItems.size();i++)
+        {
+            GComponent comp = renderedItems.get(i);
+            GRectangle rect = comp.getBounds();
+            if(rect.contains(start))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
 

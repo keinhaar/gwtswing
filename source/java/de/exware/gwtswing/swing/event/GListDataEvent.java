@@ -20,4 +20,16 @@ public class GListDataEvent
         this.minIndex = minIndex < maxIndex ? minIndex : maxIndex;
         this.maxIndex = maxIndex > minIndex ? maxIndex : minIndex;
     }
+
+    public int getIndex0()
+    {
+        return minIndex;
+    }
+
+    public int getIndex1()
+    {
+        return maxIndex;
+    }
+    
+    
 }

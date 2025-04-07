@@ -52,4 +52,14 @@ abstract public class GAbstractListModel<T>
             l.contentsChanged(evt);
         }
     }
+
+    protected void fireContentsChanged(int minIndex, int maxIndex)
+    {
+        GListDataEvent evt = new GListDataEvent(this, GListDataEvent.CONTENTS_CHANGED, minIndex, maxIndex);
+        for(int i=0;i<listeners.size();i++)
+        {
+            GListDataListener l = listeners.get(i);
+            l.contentsChanged(evt);
+        }
+    }
 }
