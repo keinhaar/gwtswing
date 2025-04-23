@@ -1175,8 +1175,8 @@ public class GComponent
         if(components != null && index >= 0 && index < components.size())
         {
             GComponent comp = components.remove(index);
-            comp.getPeer().removeFromParent();
             comp.setParent(null);
+            comp.getPeer().removeFromParent();
             if(layout != null)
             {
                 layout.removeLayoutComponent(comp);
@@ -1194,7 +1194,7 @@ public class GComponent
         }
     }
     
-    private void setParent(GComponent parent)
+    protected void setParent(GComponent parent)
     {
         this.parent = parent;
         setCachedPreferredSize(null);

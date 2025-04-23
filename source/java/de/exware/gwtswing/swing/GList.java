@@ -35,7 +35,22 @@ public class GList<T> extends GComponent
         @Override
         public void intervalRemoved(GListDataEvent e)
         {
-            setModel(model);
+            int start = e.getIndex0();
+            int end = e.getIndex1();
+            if(end == start)
+            {
+                GComponent c = renderedItems.remove(end);
+                c.getPeer().removeFromParent();
+            }
+            else
+            {
+                for(int i=end;i>=start;i--)
+                {
+                    GComponent c = renderedItems.remove(i);
+                    c.getPeer().removeFromParent();
+                }
+            }
+            validate();
         }
         
         @Override
@@ -146,12 +161,6 @@ public class GList<T> extends GComponent
                 preferredWidth = dim.width;
             }
         }
-    }
-    
-    @Override
-    public void setSize(int width, int height)
-    {
-        super.setSize(width, height);
     }
     
     @Override

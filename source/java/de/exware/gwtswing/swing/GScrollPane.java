@@ -11,6 +11,7 @@ public class GScrollPane extends GComponent
     private static int scrollbarWidth;
     private GPElement innerDiv;
     private GDimension compDimensions;
+    private int lastVerticalScrollPos = 0;
     
     static
     {
@@ -121,7 +122,8 @@ public class GScrollPane extends GComponent
                     h = ih - scrollbarWidth;
                 }
             }
-            comp.setBounds(0, 0, w, h);
+//            comp.setBounds(0, 0, w, h);
+            comp.setSize(w, h);
             compDimensions = new GDimension(w,h);
         }
         else
@@ -131,6 +133,12 @@ public class GScrollPane extends GComponent
             innerDiv.getStyle().setHeight(0);
 //            compDimensions = new GDimension(0,0);
         }
+    }
+    
+    @Override
+    public GInsets getInsets()
+    {
+        return super.getInsets();
     }
     
     @Override
@@ -166,6 +174,35 @@ public class GScrollPane extends GComponent
     {
         super.setSize(dim);
         refit();
+    }
+
+    @Override
+    public GComponent getParent()
+    {
+        return super.getParent();
+    }
+
+    @Override
+    protected void setParent(GComponent parent)
+    {
+        if(parent == null)
+        {
+            lastVerticalScrollPos = getVerticalScrollValue();
+        }
+        super.setParent(parent);
+        if(parent != null)
+        {
+            setVerticalScrollValue(lastVerticalScrollPos);
+        }
+    }
+    
+    /**
+     * Set the vertical scroll position.
+     * @param scrollPos
+     */
+    private void setVerticalScrollValue(int scrollPos)
+    {
+        innerDiv.setPropertyInt("scrollTop", scrollPos);
     }
 
     public int getVerticalScrollValue()
