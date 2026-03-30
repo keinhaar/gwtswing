@@ -53,16 +53,23 @@ public class DefaultGestureListener implements GTouchListener
         if(evt.getPoints().length == 0)
         {
             GPoint start = startPoint;
-            GPoint end = new GPoint(lastPoint.x, lastPoint.y);
+            GPoint end = null;
+            if(lastPoint != null)
+            {
+                end = new GPoint(lastPoint.x, lastPoint.y);
+            }
             if(compensateScrolling)
             {
                 GPoint endLocation = ((GComponent)evt.getSource()).getLocationOnScreen();
                 int diffX = endLocation.x - startLocation.x;
                 int diffY = endLocation.y - startLocation.y;
-                end.x += diffX; 
-                end.y += diffY; 
+                if(end != null)
+                {
+                    end.x += diffX; 
+                    end.y += diffY;
+                }
             }
-            if(isSwiping && GUtilities.getDistance(start, end) > 10)
+            if(isSwiping && end != null && GUtilities.getDistance(start, end) > 10)
             {
                 double x = end.getX() - start.getX();
                 double y = end.getY() - start.getY();
@@ -141,6 +148,13 @@ public class DefaultGestureListener implements GTouchListener
         }
     }
 
+    /**
+     * 
+     * @param start
+     * @param end
+     * @param direction
+     * @return true, if the event should be consumed, to avoid further processing.
+     */
     public boolean onSwipe(GPoint start, GPoint end, SwipeDirection direction)
     {
         return true;
@@ -150,6 +164,11 @@ public class DefaultGestureListener implements GTouchListener
     {
     }
     
+    /**
+     * 
+     * @param startPoint
+     * @return true, if the event should be consumed, to avoid further processing.
+     */
     public boolean onClick(GPoint startPoint)
     {
         return false;

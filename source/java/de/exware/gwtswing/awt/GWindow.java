@@ -23,6 +23,7 @@ public class GWindow extends GComponent
     private DragListener dragListener;
     private GPanel contentpane;
     private GPanel header;
+    private ResizeListener resizeListener;
 
     public GWindow()
     {
@@ -53,7 +54,9 @@ public class GWindow extends GComponent
         dragListener = new DragListener();
         title.addMouseListener(dragListener);
         title.addMouseMotionListener(dragListener);
-//        GToolkit.getDefaultToolkit().addAWTEventListener(dragListener, 0);
+        resizeListener = new ResizeListener();
+        addMouseListener(resizeListener);
+        addMouseMotionListener(resizeListener);
     }
     
     public GComponent getContentPane()
@@ -69,6 +72,20 @@ public class GWindow extends GComponent
     public void setUndecorated(boolean b)
     {
         header.setVisible(!b);
+        if(b)
+        {
+            removeMouseListener(dragListener);
+            removeMouseMotionListener(dragListener);
+            removeMouseListener(resizeListener);
+            removeMouseMotionListener(resizeListener);
+        }
+        else
+        {
+            addMouseListener(dragListener);
+            addMouseMotionListener(dragListener);
+            addMouseListener(resizeListener);
+            addMouseMotionListener(resizeListener);
+        }
     }
     
     @Override
@@ -150,12 +167,12 @@ public class GWindow extends GComponent
                 dragging = false;
             }
         }
-
+    
         @Override
         public void mouseMoved(GMouseEvent e)
         {
         }
-
+    
         @Override
         public void eventDispatched(GAWTEvent event)
         {
@@ -185,7 +202,89 @@ public class GWindow extends GComponent
             }
         }
     }
+
+    class ResizeListener extends GMouseAdapter
+        implements GMouseMotionListener, GAWTEventListener
+    {
+        boolean dragging;
+        int dragStartX, dragStartY;
+        int mouseStartX, mouseStartY;
+        
+        @Override
+        public void mousePressed(GMouseEvent e)
+        {            
+            GComponent comp = (GComponent) e.getSource();
+            GDimension size = getSize();
+            GPoint loc = getLocationOnScreen();
+            GPoint cloc = comp.getLocationOnScreen();
+            mouseStartX = e.getX() + cloc.x;
+            mouseStartY = e.getY() + cloc.y;
+            dragStartX = loc.x;
+            dragStartY = loc.y;
+            GPoint point = GSwingUtilities.convertPoint(comp, e.getX(), e.getY(), GWindow.this);
+            if(point.getX() > size.getWidth() - 20
+                && point.getY() > size.getHeight() - 20)
+            {
+                dragging = true;
+                setCursor(GCursor.NORTHWEST_SOUTHEAST_RESIZE_CURSOR);
+            }
+        }
+        
+        @Override
+        public void mouseReleased(GMouseEvent e)
+        {
+            if(dragging)
+            {
+                dragging = false;
+                setCursor(GCursor.DEFAULT_CURSOR);
+            }
+        }
     
+        @Override
+        public void mouseMoved(GMouseEvent e)
+        {
+            move(e);
+        }
+    
+        @Override
+        public void eventDispatched(GAWTEvent event)
+        {
+            //Events outside of the title, because the mouse moved to fast.
+            if(event.getId() == GMouseEvent.MOUSE_MOVED)
+            {
+                move((GMouseEvent) event);
+            }
+            else if(event.getId() == GMouseEvent.MOUSE_RELEASED)
+            {
+                mouseReleased((GMouseEvent) event);
+            }
+        }
+        
+        private void move(GMouseEvent e)
+        {
+            GDimension size = getSize();
+            GComponent comp = (GComponent) e.getSource();
+            GPoint point = GSwingUtilities.convertPoint(comp, e.getX(), e.getY(), GWindow.this);
+            if(point.getX() > size.getWidth() - 20
+                && point.getY() > size.getHeight() - 20)
+            {
+                setCursor(GCursor.NORTHWEST_SOUTHEAST_RESIZE_CURSOR);
+            }
+            else
+            {
+                setCursor(GCursor.DEFAULT_CURSOR);
+            }
+            if(dragging)
+            {
+                int dX = point.x - mouseStartX;
+                int dY = point.y - mouseStartY;
+                GWindow.this.setSize(size.width +dX, size.height + dY);
+                revalidate();
+                GUtilities.clearSelection();
+            }
+        }
+    }
+
     public void setTitle(String title)
     {
         this.title.setText(title);

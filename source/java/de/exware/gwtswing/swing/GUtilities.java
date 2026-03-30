@@ -1,5 +1,7 @@
 package de.exware.gwtswing.swing;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Stack;
 
 import de.exware.gplatform.GPElement;
@@ -93,6 +95,15 @@ public class GUtilities
 //        } 
 //    }-*/;
     
+    /**
+     * This Method returns an URL for a resource file in the specified plugin.
+     * @throws MalformedURLException 
+     */
+    public static final URL getResourceURL(String pluginid,String resourcename) throws MalformedURLException
+    {
+        return new URL(getResource(pluginid, resourcename));
+    }
+
     /**
      * This Method returns an URL for a resource file in the specified plugin.
      */

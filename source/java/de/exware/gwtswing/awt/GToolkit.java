@@ -55,6 +55,10 @@ public class GToolkit
         {
             addAWTEventListener(listener, GMouseEvent.class);
         }
+        if((eventMask & GAWTEvent.KEY_EVENT_MASK) > 0)
+        {
+            addAWTEventListener(listener, GKeyEvent.class);
+        }
     }
     
     public void addAWTEventListener(GAWTEventListener listener, Class eventClass)

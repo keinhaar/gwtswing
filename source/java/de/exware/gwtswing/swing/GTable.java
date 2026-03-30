@@ -622,8 +622,11 @@ public class GTable<T> extends GComponent
         headerlayout.setColumnWidth(col, columnWidth);
         contentlayout.setColumnWidth(col, columnWidth);
         revalidate();
-        GScrollPane parent = (GScrollPane) getParent();
-        parent.refitContent();
+        if(getParent() instanceof GScrollPane)
+        {
+            GScrollPane parent = (GScrollPane) getParent();
+            parent.refitContent();
+        }
     }
     
     @Override

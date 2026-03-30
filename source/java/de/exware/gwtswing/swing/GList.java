@@ -134,11 +134,6 @@ public class GList<T> extends GComponent
         }
         setCachedPreferredSize(null);
         validate();
-        GComponent parent = getParent();
-        if(parent instanceof GScrollPane)
-        {
-            ((GScrollPane)parent).refitContent();
-        }
     }
 
     @Override
@@ -160,6 +155,11 @@ public class GList<T> extends GComponent
             {
                 preferredWidth = dim.width;
             }
+        }
+        GComponent parent = getParent();
+        if(parent instanceof GScrollPane)
+        {
+            ((GScrollPane)parent).refitContent();
         }
     }
     

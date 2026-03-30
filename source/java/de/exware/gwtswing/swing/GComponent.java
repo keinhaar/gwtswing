@@ -999,6 +999,18 @@ public class GComponent
         getPeer().getStyle().setProperty("cursor", cursor.getCursorName());
     }
     
+    public GCursor getCursor()
+    {
+        GCursor cursor = GCursor.DEFAULT_CURSOR;
+        String cur = getPeer().getStyle().getProperty("cursor");
+        GCursor c = cursor.getByName(cur);
+        if(c != null)
+        {
+            cursor = c;
+        }
+        return cursor;
+    }
+    
     public GRectangle getBounds() 
     {
         GPoint loc = getLocation();
