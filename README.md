@@ -10,6 +10,14 @@ There are 2 main differences between Swing an GWTSwing.
 One of the main benefits is, that there are no server calls after starting the application. Everything is handled locally on the client, until you do server calls by yourself.
 
 ## What's new
+### 2026-04-01 Version 1.4.0
+- GWTSwing is now available on Maven Central
+- Fixes for DefaultGestureListener
+- added GComponent.getCursor()
+- added GCursor.getByName(name)
+- added GCursor.NORTHWEST_SOUTHEAST_RESIZE_CURSOR
+- more fixes
+
 ### 2024-12-27 Version 1.3
 - DefaultGestureListener will now create useful calls on Swiping, Scaling and Clicking
 - GPopupMenus will always be inside the visible Browser area. If the requested popup position is outside, then it is moved into the visible area.
@@ -23,7 +31,29 @@ This version fixes an issue with padding on GLabels and conatins better looking 
 GWTSwing can now dynamically switch between different Stylesheets. To see that in action just have a look at the demos listed below. Inside the demo select "Look" on the left, and then press one of the available style buttons like "Dark" for the Dark Mode.
 
 ## How to use
+GWTSwing is now on Maven Central. Just add the dependencies for GWT or TeaVM as needed and shown below.
+
 ### GWT
+Add the dependencies to your pom.xml
+
+```
+    <dependency>
+      <groupId>de.exware</groupId>
+      <artifactId>gplatform</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>de.exware</groupId>
+      <artifactId>gplatform.gwt</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>de.exware</groupId>
+      <artifactId>gwtswing</artifactId>
+      <version>1.4.0</version>
+    </dependency>
+```
+
 GWTSwing is used like other gwt libraries. Just add the gwtswing, gplatform and gplatform.gwt to your classpath and
 
 ```
@@ -31,8 +61,9 @@ GWTSwing is used like other gwt libraries. Just add the gwtswing, gplatform and 
 ```
 to your projects ```abc.gwt.xml```.
 Additionally you should add the css file to your html pages header
+
 ```
-   <link type="text/css" rel="stylesheet" href="YOUR_PROJECT_NAME/de/exware/gwtswing/gwtswing.css">
+   <link type="text/css" rel="stylesheet" href="YOUR_PROJECT_NAME/de/exware/gwtswing/gwtswing.css"/>
 ```
 
 After that, you can use the GWTSwing classes in your project.
@@ -52,28 +83,24 @@ The call of 'GUtilities.addToBody' appends your GWTSwing UI to the Web Page.
 Porting an existing Swing application is now nearly as easy as replacing all "J" with "G".
 
 ### TeaVM
-To use GWTSwing with teavm you need the contents of the following
-repositories: gplatform.teavm, gplatform and of course gwtswing.
-
-For each of them call 
+Add the dependencies to your pom.xml
 
 ```
-sh nobuto.sh -t installToMaven -vvv
-```
-to add them to your local maven repository.
-Then include the gplatform.teavm and gwtswing as dependencies in your project. 
-
-```
-<dependency>
-  <groupId>de.exware</groupId>
-  <artifactId>de.exware.gplatform.teavm</artifactId>
-  <version>1.0</version>
-</dependency>
-<dependency>
-  <groupId>de.exware</groupId>
-  <artifactId>de.exware.gwtswing</artifactId>
-  <version>1.0</version>
-</dependency>
+    <dependency>
+      <groupId>de.exware</groupId>
+      <artifactId>gplatform</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>de.exware</groupId>
+      <artifactId>gplatform.teavm</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>de.exware</groupId>
+      <artifactId>gwtswing</artifactId>
+      <version>1.4.0</version>
+    </dependency>
 ```
 
 Furthermore you need to include the contents of the resources folder in the webapp folder. 
@@ -83,6 +110,7 @@ You have to manually link the css file with:
 ```
 <link href="./de/exware/gwtswing/gwtswing.css" rel="stylesheet">
 ```
+
 Now you need to initialize the TeavmGPPlatform class with a static call to the init method.
 
 ```java

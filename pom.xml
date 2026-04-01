@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://apache.org"
+         xmlns:xsi="http://w3.org"
+         xsi:schemaLocation="http://apache.org http://apache.org">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 1. Basis-Informationen (Namespace & Projekt) -->
+    <groupId>de.exware</groupId>
+    <artifactId>gwtswing</artifactId>
+    <version>1.4.0</version>
+    <packaging>jar</packaging>
+
+    <!-- 2. Erforderliche Metadaten für Maven Central -->
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>A Java Swing implementation that can be used with Javascript Transpilers GWT or TeaVM</description>
+    <url>https://github.com/keinhaar/gwtswing</url>
+
+    <licenses>
+        <license>
+            <name>LGPL-2.1 License</name>
+            <url>https://www.gnu.org/licenses/lgpl-2.1.html</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Martin Schmitz</name>
+            <email>martin.schmitz@exware.de</email>
+            <organization>eXware</organization>
+            <organizationUrl>https://www.exware.de</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://://github.com</connection>
+        <developerConnection>sscm:git:git://://github.com</developerConnection>
+        <url>https://github.com/keinhaar/gwtswing</url>
+    </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.exware</groupId>
+            <artifactId>gplatform</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+    </dependencies>
+    
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source> <!-- Deine Java Version -->
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>source/java</directory>
+                <includes>
+                    <include>**/*.gwt.xml</include>
+                </includes>
+            </resource>
+            <!-- Falls du einen extra Ressourcen-Ordner hast -->
+            <resource>
+                <directory>resources/common/</directory>
+            </resource>
+        </resources>
+        <sourceDirectory>source/java</sourceDirectory>
+        <plugins>
+            <!-- 3. Erzeugung von Sources (Pflicht) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Packt auch die Ressourcen (wie LICENSE, .gwt.xml) in das Sources-JAR -->
+                    <excludeResources>false</excludeResources>
+                    <attach>true</attach>
+                </configuration>
+            </plugin>
+
+            <!-- 4. Erzeugung von Javadoc (Pflicht) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Ignoriert Fehler im Javadoc-Code -->
+                    <doclint>none</doclint>
+                    <failOnError>false</failOnError>
+                </configuration>
+            </plugin>
+
+            <!-- 5. GPG Signierung (Pflicht) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Verhindert hängende Builds im Terminal -->
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 6. Das neue Central Publishing Plugin -->
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.6.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>mavencentral</publishingServerId>
+                    <autoPublish>false</autoPublish> <!-- Erst im Portal prüfen, dann manuell freigeben -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
