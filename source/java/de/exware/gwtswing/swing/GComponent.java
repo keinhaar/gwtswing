@@ -1029,6 +1029,11 @@ public class GComponent
             return new GRectangle(loc.x, loc.y, getWidth(), getHeight());
         }
     }
+
+    public void setBounds(GRectangle rectangle) 
+    {
+        setBounds(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+    }
     
     public void setBounds(int x, int y, int width, int height)
     {
