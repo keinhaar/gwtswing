@@ -12,7 +12,6 @@ import java.util.List;
 
 import de.exware.gwtswing.Constants;
 import de.exware.gwtswing.awt.GBorderLayout;
-import de.exware.gwtswing.awt.GColor;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GGridBagConstraints;
 import de.exware.gwtswing.awt.GGridBagLayout;
@@ -21,8 +20,6 @@ import de.exware.gwtswing.awt.event.GMouseAdapter;
 import de.exware.gwtswing.awt.event.GMouseEvent;
 import de.exware.gwtswing.swing.border.GBorder;
 import de.exware.gwtswing.swing.border.GBorderFactory;
-import de.exware.gwtswing.swing.border.GEmptyBorder;
-import de.exware.gwtswing.swing.border.SelectiveLineBorder;
 import de.exware.gwtswing.swing.event.GTabEvent;
 import de.exware.gwtswing.swing.event.GTabEvent.CloseState;
 import de.exware.gwtswing.swing.event.GTabListener;
@@ -43,8 +40,8 @@ public class GTabbedPane extends GComponent
     private int selectedTab = -1;
     private int closeButtonGap = 3;
     private List<GTabListener> tabListeners = new ArrayList<>();
-    private GBorder selectedTabBorder;
-    private GBorder tabBorder;
+//    private GBorder selectedTabBorder;
+//    private GBorder tabBorder;
     private static GIcon closeIcon = new GImageIcon(GUtilities.getResource(Constants.PLUGIN_ID, "/icons/cancel.png"), 16, 16);
     private GGridBagConstraints gbc = new GGridBagConstraints();
     private int position;
@@ -72,8 +69,8 @@ public class GTabbedPane extends GComponent
         add(tabbedComponents, GBorderLayout.CENTER);
         if(position == RIGHT)
         {
-            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#7a7463"), 1, 0, 1, 3);
-            tabBorder = new GEmptyBorder(1, 0, 1, 3);
+//            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#7a7463"), 1, 0, 1, 3);
+//            tabBorder = new GEmptyBorder(1, 0, 1, 3);
             add(tabs, GBorderLayout.EAST);
             gbc.fill = GGridBagConstraints.HORIZONTAL;
             gbc.insets.top = 3;
@@ -81,8 +78,8 @@ public class GTabbedPane extends GComponent
         } 
         else if(position == LEFT) 
         {
-            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#7a7463"), 1, 3, 1, 0);
-            tabBorder = new GEmptyBorder(1, 0, 1, 3);
+//            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#7a7463"), 1, 3, 1, 0);
+//            tabBorder = new GEmptyBorder(1, 0, 1, 3);
             add(tabs, GBorderLayout.WEST);
             gbc.fill = GGridBagConstraints.HORIZONTAL;
             gbc.insets.top = 3;
@@ -90,16 +87,16 @@ public class GTabbedPane extends GComponent
         }
         else if(position == TOP)
         {
-            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#6a6453"), 3, 1, 0, 1, 10, 0, 0, 0);
-            tabBorder = new SelectiveLineBorder(GColor.decode("#8a8473"), 3, 1, 0, 1, 10, 0, 0, 0);
+//            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#6a6453"), 3, 1, 0, 1, 10, 0, 0, 0);
+//            tabBorder = new SelectiveLineBorder(GColor.decode("#8a8473"), 3, 1, 0, 1, 10, 0, 0, 0);
             add(tabs, GBorderLayout.NORTH);
             gbc.fill = GGridBagConstraints.HORIZONTAL;
             gbc.insets.left = 3;
         }
         else if(position == BOTTOM)
         {
-            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#6a6453"), 0, 1, 3, 1);
-            tabBorder = new SelectiveLineBorder(GColor.decode("#8a8473"), 0, 1, 3, 1);
+//            selectedTabBorder = new SelectiveLineBorder(GColor.decode("#6a6453"), 0, 1, 3, 1);
+//            tabBorder = new SelectiveLineBorder(GColor.decode("#8a8473"), 0, 1, 3, 1);
             add(tabs, GBorderLayout.SOUTH);
             gbc.fill = GGridBagConstraints.HORIZONTAL;
             gbc.insets.left = 3;
@@ -120,7 +117,7 @@ public class GTabbedPane extends GComponent
     public void addTab(String string, GComponent comp, boolean closeable)
     {
         GLabel label = new GLabel(string);
-        label.setBorder(GBorderFactory.createEmptyBorder(3, 0, 0, 0));
+//        label.setBorder(GBorderFactory.createEmptyBorder(3, 0, 0, 0));
         addTab(label, comp, closeable);
     }
 
@@ -137,8 +134,23 @@ public class GTabbedPane extends GComponent
      */
     public void addTab(GComponent tabComp, GComponent comp, boolean closeable)
     {
-        GPanel tab = new GPanel();
-        tab.setLayout(new GBorderLayout());
+        GPanel tab = new GTabbedPaneTab();
+        if(position == RIGHT)
+        {
+            tab.addCssClassName("GTabbedPaneTab-Right");
+        }
+        else if(position == LEFT)
+        {
+            tab.addCssClassName("GTabbedPaneTab-Left");
+        }
+        else if(position == TOP)
+        {
+            tab.addCssClassName("GTabbedPaneTab-Top");
+        }
+        else if(position == BOTTOM)
+        {
+            tab.addCssClassName("GTabbedPaneTab-Bottom");
+        }
         tab.add(tabComp, GBorderLayout.CENTER);
         String tabIdentifier = "" + componentCounter++;
         if (closeable)
@@ -159,10 +171,9 @@ public class GTabbedPane extends GComponent
             close.addMouseListener(tabMouseAdapter);
             close.setBorder(GBorderFactory.createEmptyBorder(2, closeButtonGap, 0, 2));
         }
-        tab.getPeer().addClassName("gwts-GTabbedPane-Tab");
-        tabComp.getPeer().addClassName("gwts-GTabbedPane-Tab");
+//        tabComp.getPeer().addClassName("gwts-GTabbedPane-Tab");
         tabComp.addMouseListener(tabMouseAdapter);
-        tab.setBorder(tabBorder);
+//        tab.setBorder(tabBorder);
         if(tabs.getComponentCount() > 0)
         {
             gbc.insets.top = 0;
@@ -210,7 +221,8 @@ public class GTabbedPane extends GComponent
         {
             getTabComponent(selectedTab).setBorder(border);
         }
-        selectedTabBorder = border;
+        getPeer().addClassName("gwts-GTabbedPane-Tab-selected");
+//        selectedTabBorder = border;
     }
 
     public void setTabEnabled(GComponent tabbedComponent, boolean enabled, String tooltip)
@@ -265,16 +277,16 @@ public class GTabbedPane extends GComponent
             if (selectedTab >= 0)
             {
                 GComponent lastActiveTab = tabs.getComponent(selectedTab);
-                lastActiveTab.setBorder(tabBorder);
+//                lastActiveTab.setBorder(tabBorder);
 //                lastActiveTab.setOpaque(false);
-                lastActiveTab.getPeer().removeClassName("gwts-GTabbedPane-selectedTab");
+                lastActiveTab.getPeer().removeClassName("gwts-GTabbedPaneTab-selected");
             }
             selectedTab = i;
             GComponent tabcomp = tabs.getComponent(i);
-            tabcomp.setBorder(selectedTabBorder);
+//            tabcomp.setBorder(selectedTabBorder);
             String tabIdentifier = (String) tabcomp.getClientProperty("tabIdentifier");
             tabbedComponents.showCard(tabIdentifier);
-            tabcomp.getPeer().addClassName("gwts-GTabbedPane-selectedTab");
+            tabcomp.getPeer().addClassName("gwts-GTabbedPaneTab-selected");
             GComponent comp = tabbedComponents.getComponent(i);
             GUtilities.focusFirstField(comp);
             GTabEvent evt = new GTabEvent(this, tabcomp, comp);
@@ -478,5 +490,14 @@ public class GTabbedPane extends GComponent
         {
             ((GLabel)comp).setText(title);
         }
+    }
+    
+    class GTabbedPaneTab extends GPanel
+    {
+        public GTabbedPaneTab()
+        {
+            super();
+            setLayout(new GBorderLayout());
+        }        
     }
 }

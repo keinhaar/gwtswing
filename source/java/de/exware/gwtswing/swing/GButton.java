@@ -54,6 +54,25 @@ public class GButton extends GAbstractButton
         super.setBackground(col);
     }
     
+    public void setHorizontalTextPosition(int pos)
+    {
+        if(pos == GSwingConstants.CENTER)
+        {
+            getPeer().getStyle().setTextAlign("center");
+        }
+        else
+        if(pos == GSwingConstants.LEFT)
+        {
+            getPeer().getStyle().setTextAlign("left");
+        }
+        else
+        if(pos == GSwingConstants.RIGHT)
+        {
+            getPeer().getStyle().setTextAlign("right");
+        }
+        revalidate();
+    }
+    
     @Override
     public void setEnabled(boolean enabled)
     {
@@ -158,7 +177,7 @@ public class GButton extends GAbstractButton
                 GIcon icon = getIcon();
                 dim.width += icon.getIconWidth();
                 int extraheight = getStyleExtraHeight();
-                dim.height = dim.height > icon.getIconHeight() ? dim.height : icon.getIconHeight() + extraheight;
+                dim.height = dim.height > icon.getIconHeight() + extraheight ? dim.height : icon.getIconHeight() + extraheight;
             }
         }
         return dim;

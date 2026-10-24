@@ -24,6 +24,7 @@ public class GToolBar extends GComponent
     public GToolBar()
     {
         gbc = new GGridBagConstraints();
+        gbc.fill = gbc.VERTICAL;
         setLayout(new GGridBagLayout());
     }
     
@@ -36,15 +37,16 @@ public class GToolBar extends GComponent
     protected void addImpl(GComponent comp, Object constraints, int index)
     {
         super.addImpl(comp, gbc, index);
+        gbc = gbc.clone();
         gbc.gridx++;
-        if(index < getComponentCount())
+        if(index > 0 && index < getComponentCount())
         {
             GGridBagLayout gbl = (GGridBagLayout) getLayout();
-            gbc = new GGridBagConstraints();
             for(int i=0;i<getComponentCount();i++)
             {
-                gbl.setConstraints(getComponent(i), gbc);
-                gbc.gridx++;
+                GGridBagConstraints gbc2 = gbl.getConstraints(getComponent(i));
+                gbc2.gridx = i;
+                gbl.setConstraints(getComponent(i), gbc2);
             }
         }
     }

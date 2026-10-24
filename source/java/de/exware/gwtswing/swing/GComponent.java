@@ -68,11 +68,12 @@ public class GComponent
     private boolean enabled = true;
     private boolean visible = true;
     private GDimension size = new GDimension();
+    private List<String> cssClassNames;
     private static boolean isLongClickEnabled = true;
     private static long longClickStart;
     private static boolean longClickPerformed;
     private static GPoint lastTouchStart;
-    private static Map<Class, GInsets> cssBorderCache = new HashMap<>();
+    private static Map<Class<?>, List<String>> cssClassNamesCache = new HashMap<>();
     /**
      * A Stack of modal components (Most of the time GDialogs). If the Stack is not empty, then only
      * Components inside the top most Stack element will process events.
@@ -121,7 +122,7 @@ public class GComponent
     protected void setClassNames(GPElement el, String additionalName)
     {
         el.setClassName(additionalName);
-        Class cl = getClass();
+        Class<?> cl = getClass();
         while(cl != GComponent.class)
         {
             el.addClassName("gwts-" + cl.getSimpleName());
@@ -903,7 +904,11 @@ public class GComponent
                 clone.getStyle().clearWidth();
                 clone.getStyle().clearHeight();
                 clone.getStyle().setPosition("relative");
-                clone.getStyle().setDisplay("block");
+//                String display = getPeer().getStyle().getDisplay();
+//                if(display == null)
+//                {
+//                    clone.getStyle().setDisplay("block");
+//                }
                 clone.getStyle().setVisibility("visible");
                 int ew = getStyleExtraWidth();
                 clone.getStyle().setProperty("maxWidth",(maxWidthForPreferredSize - ew) + "px");
@@ -984,12 +989,7 @@ public class GComponent
         }
         else
         {
-            GInsets insets = cssBorderCache.get(getClass());
-            if(insets == null)
-            {
-                insets = GUIManager.getBorderSize(getClass());
-                cssBorderCache.put(getClass(), insets);
-            }
+            GInsets insets = GUIManager.getBorderSize(getCssClassNames());
             return insets;
         }
     }
@@ -1298,12 +1298,7 @@ public class GComponent
     protected GInsets getPadding()
     {
         GInsets padding = null;
-        Class clazz = this.getClass();
-        while(padding == null && clazz != null)
-        {
-            padding = GUIManager.getPadding(getClass());
-            clazz = clazz.getSuperclass();
-        }
+        padding = GUIManager.getPadding(getCssClassNames());
         return padding;
     }
 
@@ -1432,5 +1427,39 @@ public class GComponent
     public void updateUI()
     {
     	setUI(GUIManager.getUI(this));
+    }
+
+    protected List<String> getCssClassNames()
+    {        
+        if(cssClassNames == null)
+        {
+            List<String> list = cssClassNamesCache.get(getClass());
+            if(list == null)
+            {
+                list = new ArrayList<>();
+                Class<?> cl = getClass();
+                while(cl != null)
+                {
+                    list.add(cl.getSimpleName());
+                    cl = cl.getSuperclass();
+                }
+                cssClassNamesCache.put(getClass(), list);
+            }
+            cssClassNames = list;
+        }
+        return cssClassNames;
+    }
+
+    protected void addCssClassName(String cssClassName)
+    {
+        getPeer().addClassName("gwts-" + cssClassName);
+        List<String> classnames = getCssClassNames();
+        List<String> cln = cssClassNamesCache.get(getClass());
+        if(classnames.equals(cln))
+        {
+            //create new list to avoid trouble with other instances of the same class.
+            cssClassNames = new ArrayList<>(classnames);
+        }
+        cssClassNames.add(0, cssClassName);
     }
 }

@@ -113,27 +113,24 @@ public class CardPanel extends GComponent
 
     public void remove(String name)
     {
-        GComponent current = getCurrentComponent();
-        int nChildren = this.getComponentCount();
-        for (int i = 0; i < nChildren; i++)
+        GComponent comp = getComponent(name);
+        remove(comp);
+    }
+    
+    @Override
+    public void remove(GComponent comp)
+    {
+        GComponent currentComp = getCurrentComponent();
+        super.remove(comp);
+        if(comp == currentComp)
         {
-            GComponent child = this.getComponent(i);
-            if (child.getName().equals(name))
-            {
-//                current.setVisible(false);
-                remove(child);
-                if(current == child)
-                {
-                    this.current = -1;
-                    showFirstCard();
-                }
-                else
-                {
-                    showCard(current);
-                }
-                break;
-            }
-        }        
+            this.current = -1;
+            showFirstCard();
+        }
+        else
+        {
+            showCard(comp);
+        }
     }
     
 /**

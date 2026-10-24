@@ -28,6 +28,11 @@ public class GGridBagLayout implements GLayoutManager
         this.constraints.put(comp, con);
     }
 
+    public GGridBagConstraints getConstraints(GComponent comp) 
+    {
+        return constraints.get(comp).clone();
+    }
+    
     /**
      * Calculates the preferred size dimensions for the specified
      * panel given the components in the specified parent container.
@@ -129,10 +134,11 @@ public class GGridBagLayout implements GLayoutManager
         }
         
         GDimension contSize = parent.getSize();
+        GInsets contInsets = parent.getInsets();
         double totalWeightX = linfo.getTotalWeightX();
         if(totalWeightX > 0 && contSize.width > 0)
         {
-            int extraSpaceX = contSize.width - linfo.totalWidth;
+            int extraSpaceX = contSize.width - contInsets.left - contInsets.right  - linfo.totalWidth;
             if(extraSpaceX > 0)
             {
                 int xx = 0;
@@ -149,7 +155,7 @@ public class GGridBagLayout implements GLayoutManager
         double totalWeightY = linfo.getTotalWeightY();
         if(totalWeightY > 0 && contSize.height > 0)
         {
-            int extraSpaceY = contSize.height - linfo.totalHeight;
+            int extraSpaceY = contSize.height - contInsets.top - contInsets.bottom - linfo.totalHeight;
             if(extraSpaceY > 0)
             {
                 int xx = 0;

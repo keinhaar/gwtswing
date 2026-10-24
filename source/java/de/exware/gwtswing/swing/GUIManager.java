@@ -1,6 +1,7 @@
 package de.exware.gwtswing.swing;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -120,18 +121,18 @@ public class GUIManager
     {
         return resources.get(key) != null;
     }
-    
-    public static GInsets getPadding(Class<?> clazz)
+
+    public static GInsets getPadding(List<String> clazznames)
     {
-        String key = ".gwts-" + clazz.getName() + "/padding";
+        String key = ".gwts-" + clazznames.get(0) + "/padding-Key";
         GInsets padding = (GInsets) uiResources.get(key);
         if(padding == null && uiResources.containsKey(key) == false)
         {
-            Integer pad = getInt(".gwts-", clazz, "padding");
-            Integer pl = getInt(".gwts-", clazz, "padding-left");
-            Integer pr = getInt(".gwts-", clazz, "padding-right");
-            Integer pb = getInt(".gwts-", clazz, "padding-bottom");
-            Integer pt = getInt(".gwts-", clazz, "padding-top");
+            Integer pad = getInt(".gwts-", clazznames, "padding");
+            Integer pl = getInt(".gwts-", clazznames, "padding-left");
+            Integer pr = getInt(".gwts-", clazznames, "padding-right");
+            Integer pb = getInt(".gwts-", clazznames, "padding-bottom");
+            Integer pt = getInt(".gwts-", clazznames, "padding-top");
             pad = pad == null ? 0 : pad;
             pl = pl == null ? pad : pl;
             pr = pr == null ? pad : pr;
@@ -150,18 +151,18 @@ public class GUIManager
         }
         return padding;
     }
-
-    public static GInsets getBorderSize(Class<?> clazz)
+    
+    public static GInsets getBorderSize(List<String> clazznames)
     {
-        String key = ".gwts-" + clazz.getName() + "/border-width";
+        String key = ".gwts-" + clazznames.get(0) + "/border-width-Key";
         GInsets border = (GInsets) uiResources.get(key);
         if(border == null && uiResources.containsKey(key) == false)
         {
-            Integer bord = getInt(".gwts-", clazz, "border-width");
-            Integer pl = getInt(".gwts-", clazz, "border-left");
-            Integer pr = getInt(".gwts-", clazz, "border-right");
-            Integer pb = getInt(".gwts-", clazz, "border-bottom");
-            Integer pt = getInt(".gwts-", clazz, "border-top");
+            Integer bord = getInt(".gwts-", clazznames, "border-width");
+            Integer pl = getInt(".gwts-", clazznames, "border-left-width");
+            Integer pr = getInt(".gwts-", clazznames, "border-right-width");
+            Integer pb = getInt(".gwts-", clazznames, "border-bottom-width");
+            Integer pt = getInt(".gwts-", clazznames, "border-top-width");
             bord = bord == null ? 0 : bord;
             pl = pl == null ? bord : pl;
             pr = pr == null ? bord : pr;
@@ -181,12 +182,12 @@ public class GUIManager
         return border;
     }
 
-    protected static Integer getInt(String prefix, Class<?> clazz, String rule)
+    protected static Integer getInt(String prefix, List<String> clazznames, String rule)
     {
         Integer i = null;
-        while(i == null && clazz != null)
+        for(int c=0;c<clazznames.size();c++)
         {
-            String cssrule = prefix + clazz.getSimpleName();
+            String cssrule = prefix + clazznames.get(c);
             String key = cssrule + "/" + rule;
             i = (Integer) uiResources.get(key);
             if(i == null && uiResources.containsKey(key) == false)
@@ -194,7 +195,10 @@ public class GUIManager
                 i = GPStyleSheet.getInt(cssrule, rule);
                 uiResources.put(key, i);
             }
-            clazz = clazz.getSuperclass();
+            if(i != null)
+            {
+                break;
+            }
         }
         return i;
     }

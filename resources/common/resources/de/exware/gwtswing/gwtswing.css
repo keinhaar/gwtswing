@@ -3,6 +3,7 @@
 	--textcolor: #000000;
 	--listBackground: #eeeecc;
 	--selectedBackground: #bbbbdd;
+    --border: #bbbb99;
 }
 
 .gwts-GMenuItem input {
@@ -24,11 +25,13 @@
 }
 
 .gwts-GLabel {
-	background-color: var(--background);
+	display: flex;
+	background-color: transparent;
 	color: var(--textcolor);
 	padding-left: 3px;
 	padding-right: 2px;
-	vertical-align: middle;
+	justify-content: center;
+    flex-direction: column;
 }
 
 .gwts-GLabel img {
@@ -123,6 +126,7 @@ input {
 	border-style: solid;
 	border-color: #303030;
 	background-color: #bbbbbb;
+    text-align: center;
 }
 
 .gwts-GToggleButton {
@@ -138,6 +142,7 @@ input {
 	border-style: solid;
 	border-color: #303030;
 	background-color: #bbbbbb;
+    text-align: center;
 }
 
 .gwts-GMenuItem {
@@ -231,17 +236,117 @@ input {
 	background-color: var(--selectedBackground);	
 }
 
-.gwts-GTabbedPane-Tab {
-	background: transparent;
+.gwts-GTabbedPaneTab {
+	background-color: transparent;
 }
 
-.gwts-GTabbedPane-selectedTab {
-	background-color: var(--background);	
+.gwts-GTabbedPaneTab-selected {
+    background-color: var(--background);    
 }
 
 .gwts-GTabbedPane-Tabs {
 	cursor: default;
 	background: #afa78e;
+}
+
+.gwts-GTabbedPaneTab-Left {
+    border-left-width: 3px;
+    border-left-style: solid;
+    border-left-color: transparent;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: transparent;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: transparent;
+}
+
+.gwts-GTabbedPaneTab-selected.gwts-GTabbedPaneTab-Left {
+    border-left-width: 3px;
+    border-left-style: solid;
+    border-left-color: var(--border);
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: var(--border);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--border);
+}
+
+.gwts-GTabbedPaneTab-Right {
+    border-right-width: 3px;
+    border-right-width: solid;
+    border-right-width: transparent;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: transparent;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: transparent;
+}
+
+.gwts-GTabbedPaneTab-selected.gwts-GTabbedPaneTab-Right {
+    border-right-width: 3px;
+    border-right-style: solid;
+    border-right-color: var(--border);
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: var(--border);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--border);
+}
+
+.gwts-GTabbedPaneTab-Top {
+    border-right-width: 1px;
+    border-right-width: solid;
+    border-right-width: transparent;
+    border-top-width: 3px;
+    border-top-style: solid;
+    border-top-color: transparent;
+    border-top-left-radius: 10px;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: transparent;
+}
+
+.gwts-GTabbedPaneTab-selected.gwts-GTabbedPaneTab-Top {
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: var(--border);
+    border-top-width: 3px;
+    border-top-style: solid;
+    border-top-color: var(--border);
+    border-top-left-radius: 10px;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: var(--border);
+}
+
+.gwts-GTabbedPaneTab-Bottom {
+    border-right-width: 1px;
+    border-right-width: solid;
+    border-right-width: transparent;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    border-bottom-color: transparent;
+    border-bottom-left-radius: 10px;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: transparent;
+}
+
+.gwts-GTabbedPaneTab-selected.gwts-GTabbedPaneTab-Bottom {
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-right-color: var(--border);
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--border);
+    border-bottom-left-radius: 10px;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: var(--border);
 }
 
 .gwts-GTree-selected {

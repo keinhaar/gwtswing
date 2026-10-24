@@ -1,20 +1,18 @@
 package de.exware.gwtswing.swing;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.exware.gplatform.GPElement;
 import de.exware.gplatform.GPlatform;
 import de.exware.gplatform.element.GPImageElement;
 import de.exware.gwtswing.awt.GDimension;
 import de.exware.gwtswing.awt.GFontMetrics;
+import de.exware.gwtswing.awt.GInsets;
 
 public class GLabel extends GComponent
 {
     private GPImageElement img;
     private GIcon icon;
-    private static Map<Long, GDimension> sizeCache = new HashMap<>();
     private static Boolean canDoFastMeasuring;
+    private boolean initialized;
 
     public GLabel()
     {
@@ -24,34 +22,66 @@ public class GLabel extends GComponent
     public GLabel(String text)
     {
         setText(text);
-        setOpaque(false);
+        initialized = true;
     }
 
     public GLabel(GIcon icon)
     {
         setText(null);
         setIcon(icon);
-        setOpaque(false);
+        initialized = true;
     }
 
-    public void setHorizontalTextPosition(int pos)
+    @Override
+    protected GInsets getPadding()
     {
-        if(pos == GSwingConstants.CENTER)
+        return super.getPadding();
+    }
+    
+    @Override
+    public void setOpaque(boolean opaque)
+    {
+        if(initialized)
         {
-            getPeer().getStyle().setTextAlign("center");
-        }
-        else
-        if(pos == GSwingConstants.LEFT)
-        {
-            getPeer().getStyle().setTextAlign("left");
-        }
-        else
-        if(pos == GSwingConstants.RIGHT)
-        {
-            getPeer().getStyle().setTextAlign("right");
+            super.setOpaque(opaque);
         }
     }
     
+    public void setVerticalTextPosition(int textPosition) 
+    {
+        if(textPosition == GSwingConstants.CENTER)
+        {
+            getPeer().getStyle().setProperty("justifyContent", "center");
+        }
+        else if(textPosition == GSwingConstants.LEFT)
+        {
+            getPeer().getStyle().setProperty("justifyContent", "left");
+        }
+        else if(textPosition == GSwingConstants.RIGHT)
+        {
+            getPeer().getStyle().setProperty("justifyContent", "right");
+        }
+        revalidate();
+    }
+    
+    public void setHorizontalTextPosition(int textPosition)
+    {
+        if(textPosition == GSwingConstants.CENTER)
+        {
+            getPeer().getStyle().setProperty("alignItems", "center");
+        }
+        else if(textPosition == GSwingConstants.LEFT)
+        {
+            getPeer().getStyle().setProperty("alignItems", "left");
+        }
+        else if(textPosition == GSwingConstants.RIGHT)
+        {
+            getPeer().getStyle().setProperty("alignItems", "right");
+        }
+        revalidate();
+    }
+    
+
 //    @Override
 //    public void setBounds(int x, int y, int width, int height)
 //    {

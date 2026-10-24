@@ -18,6 +18,11 @@ public class GFont
         this.style = style;
     }
 
+    public int getSize()
+    {
+        return size;
+    }
+
     public float getSize2D()
     {
         return size;

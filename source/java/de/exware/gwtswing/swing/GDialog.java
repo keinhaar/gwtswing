@@ -76,8 +76,9 @@ public class GDialog extends GWindow
     @Override
     public void setVisible(boolean visible)
     {
+        boolean isVisible = isVisible();
         super.setVisible(visible);
-        if(visible == false && callback != null)
+        if(visible == false && callback != null && isVisible)
         {
             callback();
         }

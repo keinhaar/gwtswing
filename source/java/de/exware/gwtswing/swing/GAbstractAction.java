@@ -18,6 +18,10 @@ abstract public class GAbstractAction implements GAction
     private boolean enabled = true;
     private List<GPropertyChangeListener> listeners;
 
+    public GAbstractAction()
+    {
+    }
+
     public GAbstractAction(String name)
     {
         values.put(NAME, name);
